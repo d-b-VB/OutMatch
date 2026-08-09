@@ -1,0 +1,15 @@
+{
+  "name": "outmatch",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/server.js",
+    "build": "node scripts/build.js",
+    "test": "node --test",
+    "check": "npm run test && npm run build",
+    "tournament:named": "node simulation/named-round-robin.js",
+    "campaign:evolve": "node simulation/evolution-campaign.js",
+    "analyze:quick-losses": "node analysis/quick-losses.js"
+  }
+}

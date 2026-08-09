@@ -1,0 +1,1092 @@
+{
+  "source": "results/evolution-campaign-2026-08-09.json",
+  "minimumEliminationRound": 3,
+  "eliminationRoundCounts": {
+    "3": 266,
+    "4": 5103,
+    "5": 1391,
+    "6": 665,
+    "7": 440,
+    "8": 326,
+    "9": 198,
+    "10": 359,
+    "11": 166,
+    "12": 120,
+    "13": 102,
+    "14": 90,
+    "15": 53,
+    "16": 53,
+    "17": 38,
+    "18": 31,
+    "19": 24,
+    "20": 28,
+    "21": 18,
+    "22": 17,
+    "23": 17,
+    "24": 8,
+    "25": 12,
+    "26": 16,
+    "27": 15,
+    "28": 8,
+    "29": 7,
+    "30": 11,
+    "31": 5,
+    "32": 3,
+    "33": 9,
+    "34": 6,
+    "35": 2,
+    "36": 3,
+    "37": 3,
+    "38": 1,
+    "39": 1,
+    "40": 2,
+    "41": 3,
+    "42": 1,
+    "43": 2,
+    "44": 2,
+    "45": 1,
+    "46": 1,
+    "47": 2,
+    "49": 3,
+    "51": 3,
+    "52": 1,
+    "53": 1,
+    "54": 1,
+    "55": 1,
+    "56": 1
+  },
+  "quickLosses": {
+    "games": 5369,
+    "shareOfAllGames": 0.510361216730038,
+    "shareOfEliminations": 0.5569502074688797,
+    "redWins": 5083,
+    "blueWins": 286,
+    "affectedGenomes": 1056,
+    "totalPlayedGenomes": 1068,
+    "rateBands": {
+      "100%": 99,
+      "75–99%": 235,
+      "50–74%": 392,
+      "25–49%": 243,
+      "under 25%": 87
+    },
+    "strengthBands": [
+      {
+        "label": "0–19%",
+        "genomes": 187,
+        "losses": 2369,
+        "quickLosses": 771,
+        "quickLossRate": 0.3254537779653862
+      },
+      {
+        "label": "20–39%",
+        "genomes": 144,
+        "losses": 1483,
+        "quickLosses": 654,
+        "quickLossRate": 0.44099797707349964
+      },
+      {
+        "label": "40–59%",
+        "genomes": 487,
+        "losses": 3996,
+        "quickLosses": 2617,
+        "quickLossRate": 0.6549049049049049
+      },
+      {
+        "label": "60–79%",
+        "genomes": 250,
+        "losses": 1792,
+        "quickLosses": 1327,
+        "quickLossRate": 0.7405133928571429
+      },
+      {
+        "label": "80–100%",
+        "genomes": 0,
+        "losses": 0,
+        "quickLosses": 0,
+        "quickLossRate": null
+      }
+    ],
+    "mostFrequent": [
+      {
+        "id": "scipio_wiser_001",
+        "name": "Scipio the Wiser",
+        "origin": "canonical",
+        "lineage": "scipio",
+        "played": 276,
+        "wins": 149,
+        "losses": 117,
+        "quickLosses": 74,
+        "quickShareOfLosses": 0.6324786324786325
+      },
+      {
+        "id": "emu_001",
+        "name": "Emu",
+        "origin": "canonical",
+        "lineage": "emu",
+        "played": 228,
+        "wins": 136,
+        "losses": 84,
+        "quickLosses": 63,
+        "quickShareOfLosses": 0.75
+      },
+      {
+        "id": "hannibal_001",
+        "name": "Hannibal",
+        "origin": "canonical",
+        "lineage": "hannibal",
+        "played": 144,
+        "wins": 81,
+        "losses": 59,
+        "quickLosses": 44,
+        "quickShareOfLosses": 0.7457627118644068
+      },
+      {
+        "id": "paullus_001",
+        "name": "Paullus",
+        "origin": "canonical",
+        "lineage": "paullus",
+        "played": 144,
+        "wins": 28,
+        "losses": 90,
+        "quickLosses": 39,
+        "quickShareOfLosses": 0.43333333333333335
+      },
+      {
+        "id": "surena_001",
+        "name": "Surena",
+        "origin": "canonical",
+        "lineage": "surena",
+        "played": 144,
+        "wins": 34,
+        "losses": 96,
+        "quickLosses": 29,
+        "quickShareOfLosses": 0.3020833333333333
+      },
+      {
+        "id": "seed_012",
+        "name": "Varro",
+        "origin": "historical-seed",
+        "lineage": "varro",
+        "played": 80,
+        "wins": 0,
+        "losses": 78,
+        "quickLosses": 27,
+        "quickShareOfLosses": 0.34615384615384615
+      },
+      {
+        "id": "seed_008",
+        "name": "Fabius-Khan",
+        "origin": "historical-seed",
+        "lineage": "fabius-khan",
+        "played": 128,
+        "wins": 83,
+        "losses": 29,
+        "quickLosses": 26,
+        "quickShareOfLosses": 0.896551724137931
+      },
+      {
+        "id": "seed_013",
+        "name": "Ventidius",
+        "origin": "historical-seed",
+        "lineage": "ventidius",
+        "played": 80,
+        "wins": 30,
+        "losses": 39,
+        "quickLosses": 24,
+        "quickShareOfLosses": 0.6153846153846154
+      },
+      {
+        "id": "mutation_g2_0429",
+        "name": "Surena-Genghis 44 Variant 429",
+        "origin": "mutation",
+        "lineage": "surena+mongol",
+        "played": 64,
+        "wins": 36,
+        "losses": 28,
+        "quickLosses": 22,
+        "quickShareOfLosses": 0.7857142857142857
+      },
+      {
+        "id": "narses_001",
+        "name": "Narses",
+        "origin": "canonical",
+        "lineage": "narses",
+        "played": 80,
+        "wins": 31,
+        "losses": 36,
+        "quickLosses": 20,
+        "quickShareOfLosses": 0.5555555555555556
+      },
+      {
+        "id": "mutation_g4_0945",
+        "name": "Fabius-Khan-Ventidius-Emu 262 Hunter 263 Variant 591 Variant 945",
+        "origin": "mutation",
+        "lineage": "fabius-khan+ventidius+emu",
+        "played": 72,
+        "wins": 45,
+        "losses": 24,
+        "quickLosses": 20,
+        "quickShareOfLosses": 0.8333333333333334
+      },
+      {
+        "id": "seed_010",
+        "name": "Ackbar",
+        "origin": "historical-seed",
+        "lineage": "ackbar",
+        "played": 80,
+        "wins": 33,
+        "losses": 37,
+        "quickLosses": 17,
+        "quickShareOfLosses": 0.4594594594594595
+      },
+      {
+        "id": "assassin_g3_0538",
+        "name": "Genghis-Emu 537 Hunter 538",
+        "origin": "assassin",
+        "lineage": "mongol+emu",
+        "played": 80,
+        "wins": 55,
+        "losses": 20,
+        "quickLosses": 17,
+        "quickShareOfLosses": 0.85
+      },
+      {
+        "id": "cross_g3_0709",
+        "name": "Fabius-Khan-Scipio 709",
+        "origin": "cross",
+        "lineage": "fabius-khan+scipio",
+        "played": 72,
+        "wins": 48,
+        "losses": 21,
+        "quickLosses": 17,
+        "quickShareOfLosses": 0.8095238095238095
+      },
+      {
+        "id": "seed_007",
+        "name": "Agrippa",
+        "origin": "historical-seed",
+        "lineage": "agrippan",
+        "played": 80,
+        "wins": 28,
+        "losses": 33,
+        "quickLosses": 16,
+        "quickShareOfLosses": 0.48484848484848486
+      },
+      {
+        "id": "seed_011",
+        "name": "Grievous",
+        "origin": "historical-seed",
+        "lineage": "grievous",
+        "played": 80,
+        "wins": 53,
+        "losses": 25,
+        "quickLosses": 16,
+        "quickShareOfLosses": 0.64
+      },
+      {
+        "id": "seed_014",
+        "name": "Marc Antony",
+        "origin": "historical-seed",
+        "lineage": "antonian",
+        "played": 80,
+        "wins": 51,
+        "losses": 21,
+        "quickLosses": 16,
+        "quickShareOfLosses": 0.7619047619047619
+      },
+      {
+        "id": "mutation_g1_0057",
+        "name": "Emu Variant 57",
+        "origin": "mutation",
+        "lineage": "emu",
+        "played": 64,
+        "wins": 40,
+        "losses": 22,
+        "quickLosses": 16,
+        "quickShareOfLosses": 0.7272727272727273
+      },
+      {
+        "id": "crassus_001",
+        "name": "Crassus",
+        "origin": "canonical",
+        "lineage": "crassus",
+        "played": 80,
+        "wins": 1,
+        "losses": 79,
+        "quickLosses": 15,
+        "quickShareOfLosses": 0.189873417721519
+      },
+      {
+        "id": "wild_g2_0443",
+        "name": "Wildcard 2-443",
+        "origin": "wildcard",
+        "lineage": "wild",
+        "played": 64,
+        "wins": 38,
+        "losses": 23,
+        "quickLosses": 15,
+        "quickShareOfLosses": 0.6521739130434783
+      }
+    ]
+  },
+  "overallColor": {
+    "redWins": 7061,
+    "blueWins": 2579,
+    "draws": 880
+  },
+  "representatives": {
+    "3": {
+      "id": "evo-006098",
+      "generation": 4,
+      "purpose": "ecological",
+      "target": null,
+      "red": "seed_009",
+      "blue": "seed_008",
+      "winner": "seed_008",
+      "rounds": 3,
+      "turns": 6,
+      "result": "elimination",
+      "finalUnits": {
+        "red": 0,
+        "blue": 2
+      },
+      "seed": 24266906,
+      "redName": "Genghis",
+      "blueName": "Fabius-Khan",
+      "winnerName": "Fabius-Khan",
+      "events": [
+        {
+          "round": 1,
+          "side": "red",
+          "type": "commit",
+          "unitType": "cavalry"
+        },
+        {
+          "round": 1,
+          "side": "red",
+          "type": "move",
+          "unitId": "r3",
+          "unitType": "cavalry",
+          "from": [
+            -2,
+            -1
+          ],
+          "to": [
+            0,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "red",
+          "type": "move",
+          "unitId": "r1",
+          "unitType": "pike",
+          "from": [
+            -2,
+            0
+          ],
+          "to": [
+            -1,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "red",
+          "type": "move",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -3,
+            1
+          ],
+          "to": [
+            -2,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "red",
+          "type": "hold",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -2,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "red",
+          "type": "end"
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "commit",
+          "unitType": "cavalry"
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b6",
+          "unitType": "cavalry",
+          "from": [
+            2,
+            1
+          ],
+          "captureId": "r3",
+          "captureType": "cavalry",
+          "to": [
+            0,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b5",
+          "unitType": "archer",
+          "from": [
+            3,
+            -1
+          ],
+          "to": [
+            2,
+            -1
+          ]
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b4",
+          "unitType": "pike",
+          "from": [
+            2,
+            0
+          ],
+          "to": [
+            1,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "hold",
+          "unitId": "b5",
+          "unitType": "archer",
+          "from": [
+            2,
+            -1
+          ]
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "end"
+        },
+        {
+          "round": 2,
+          "side": "red",
+          "type": "deploy",
+          "unitType": "cavalry",
+          "unitId": "r7",
+          "to": [
+            -2,
+            -1
+          ]
+        },
+        {
+          "round": 2,
+          "side": "red",
+          "type": "move",
+          "unitId": "r1",
+          "unitType": "pike",
+          "from": [
+            -1,
+            0
+          ],
+          "captureId": "b6",
+          "captureType": "cavalry",
+          "to": [
+            0,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "red",
+          "type": "move",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -2,
+            0
+          ],
+          "to": [
+            -1,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "red",
+          "type": "hold",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -1,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "red",
+          "type": "end"
+        },
+        {
+          "round": 2,
+          "side": "blue",
+          "type": "deploy",
+          "unitType": "cavalry",
+          "unitId": "b8",
+          "to": [
+            2,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b4",
+          "unitType": "pike",
+          "from": [
+            1,
+            0
+          ],
+          "captureId": "r1",
+          "captureType": "pike",
+          "to": [
+            0,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b5",
+          "unitType": "archer",
+          "from": [
+            2,
+            -1
+          ],
+          "to": [
+            1,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "blue",
+          "type": "hold",
+          "unitId": "b5",
+          "unitType": "archer",
+          "from": [
+            1,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "blue",
+          "type": "end"
+        },
+        {
+          "round": 3,
+          "side": "red",
+          "type": "commit",
+          "unitType": "cavalry"
+        },
+        {
+          "round": 3,
+          "side": "red",
+          "type": "shoot",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -1,
+            0
+          ],
+          "targetId": "b4",
+          "captureType": "pike"
+        },
+        {
+          "round": 3,
+          "side": "red",
+          "type": "move",
+          "unitId": "r7",
+          "unitType": "cavalry",
+          "from": [
+            -2,
+            -1
+          ],
+          "to": [
+            0,
+            0
+          ]
+        },
+        {
+          "round": 3,
+          "side": "red",
+          "type": "move",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -1,
+            0
+          ],
+          "to": [
+            0,
+            -1
+          ]
+        },
+        {
+          "round": 3,
+          "side": "red",
+          "type": "end"
+        },
+        {
+          "round": 3,
+          "side": "blue",
+          "type": "commit",
+          "unitType": "cavalry"
+        },
+        {
+          "round": 3,
+          "side": "blue",
+          "type": "shoot",
+          "unitId": "b5",
+          "unitType": "archer",
+          "from": [
+            1,
+            0
+          ],
+          "targetId": "r7",
+          "captureType": "cavalry"
+        },
+        {
+          "round": 3,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b8",
+          "unitType": "cavalry",
+          "from": [
+            2,
+            0
+          ],
+          "captureId": "r2",
+          "captureType": "archer",
+          "to": [
+            0,
+            -1
+          ]
+        }
+      ]
+    },
+    "4": {
+      "id": "evo-005584",
+      "generation": 3,
+      "purpose": "ecological",
+      "target": null,
+      "red": "mutation_g3_0555",
+      "blue": "assassin_g3_0550",
+      "winner": "mutation_g3_0555",
+      "rounds": 4,
+      "turns": 7,
+      "result": "elimination",
+      "finalUnits": {
+        "red": 3,
+        "blue": 0
+      },
+      "seed": 23266392,
+      "redName": "Emu Variant 215 Variant 320 Variant 555",
+      "blueName": "Wildcard-Emu 549 Hunter 550",
+      "winnerName": "Emu Variant 215 Variant 320 Variant 555",
+      "events": [
+        {
+          "round": 1,
+          "side": "red",
+          "type": "commit",
+          "unitType": "cavalry"
+        },
+        {
+          "round": 1,
+          "side": "red",
+          "type": "move",
+          "unitId": "r3",
+          "unitType": "cavalry",
+          "from": [
+            -2,
+            -1
+          ],
+          "to": [
+            0,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "red",
+          "type": "move",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -3,
+            1
+          ],
+          "to": [
+            -2,
+            1
+          ]
+        },
+        {
+          "round": 1,
+          "side": "red",
+          "type": "move",
+          "unitId": "r1",
+          "unitType": "pike",
+          "from": [
+            -2,
+            0
+          ],
+          "to": [
+            -1,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "red",
+          "type": "hold",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -2,
+            1
+          ]
+        },
+        {
+          "round": 1,
+          "side": "red",
+          "type": "end"
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "commit",
+          "unitType": "pike"
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b6",
+          "unitType": "cavalry",
+          "from": [
+            2,
+            1
+          ],
+          "captureId": "r3",
+          "captureType": "cavalry",
+          "to": [
+            0,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b4",
+          "unitType": "pike",
+          "from": [
+            2,
+            0
+          ],
+          "to": [
+            1,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b5",
+          "unitType": "archer",
+          "from": [
+            3,
+            -1
+          ],
+          "to": [
+            2,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "hold",
+          "unitId": "b5",
+          "unitType": "archer",
+          "from": [
+            2,
+            0
+          ]
+        },
+        {
+          "round": 1,
+          "side": "blue",
+          "type": "end"
+        },
+        {
+          "round": 2,
+          "side": "red",
+          "type": "deploy",
+          "unitType": "cavalry",
+          "unitId": "r7",
+          "to": [
+            -2,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "red",
+          "type": "move",
+          "unitId": "r1",
+          "unitType": "pike",
+          "from": [
+            -1,
+            0
+          ],
+          "captureId": "b6",
+          "captureType": "cavalry",
+          "to": [
+            0,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "red",
+          "type": "move",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -2,
+            1
+          ],
+          "to": [
+            -1,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "red",
+          "type": "hold",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -1,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "red",
+          "type": "end"
+        },
+        {
+          "round": 2,
+          "side": "blue",
+          "type": "deploy",
+          "unitType": "pike",
+          "unitId": "b8",
+          "to": [
+            3,
+            -1
+          ]
+        },
+        {
+          "round": 2,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b4",
+          "unitType": "pike",
+          "from": [
+            1,
+            0
+          ],
+          "captureId": "r1",
+          "captureType": "pike",
+          "to": [
+            0,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b5",
+          "unitType": "archer",
+          "from": [
+            2,
+            0
+          ],
+          "to": [
+            1,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "blue",
+          "type": "hold",
+          "unitId": "b5",
+          "unitType": "archer",
+          "from": [
+            1,
+            0
+          ]
+        },
+        {
+          "round": 2,
+          "side": "blue",
+          "type": "end"
+        },
+        {
+          "round": 3,
+          "side": "red",
+          "type": "commit",
+          "unitType": "cavalry"
+        },
+        {
+          "round": 3,
+          "side": "red",
+          "type": "shoot",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -1,
+            0
+          ],
+          "targetId": "b4",
+          "captureType": "pike"
+        },
+        {
+          "round": 3,
+          "side": "red",
+          "type": "move",
+          "unitId": "r7",
+          "unitType": "cavalry",
+          "from": [
+            -2,
+            0
+          ],
+          "captureId": "b5",
+          "captureType": "archer",
+          "to": [
+            1,
+            0
+          ]
+        },
+        {
+          "round": 3,
+          "side": "red",
+          "type": "move",
+          "unitId": "r2",
+          "unitType": "archer",
+          "from": [
+            -1,
+            0
+          ],
+          "to": [
+            0,
+            0
+          ]
+        },
+        {
+          "round": 3,
+          "side": "red",
+          "type": "end"
+        },
+        {
+          "round": 3,
+          "side": "blue",
+          "type": "commit",
+          "unitType": "archer"
+        },
+        {
+          "round": 3,
+          "side": "blue",
+          "type": "move",
+          "unitId": "b8",
+          "unitType": "pike",
+          "from": [
+            3,
+            -1
+          ],
+          "to": [
+            2,
+            -1
+          ]
+        },
+        {
+          "round": 3,
+          "side": "blue",
+          "type": "end"
+        },
+        {
+          "round": 4,
+          "side": "red",
+          "type": "deploy",
+          "unitType": "cavalry",
+          "unitId": "r9",
+          "to": [
+            -2,
+            0
+          ]
+        },
+        {
+          "round": 4,
+          "side": "red",
+          "type": "move",
+          "unitId": "r7",
+          "unitType": "cavalry",
+          "from": [
+            1,
+            0
+          ],
+          "captureId": "b8",
+          "captureType": "pike",
+          "to": [
+            2,
+            -1
+          ]
+        }
+      ]
+    }
+  }
+}

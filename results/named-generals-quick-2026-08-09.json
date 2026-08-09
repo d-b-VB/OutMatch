@@ -1,0 +1,1066 @@
+{
+  "schemaVersion": "1.0.0",
+  "tournament": "named-generals-quick-round-robin",
+  "createdAt": "2026-08-09T04:13:47.432Z",
+  "manifest": {
+    "engineCommit": "5228ef1c45c0e27745b80f7f02c25119a29253c7",
+    "rulesVersion": "1.0.0",
+    "roundCap": 20,
+    "gamesPerPair": 2,
+    "colorBalanced": true,
+    "scoring": {
+      "win": 1,
+      "draw": 0.5,
+      "loss": 0
+    },
+    "competitors": [
+      {
+        "id": "hannibal_001",
+        "name": "Hannibal"
+      },
+      {
+        "id": "scipio_wiser_001",
+        "name": "Scipio the Wiser"
+      },
+      {
+        "id": "surena_001",
+        "name": "Surena"
+      },
+      {
+        "id": "paullus_001",
+        "name": "Paullus"
+      },
+      {
+        "id": "emu_001",
+        "name": "Emu"
+      },
+      {
+        "id": "narses_001",
+        "name": "Narses"
+      },
+      {
+        "id": "crassus_001",
+        "name": "Crassus"
+      }
+    ]
+  },
+  "summary": {
+    "competitors": 7,
+    "pairings": 21,
+    "games": 42,
+    "eliminations": 28,
+    "draws": 14
+  },
+  "ranking": [
+    {
+      "id": "scipio_wiser_001",
+      "name": "Scipio the Wiser",
+      "played": 12,
+      "wins": 10,
+      "losses": 1,
+      "draws": 1,
+      "redWins": 6,
+      "blueWins": 4,
+      "eliminations": 10,
+      "points": 10.5
+    },
+    {
+      "id": "emu_001",
+      "name": "Emu",
+      "played": 12,
+      "wins": 8,
+      "losses": 1,
+      "draws": 3,
+      "redWins": 6,
+      "blueWins": 2,
+      "eliminations": 8,
+      "points": 9.5
+    },
+    {
+      "id": "hannibal_001",
+      "name": "Hannibal",
+      "played": 12,
+      "wins": 4,
+      "losses": 5,
+      "draws": 3,
+      "redWins": 1,
+      "blueWins": 3,
+      "eliminations": 4,
+      "points": 5.5
+    },
+    {
+      "id": "narses_001",
+      "name": "Narses",
+      "played": 12,
+      "wins": 3,
+      "losses": 4,
+      "draws": 5,
+      "redWins": 1,
+      "blueWins": 2,
+      "eliminations": 3,
+      "points": 5.5
+    },
+    {
+      "id": "surena_001",
+      "name": "Surena",
+      "played": 12,
+      "wins": 1,
+      "losses": 2,
+      "draws": 9,
+      "redWins": 0,
+      "blueWins": 1,
+      "eliminations": 1,
+      "points": 5.5
+    },
+    {
+      "id": "paullus_001",
+      "name": "Paullus",
+      "played": 12,
+      "wins": 2,
+      "losses": 4,
+      "draws": 6,
+      "redWins": 1,
+      "blueWins": 1,
+      "eliminations": 2,
+      "points": 5
+    },
+    {
+      "id": "crassus_001",
+      "name": "Crassus",
+      "played": 12,
+      "wins": 0,
+      "losses": 11,
+      "draws": 1,
+      "redWins": 0,
+      "blueWins": 0,
+      "eliminations": 0,
+      "points": 0.5
+    }
+  ],
+  "games": [
+    {
+      "gameId": "named-01",
+      "red": "hannibal_001",
+      "blue": "scipio_wiser_001",
+      "seed": 20260811,
+      "winner": "scipio_wiser_001",
+      "result": "elimination",
+      "rounds": 3,
+      "turns": 6,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 0,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-02",
+      "red": "scipio_wiser_001",
+      "blue": "hannibal_001",
+      "seed": 20260812,
+      "winner": "scipio_wiser_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-03",
+      "red": "hannibal_001",
+      "blue": "surena_001",
+      "seed": 20260813,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 2
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 3,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-04",
+      "red": "surena_001",
+      "blue": "hannibal_001",
+      "seed": 20260814,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-05",
+      "red": "hannibal_001",
+      "blue": "paullus_001",
+      "seed": 20260815,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 1,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-06",
+      "red": "paullus_001",
+      "blue": "hannibal_001",
+      "seed": 20260816,
+      "winner": "hannibal_001",
+      "result": "elimination",
+      "rounds": 19,
+      "turns": 38,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 0,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-07",
+      "red": "hannibal_001",
+      "blue": "emu_001",
+      "seed": 20260817,
+      "winner": "emu_001",
+      "result": "elimination",
+      "rounds": 3,
+      "turns": 6,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 0,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-08",
+      "red": "emu_001",
+      "blue": "hannibal_001",
+      "seed": 20260818,
+      "winner": "emu_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-09",
+      "red": "hannibal_001",
+      "blue": "narses_001",
+      "seed": 20260819,
+      "winner": "narses_001",
+      "result": "elimination",
+      "rounds": 20,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-10",
+      "red": "narses_001",
+      "blue": "hannibal_001",
+      "seed": 20260820,
+      "winner": "hannibal_001",
+      "result": "elimination",
+      "rounds": 19,
+      "turns": 38,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 0,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-11",
+      "red": "hannibal_001",
+      "blue": "crassus_001",
+      "seed": 20260821,
+      "winner": "hannibal_001",
+      "result": "elimination",
+      "rounds": 6,
+      "turns": 11,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 0,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-12",
+      "red": "crassus_001",
+      "blue": "hannibal_001",
+      "seed": 20260822,
+      "winner": "hannibal_001",
+      "result": "elimination",
+      "rounds": 5,
+      "turns": 10,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-13",
+      "red": "scipio_wiser_001",
+      "blue": "surena_001",
+      "seed": 20260913,
+      "winner": "scipio_wiser_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-14",
+      "red": "surena_001",
+      "blue": "scipio_wiser_001",
+      "seed": 20260914,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 2,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 2
+        }
+      }
+    },
+    {
+      "gameId": "named-15",
+      "red": "scipio_wiser_001",
+      "blue": "paullus_001",
+      "seed": 20260915,
+      "winner": "scipio_wiser_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-16",
+      "red": "paullus_001",
+      "blue": "scipio_wiser_001",
+      "seed": 20260916,
+      "winner": "scipio_wiser_001",
+      "result": "elimination",
+      "rounds": 13,
+      "turns": 26,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-17",
+      "red": "scipio_wiser_001",
+      "blue": "emu_001",
+      "seed": 20260917,
+      "winner": "scipio_wiser_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-18",
+      "red": "emu_001",
+      "blue": "scipio_wiser_001",
+      "seed": 20260918,
+      "winner": "emu_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-19",
+      "red": "scipio_wiser_001",
+      "blue": "narses_001",
+      "seed": 20260919,
+      "winner": "scipio_wiser_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-20",
+      "red": "narses_001",
+      "blue": "scipio_wiser_001",
+      "seed": 20260920,
+      "winner": "scipio_wiser_001",
+      "result": "elimination",
+      "rounds": 15,
+      "turns": 30,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-21",
+      "red": "scipio_wiser_001",
+      "blue": "crassus_001",
+      "seed": 20260921,
+      "winner": "scipio_wiser_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-22",
+      "red": "crassus_001",
+      "blue": "scipio_wiser_001",
+      "seed": 20260922,
+      "winner": "scipio_wiser_001",
+      "result": "elimination",
+      "rounds": 5,
+      "turns": 10,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-23",
+      "red": "surena_001",
+      "blue": "paullus_001",
+      "seed": 20261015,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 2,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-24",
+      "red": "paullus_001",
+      "blue": "surena_001",
+      "seed": 20261016,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 2,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-25",
+      "red": "surena_001",
+      "blue": "emu_001",
+      "seed": 20261017,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 2,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 2
+        }
+      }
+    },
+    {
+      "gameId": "named-26",
+      "red": "emu_001",
+      "blue": "surena_001",
+      "seed": 20261018,
+      "winner": "emu_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-27",
+      "red": "surena_001",
+      "blue": "narses_001",
+      "seed": 20261019,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 2,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-28",
+      "red": "narses_001",
+      "blue": "surena_001",
+      "seed": 20261020,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 2,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-29",
+      "red": "surena_001",
+      "blue": "crassus_001",
+      "seed": 20261021,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 2,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-30",
+      "red": "crassus_001",
+      "blue": "surena_001",
+      "seed": 20261022,
+      "winner": "surena_001",
+      "result": "elimination",
+      "rounds": 5,
+      "turns": 10,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 2,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-31",
+      "red": "paullus_001",
+      "blue": "emu_001",
+      "seed": 20261117,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 0,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-32",
+      "red": "emu_001",
+      "blue": "paullus_001",
+      "seed": 20261118,
+      "winner": "emu_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-33",
+      "red": "paullus_001",
+      "blue": "narses_001",
+      "seed": 20261119,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-34",
+      "red": "narses_001",
+      "blue": "paullus_001",
+      "seed": 20261120,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-35",
+      "red": "paullus_001",
+      "blue": "crassus_001",
+      "seed": 20261121,
+      "winner": "paullus_001",
+      "result": "elimination",
+      "rounds": 12,
+      "turns": 23,
+      "finalComposition": {
+        "red": {
+          "pike": 2,
+          "archer": 2,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-36",
+      "red": "crassus_001",
+      "blue": "paullus_001",
+      "seed": 20261122,
+      "winner": "paullus_001",
+      "result": "elimination",
+      "rounds": 5,
+      "turns": 10,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-37",
+      "red": "emu_001",
+      "blue": "narses_001",
+      "seed": 20261219,
+      "winner": "emu_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-38",
+      "red": "narses_001",
+      "blue": "emu_001",
+      "seed": 20261220,
+      "winner": null,
+      "result": "round-cap-draw",
+      "rounds": 21,
+      "turns": 40,
+      "finalComposition": {
+        "red": {
+          "pike": 1,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 0,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-39",
+      "red": "emu_001",
+      "blue": "crassus_001",
+      "seed": 20261221,
+      "winner": "emu_001",
+      "result": "elimination",
+      "rounds": 4,
+      "turns": 7,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-40",
+      "red": "crassus_001",
+      "blue": "emu_001",
+      "seed": 20261222,
+      "winner": "emu_001",
+      "result": "elimination",
+      "rounds": 5,
+      "turns": 10,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 1,
+          "cavalry": 1
+        }
+      }
+    },
+    {
+      "gameId": "named-41",
+      "red": "narses_001",
+      "blue": "crassus_001",
+      "seed": 20261321,
+      "winner": "narses_001",
+      "result": "elimination",
+      "rounds": 12,
+      "turns": 23,
+      "finalComposition": {
+        "red": {
+          "pike": 2,
+          "archer": 1,
+          "cavalry": 1
+        },
+        "blue": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        }
+      }
+    },
+    {
+      "gameId": "named-42",
+      "red": "crassus_001",
+      "blue": "narses_001",
+      "seed": 20261322,
+      "winner": "narses_001",
+      "result": "elimination",
+      "rounds": 5,
+      "turns": 10,
+      "finalComposition": {
+        "red": {
+          "pike": 0,
+          "archer": 0,
+          "cavalry": 0
+        },
+        "blue": {
+          "pike": 1,
+          "archer": 1,
+          "cavalry": 1
+        }
+      }
+    }
+  ]
+}
