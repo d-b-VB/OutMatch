@@ -1,14 +1,772 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#111713" />
-    <meta name="description" content="OutMatch — a compact tactical game of perfect positioning." />
-    <title>OutMatch</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/app.js"></script>
-  </body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OutMatch — Mercian Counterstrategy Panel</title>
+<style>
+:root{--bg:#171c22;--panel:#fffaf0;--ink:#252019;--muted:#756d64;--line:#d4c5ad;--red:#b33b32;--blue:#315f9b;--sel:#222;--legal:#f0b429;--deploy:#2ba568;--gold:#c89032}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,"Times New Roman",serif;background:radial-gradient(circle at 50% 20%,#34404a 0,#1b2229 48%,#11161b 100%);color:var(--ink);overflow:hidden}
+header{padding:11px 18px;border-bottom:1px solid #a7772c;background:linear-gradient(90deg,#131920,#252d34,#131920);color:#f7ead2;display:flex;align-items:center;gap:14px;box-shadow:0 3px 18px #0008;position:relative;z-index:3}
+h1{font-size:20px;margin:0;white-space:nowrap;letter-spacing:.04em}.sub{font-size:12px;color:var(--muted)}
+.controls{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-left:auto}
+.controls label{font-size:12px;color:var(--muted);display:flex;gap:5px;align-items:center;margin:0}
+select,button{font:inherit;border:1px solid var(--line);border-radius:7px;background:#fffaf0;color:var(--ink);padding:7px 10px}button{cursor:pointer}button:hover{border-color:var(--gold);transform:translateY(-1px)}button.primary{font-weight:700;background:linear-gradient(#e4b55c,#bd7f26);color:#1b160f;border-color:#f3cf83;box-shadow:0 3px 10px #0003}button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+main{display:grid;grid-template-columns:minmax(500px,1fr) 300px;gap:12px;padding:12px;max-width:1150px;margin:auto;align-items:start;height:calc(100vh - 56px);overflow:hidden}
+#boardWrap{position:relative;background:radial-gradient(circle,#f7f0e1 0,#e5d7bd 72%,#c4ab82 100%);border:2px solid #b48848;border-radius:14px;height:min(620px,calc(100vh - 80px));min-height:0;display:flex;justify-content:center;align-items:center;padding:10px;overflow:hidden;box-shadow:0 12px 32px #0008,inset 0 0 38px #76501f40}
+#board{height:100%;width:auto;max-width:100%;display:block}
+.hex{stroke:#fff8;stroke-width:3;cursor:pointer;filter:drop-shadow(0 2px 1px #5b452c55);transition:filter .15s}.hex.tone0{fill:#d3b16d}.hex.tone1{fill:#78968a}.hex.tone2{fill:#a97668}.hex:hover{filter:brightness(1.08) drop-shadow(0 2px 2px #0005)}.hex.baseR{fill:#c65b54}.hex.baseB{fill:#537dab}.hex.legal{stroke:var(--legal);stroke-width:6}.hex.deploy{stroke:var(--deploy);stroke-width:6}.hex.selected{stroke:var(--sel);stroke-width:6}
+.unit circle{stroke:#fff;stroke-width:2.2}.unit text{fill:#fff;font-weight:800;font-size:19px;text-anchor:middle;dominant-baseline:middle;pointer-events:none}.unit.inactive circle{opacity:.45}.unit{cursor:pointer}
+aside{display:flex;flex-direction:column;gap:9px;height:min(620px,calc(100vh - 80px));overflow-y:auto;padding-right:3px}.card{background:linear-gradient(135deg,#fffdf7,#f2e7d3);border:1px solid #c4a77c;border-radius:11px;padding:12px;box-shadow:0 5px 16px #0004}.card h2{font-size:12px;margin:0 0 7px;text-transform:uppercase;letter-spacing:.12em;color:#704b22}
+#prompt{font-size:15px;font-weight:700;min-height:22px;margin-bottom:6px}.status{display:flex;gap:5px;flex-wrap:wrap;font-size:11px;margin-bottom:7px}.badge{border:1px solid var(--line);border-radius:99px;padding:2px 6px;background:#fff}
+.row,#actionBar,#recruitBar,.logbuttons,#reviewBar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}#actionBar:empty,#recruitBar:empty{display:none}#reviewBar{margin-top:7px}#reviewBar button{padding:5px 8px}#reviewState{font-size:11px;color:var(--muted);margin-left:2px}
+#actionBar button,#recruitBar button{padding:6px 8px;min-width:0}#recruitBar button{min-width:112px;font-weight:800}#recruitBar.recruit-required{padding:7px;border:2px solid #d39613;border-radius:8px;background:#fff8df}
+.small{font-size:11px;color:var(--muted);line-height:1.35}.sideR{color:var(--red);font-weight:700}.sideB{color:var(--blue);font-weight:700}
+#log{width:100%;height:145px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;line-height:1.3;border:1px solid var(--line);border-radius:6px;padding:7px;background:#fff;margin-top:7px}
+.logbuttons button{font-size:11px;padding:5px 7px}
+.menu{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px;background:#11171bf2;backdrop-filter:blur(5px)}.menu.hidden{display:none}.menu-panel{width:min(440px,100%);background:linear-gradient(145deg,#fffaf0,#e8d6b8);border:2px solid #d1a24d;border-radius:20px;box-shadow:0 25px 80px #000c;padding:28px}.menu h2{text-align:center;font-size:32px;margin:0 0 22px}.menu-label{display:block;font-size:12px;font-weight:700;color:#755125;margin:16px 0 7px}.menu select{display:block;width:100%;max-width:none;padding:11px;background:#fff}.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.order-card{padding:13px;text-align:left;background:#fff9ed}.order-card b{display:block}.order-card.active{border:2px solid currentColor}.order-card.red{color:#9f332d}.order-card.blue{color:#294f82}.menu-actions{text-align:center;margin-top:20px}.menu-actions button{font-size:17px;padding:12px 35px}.header-note{font-size:11px;color:#c9b99e;margin-left:auto;letter-spacing:.08em}.recruit-modal{display:none;position:absolute;z-index:8;inset:0;place-items:center;background:#15202aaa;backdrop-filter:blur(2px)}.recruit-modal.active{display:grid}.recruit-box{width:min(390px,calc(100% - 32px));padding:24px;background:#fff8e9;border:2px solid #d39a38;border-radius:16px;text-align:center;box-shadow:0 18px 50px #0009}.recruit-box h2{margin:0 0 7px}.recruit-box p{margin:0 0 16px;color:#6d604f}.recruit-box .row{justify-content:center}.recruit-box button{min-width:105px}
+.menu select[hidden]{display:none}
+@media(max-width:900px){body{overflow:auto}header{align-items:flex-start}.controls{margin-left:0;width:100%}main{grid-template-columns:1fr;height:auto;overflow:visible}#boardWrap{height:auto;min-height:430px}#board{height:auto;width:min(100%,570px);max-height:520px}aside{height:auto;overflow:visible;display:grid;grid-template-columns:1fr 1fr}.logcard{grid-column:1/-1}}
+@media(max-width:700px){.opponent-grid{grid-template-columns:1fr 1fr}.menu-panel{padding:19px}.menu h2{font-size:29px}}@media(max-width:620px){aside{display:flex}#boardWrap{min-height:430px}.header-note{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>OutMatch</h1>
+  <div class="controls">
+    <span class="header-note" id="matchup">CHOOSE YOUR MATCH</span>
+    <button class="primary" id="newGame">New battle</button>
+  </div>
+</header>
+<section class="menu" id="menu" aria-label="New battle setup">
+ <div class="menu-panel">
+  <h2>New battle</h2>
+  <label class="menu-label" for="opponent">Choose opponent</label><select id="opponent"></select>
+  <span class="menu-label">Turn order</span><div class="order-grid">
+   <button class="order-card red" data-color="R"><b>Go first</b></button>
+   <button class="order-card blue" data-color="B"><b>Go second</b></button>
+  </div>
+  <div class="menu-actions"><button class="primary" id="startBattle">Play</button></div>
+  <select id="humanColor" hidden><option value="R">Red</option><option value="B">Blue</option></select>
+ </div>
+</section>
+<main>
+  <section id="boardWrap"><svg id="board" viewBox="-30 -30 720 660" aria-label="OutMatch game board"></svg><div class="recruit-modal" id="recruitModal"><div class="recruit-box"><h2>Choose a reinforcement</h2><p>Choose before moving your pieces.</p><div id="recruitBar" class="row"></div></div></div></section>
+  <aside>
+    <div class="card">
+      <div id="prompt">Choose an opponent and start a game.</div>
+      <div class="status">
+        <span class="badge" id="roundBadge">Round —</span>
+        <span class="badge" id="turnBadge">Turn —</span>
+        <span class="badge" id="captureBadge">Captured R 0 / B 0</span>
+        <span class="badge" id="queueBadge">Your queued recruit: —</span>
+      </div>
+      <div id="actionBar" class="row"></div>
+      <div id="reviewBar"><button id="rewindBtn">◀ Rewind</button><button id="forwardBtn">Forward ▶</button><span id="reviewState">Live</span><span class="small" style="margin-left:auto">Sun G67 · unmodified sources</span></div>
+    </div>
+    <textarea id="log" hidden></textarea>
+  </aside>
+</main>
+<script>
+"use strict";
+const FINALISTS = [{"id":"G66_0004","name":"Cassander the Twice-Crowned","origin":"65R-guaranteed-survivor","parents":["G65_0324"],"father":"G65_0324","tags":["academy-graduate-G4","sun:archer-depth","sun-stance:heretic","probabilistic-father-lottery","sun:rare-ring-screen","sun-stance:heretic","probabilistic-father-lottery","probabilistic-father-lottery","rare-locus:1"],"genes":{"action":{"progress":7.355298137300074,"support":31.079292211859798,"dispersion":0.4152136995690002,"force":-23.68554483002952,"exposure":-6.374117150282567,"repetition":-3.1240551508468855,"center":4.32966362514082,"mobility":1.9726790472904678,"enemyBase":5.377792395848447,"hold":-12.354599691820113},"captureTarget":{"P":220.5605554618049,"A":132.0889527569421,"C":212.16288973148897},"attacker":{"P":-9.200462380600538,"A":-3.338797342943683,"C":2.4190420752846062},"cell":{"friend1_0":-4.551344039712779,"friend1_1":-1.9003864286813972,"friend1_2":5.732519706587048,"friend1_3":-1.443514949077434,"friend1_4":-17.2095347492141,"friend1_5":19.731720742931245,"friend1_6":-7.069750158618084,"friend2_0":-3.8113835703442565,"friend2_1":0.7415422236915461,"friend2_2":-0.7323507426323765,"friend2_3":3.957642425269584,"friend2_4":10.201294050139987,"friend2_5":16.727533180230004,"friend2_6":-9.669264627515291,"enemy1_0":7.354706164903268,"enemy1_1":6.022586118319313,"enemy1_2":1.2347984041088629,"enemy1_3":-17.645277936963844,"enemy1_4":-1.0923874044974493,"enemy1_5":16.15411728081314,"enemy1_6":7.897581548652145,"enemy2_0":13.533549351815292,"enemy2_1":5.4654342505838205,"enemy2_2":-4.63279635818473,"enemy2_3":3.8081953929546724,"enemy2_4":6.874769002134546,"enemy2_5":-8.64941077706527,"enemy2_6":10.653091690390111},"sequence":{"secondAction":37.05844163402533,"sameUnitCombo":0.6868538656331343,"coordinatedCombo":-8.10024926840222,"doubleCapture":47.26566606260625},"search":{"breadth":29.696331398153198,"exploration":0.039816821022379184,"ordering":0.599555339968936},"recruitBase":{"P":0.8187382269738146,"A":2.514980680522317,"C":5.917901230002988},"recruitResponse":{"P>P":2.975149548462977,"P>A":-6.9560941810707435,"P>C":2.8184182858645714,"A>P":-1.0310526120699874,"A>A":2.2193526795759793,"A>C":-0.19625405410881985,"C>P":-0.7429691399435603,"C>A":3.6706462345471915,"C>C":0.9914868499159045},"desiredRatio":{"P>P":3.2028222756527334,"P>A":1.137369500464278,"P>C":-0.6701009058056717,"A>P":4.354432517943321,"A>A":0.44872820561709836,"A>C":4.052154312675601,"C>P":2.978518057162941,"C>A":1.844481947626687,"C>C":2.815140887179176},"deploy":{"center":10.094312589570897,"enemyBase":2.1143174024682025,"support":0.17998083052643954,"exposure":1.5991704268532818},"pos36":{"P|friend|P|1":-6.692182511791015,"P|friend|P|2":0.0,"P|friend|P|3":5.0,"P|friend|C|1":2.721762100969005,"P|friend|C|2":8.885615672100155,"P|friend|C|3":7.009715643515628,"P|enemy|C|1":12.777978607913273,"P|enemy|C|2":0.0,"P|enemy|C|3":4.374273908274253,"P|enemy|A|1":10.737054766983965,"P|enemy|A|2":0.0,"P|enemy|A|3":2.495563380063274,"C|friend|P|1":-4.5,"C|friend|P|2":14.0,"C|friend|P|3":-21.56796350893699,"C|friend|C|1":-10.0,"C|friend|C|2":-1.8228998956898854,"C|friend|C|3":12.982756677228387,"C|enemy|P|1":-24.0,"C|enemy|P|2":-29.234249019953808,"C|enemy|P|3":0.0,"C|enemy|A|1":0.825542814253569,"C|enemy|A|2":-7.00960726990993,"C|enemy|A|3":-6.613089349239447,"A|friend|P|1":-3.9582281008235256,"A|friend|P|2":-22.262559280658735,"A|friend|P|3":0.0,"A|friend|A|1":-8.332473098130839,"A|friend|A|2":-2.3905757784698602,"A|friend|A|3":-40.45492018967258,"A|enemy|C|1":-26.612212617907858,"A|enemy|C|2":-29.554129620882534,"A|enemy|C|3":-11.538417454406993,"A|enemy|P|1":-3.9168021657356187,"A|enemy|P|2":-16.84193616655325,"A|enemy|P|3":-3.9712872162530255}},"sourceGeneration":65,"inheritanceRealization":{"father_exact":48,"mother_exact":47,"mean":10,"empirical_prior":6,"uniform_between":1},"clan":"Macedonian","emuHeritage":0.06586079306831312,"pendaHeritage":0.08210232700288268,"macedonianAncestry":true,"karlMartellAncestry":false,"offaAncestry":true,"philipIAncestry":false,"survivalBasis":["Top49","final-seven","finalist-extra-fatherhood"],"mutationLoci":["pos36.A|friend|P|1"],"slot":"Sun enrollee #1 — G66 ecology rank 34","generation":66,"place":34,"note":"Macedonian; G66 ecology rank 34. Unmodified source general selected for Sun Tzu's G67 experiment."},{"id":"G66_0139","name":"Belisarius the Unbound","origin":"probabilistic-cross","parents":["G65_0342","G65_0026"],"father":"G65_0342","mother":"G65_0026","tags":["true-wildcard","probabilistic-father-lottery","stable-mate-litter"],"genes":{"action":{"progress":0.35529813730007387,"support":20.837361773675436,"dispersion":0.4152136995690002,"force":-15.326221939846494,"exposure":-10.912017446532575,"repetition":-2.154558458875223,"center":10.22624264718087,"mobility":13.598539101310624,"enemyBase":-4.083804757112324,"hold":-19.98802748441313},"captureTarget":{"P":157.6188725986237,"A":131.59128705772207,"C":115.7885642594807},"attacker":{"P":6.231635328603673,"A":18.79209630439148,"C":-5.9752548643175665},"cell":{"friend1_0":5.7667423872412416,"friend1_1":-10.547886792899874,"friend1_2":2.05932879029448,"friend1_3":-0.5970916595071722,"friend1_4":7.66678244263767,"friend1_5":17.16507978743023,"friend1_6":-0.6882184087425249,"friend2_0":-2.6436982400242766,"friend2_1":2.9655785709307327,"friend2_2":-9.328348644330735,"friend2_3":4.573957077474048,"friend2_4":7.897695345075373,"friend2_5":13.93074762298522,"friend2_6":-9.299376513251023,"enemy1_0":10.967338665590708,"enemy1_1":-7.593742975470386,"enemy1_2":-36.49288324677907,"enemy1_3":-10.383771897400862,"enemy1_4":-2.7810563954379326,"enemy1_5":16.15411728081314,"enemy1_6":10.16616576957742,"enemy2_0":15.051454831386087,"enemy2_1":8.658783993333804,"enemy2_2":-5.178058924148029,"enemy2_3":14.098580354553592,"enemy2_4":2.0710326962110743,"enemy2_5":1.4878620649061727,"enemy2_6":10.653091690390111},"sequence":{"secondAction":45.53649211642197,"sameUnitCombo":-15.555627369225522,"coordinatedCombo":12.427687798444218,"doubleCapture":43.525059595412},"search":{"breadth":18.29400662168827,"exploration":-0.00038127418781581934,"ordering":1.6374771733085873},"recruitBase":{"P":-0.2670305886603886,"A":3.5820476242505923,"C":0.4216598733931578},"recruitResponse":{"P>P":-0.013674413939614993,"P>A":-1.733071024726569,"P>C":-2.6108921059087833,"A>P":-1.205428236524014,"A>A":1.9782390929563896,"A>C":-1.8277193106849063,"C>P":-1.6588768000229612,"C>A":-0.08182007388345025,"C>C":1.2696277565990641},"desiredRatio":{"P>P":-1.8066828554497294,"P>A":2.923208491660648,"P>C":1.643869551252183,"A>P":3.2393324662032756,"A>A":0.9390002851555661,"A>C":0.54370861232017,"C>P":-1.8597478783059525,"C>A":1.0394821146690254,"C>C":3.512942638944972},"deploy":{"center":15.603688865373957,"enemyBase":0.36530219193364744,"support":5.218887470208838,"exposure":-32.706118843542335},"pos36":{"P|friend|P|1":-12.584496355411915,"P|friend|P|2":13.20708933329844,"P|friend|P|3":0.0,"P|friend|C|1":0.6827986186359594,"P|friend|C|2":14.992624987771602,"P|friend|C|3":-1.664944721626787,"P|enemy|C|1":-20.0,"P|enemy|C|2":0.0,"P|enemy|C|3":-9.154914122159001,"P|enemy|A|1":5.034432762137857,"P|enemy|A|2":0.030215994594732485,"P|enemy|A|3":0.0,"C|friend|P|1":0.0,"C|friend|P|2":-18.0,"C|friend|P|3":0.0,"C|friend|C|1":7.614007749504226,"C|friend|C|2":12.241359962352819,"C|friend|C|3":2.9588059996851332,"C|enemy|P|1":6.62973672086373,"C|enemy|P|2":-7.782264649178886,"C|enemy|P|3":0.0,"C|enemy|A|1":57.035763735257994,"C|enemy|A|2":-6.442804289680001,"C|enemy|A|3":-9.308971581360847,"A|friend|P|1":28.993449903658252,"A|friend|P|2":12.0,"A|friend|P|3":-0.326605392882918,"A|friend|A|1":7.820414599856182,"A|friend|A|2":-10.56324638249379,"A|friend|A|3":-26.44613122835079,"A|enemy|C|1":-5.055790031244385,"A|enemy|C|2":-4.9993552663993555,"A|enemy|C|3":7.013307390340909,"A|enemy|P|1":24.305528686512453,"A|enemy|P|2":-0.0,"A|enemy|P|3":12.342733823981625}},"sourceGeneration":65,"inheritanceRealization":{"mother_exact":41,"father_exact":48,"mean":8,"empirical_prior":7,"uniform_between":8},"clan":"Unaligned","emuHeritage":0.027258964746099647,"pendaHeritage":0.07546067252204465,"macedonianAncestry":true,"karlMartellAncestry":true,"offaAncestry":true,"philipIAncestry":false,"mateSimilarity":0.6038157022991223,"mateRegime":"closer","litterFather":"G65_0342","litterMother":"G65_0026","slot":"Sun enrollee #2 — G66 ecology rank 1","generation":66,"place":1,"note":"Unaligned; G66 ecology rank 1. Unmodified source general selected for Sun Tzu's G67 experiment."},{"id":"G66_0050","name":"Offa the Hundred-Ninth","origin":"65R-guaranteed-survivor","parents":["G65_0021"],"father":"G65_0021","tags":["fatherhood:>3-rampage-elimination-wins","G57-source:G57_0108","rare-locus:2","probabilistic-father-lottery","stable-mate-litter"],"genes":{"action":{"progress":5.865034740107033,"support":9.258144912679477,"dispersion":-10.7612249450152,"force":-12.131699609306143,"exposure":-13.508238344390385,"repetition":-0.9994025760706675,"center":20.51155476685981,"mobility":20.93007379383769,"enemyBase":-17.525236097594373,"hold":-0.8859132510720698},"captureTarget":{"P":260.8108069985663,"A":101.9371835935266,"C":217.65630590656872},"attacker":{"P":-12.435236442701223,"A":38.491107854103674,"C":-7.103023009832556},"cell":{"friend1_0":-2.217477278801458,"friend1_1":-8.00457985546829,"friend1_2":-17.91551339971421,"friend1_3":-10.530738961128252,"friend1_4":6.408875154814517,"friend1_5":-11.328251461070753,"friend1_6":2.838009102483302,"friend2_0":-4.620473676465062,"friend2_1":0.7415422236915461,"friend2_2":-10.42487919617438,"friend2_3":6.540113475318292,"friend2_4":-4.898698783110035,"friend2_5":-10.808305082719968,"friend2_6":-8.980425199309767,"enemy1_0":10.77397721516705,"enemy1_1":-11.161781893912673,"enemy1_2":2.377774942046095,"enemy1_3":-19.81904076985693,"enemy1_4":-1.8716022402372445,"enemy1_5":16.736560264930773,"enemy1_6":2.7964908194055385,"enemy2_0":15.56206868932711,"enemy2_1":5.890848887006328,"enemy2_2":-4.320118804414938,"enemy2_3":8.430813599652817,"enemy2_4":1.8314572315734132,"enemy2_5":-3.9497986758406602,"enemy2_6":-6.0819665385167845},"sequence":{"secondAction":-13.11246170717231,"sameUnitCombo":-22.5224636021992,"coordinatedCombo":-22.515771918477924,"doubleCapture":36.12613358178794},"search":{"breadth":30.99221233625763,"exploration":0.4138200424423852,"ordering":1.1518952740860788},"recruitBase":{"P":1.6336795976300174,"A":0.38885565787002374,"C":-1.6542242791002788},"recruitResponse":{"P>P":2.060479618537248,"P>A":-3.7557114754133867,"P>C":1.5688626421255756,"A>P":4.649120555889051,"A>A":3.131588388885804,"A>C":-0.4965212316358146,"C>P":3.140341095766738,"C>A":0.6117275389222698,"C>C":1.8441565617006774},"desiredRatio":{"P>P":0.7339492950309745,"P>A":0.9298431012069761,"P>C":1.9304167988211243,"A>P":1.10046464357376,"A>A":1.99580129559238,"A>C":4.058022535943977,"C>P":-1.8597478783059525,"C>A":1.8433849587842115,"C>C":3.5503541319135135},"deploy":{"center":15.693355299709054,"enemyBase":-4.364544780826875,"support":4.508539115295779,"exposure":-0.15231122005492637},"pos36":{"P|friend|P|1":0.0,"P|friend|P|2":-4.9445464029407695,"P|friend|P|3":0.0,"P|friend|C|1":2.721762100969005,"P|friend|C|2":0.09650156312213642,"P|friend|C|3":1.1285335091596975,"P|enemy|C|1":0.0,"P|enemy|C|2":2.886190184985098,"P|enemy|C|3":-0.0,"P|enemy|A|1":0.0,"P|enemy|A|2":6.282189547047677,"P|enemy|A|3":3.150675422605829,"C|friend|P|1":0.0,"C|friend|P|2":-5.019786170232906,"C|friend|P|3":0.0,"C|friend|C|1":5.822055328062927,"C|friend|C|2":12.241359962352819,"C|friend|C|3":0.0,"C|enemy|P|1":8.667477960308696,"C|enemy|P|2":-0.34955870816669865,"C|enemy|P|3":0.0,"C|enemy|A|1":60.860404396361766,"C|enemy|A|2":-2.947060361313735,"C|enemy|A|3":-16.948731450796917,"A|friend|P|1":5.0,"A|friend|P|2":-16.827828244730302,"A|friend|P|3":0.0,"A|friend|A|1":2.8797093687508535,"A|friend|A|2":0.98752303051951,"A|friend|A|3":0.0,"A|enemy|C|1":9.15562182887824,"A|enemy|C|2":0.0,"A|enemy|C|3":-1.107212253941812,"A|enemy|P|1":24.305528686512453,"A|enemy|P|2":25.821095019224252,"A|enemy|P|3":-10.145643934456498}},"sourceGeneration":65,"inheritanceRealization":{"father_exact":51,"mean":9,"uniform_between":9,"mother_exact":32,"empirical_prior":11},"clan":"Mercian","emuHeritage":0.0038601917329486226,"pendaHeritage":0.0958424827813032,"macedonianAncestry":true,"karlMartellAncestry":false,"offaAncestry":true,"philipIAncestry":false,"mateSimilarity":0.7714635192535074,"mateRegime":"kin-band","litterFather":"G63_0054","litterMother":"G63_0155","survivalBasis":["Top49"],"slot":"Sun enrollee #3 — G66 ecology rank 2","generation":66,"place":2,"note":"Mercian; G66 ecology rank 2. Unmodified source general selected for Sun Tzu's G67 experiment."},{"id":"G66_0337","name":"The Stranger of the Third Gate","origin":"true-wildcard","parents":[],"father":null,"mother":null,"clan":"Unaligned","emuHeritage":0.0,"pendaHeritage":0.0,"macedonianAncestry":false,"karlMartellAncestry":false,"offaAncestry":false,"philipIAncestry":false,"tags":["true-wildcard"],"genes":{"action":{"progress":2.4507779437992645,"support":22.70066325304845,"dispersion":-6.83080915068532,"force":-32.83912537850373,"exposure":-9.115594064793912,"repetition":4.3153888288156175,"center":4.3637061805283,"mobility":19.64912978534523,"enemyBase":11.096770453107194,"hold":-29.00665554322162},"captureTarget":{"P":236.78510912240557,"A":131.59128705772207,"C":141.384713262702},"attacker":{"P":11.72596594863018,"A":5.316452814443892,"C":-6.618852593363075},"cell":{"friend1_0":5.7667423872412416,"friend1_1":-13.27421112303435,"friend1_2":5.732519706587048,"friend1_3":-8.27727790402545,"friend1_4":2.1282123408910363,"friend1_5":-11.41446097805324,"friend1_6":-1.4746979911107263,"friend2_0":-3.9124347000574353,"friend2_1":1.8814332205636748,"friend2_2":-4.433957109937477,"friend2_3":1.7075349658137806,"friend2_4":9.544676489625699,"friend2_5":13.64026364993522,"friend2_6":-8.981523059515194,"enemy1_0":6.721414038665898,"enemy1_1":-11.232979363847946,"enemy1_2":2.377774942046095,"enemy1_3":-6.590769001676152,"enemy1_4":-12.975579742085298,"enemy1_5":15.776486209239106,"enemy1_6":14.4930133385992,"enemy2_0":7.162131987113231,"enemy2_1":5.855261258707262,"enemy2_2":-4.63279635818473,"enemy2_3":5.238253067724483,"enemy2_4":3.35899339674602,"enemy2_5":0.13315739155214434,"enemy2_6":2.593775422929284},"sequence":{"secondAction":47.83636229822837,"sameUnitCombo":0.6868538656331343,"coordinatedCombo":5.767164904048123,"doubleCapture":39.73294254547928},"search":{"breadth":32.0,"exploration":0.27351211661221153,"ordering":0.599555339968936},"recruitBase":{"P":0.29286287264876276,"A":3.5820476242505923,"C":5.0974320180919435},"recruitResponse":{"P>P":-0.013674413939614993,"P>A":-5.22557528916729,"P>C":-3.526966156048924,"A>P":-1.0310526120699874,"A>A":2.8603964068961982,"A>C":0.8701517645191357,"C>P":1.4106059332305483,"C>A":3.47874918489427,"C>C":1.2696277565990641},"desiredRatio":{"P>P":-5.056453890568761,"P>A":0.9520973941716425,"P>C":1.5994913194159344,"A>P":2.818926482753519,"A>A":-2.278766937756636,"A>C":1.7744977238093644,"C>P":5.684355880897304,"C>A":3.8132424929088127,"C>C":3.584345877481061},"deploy":{"center":12.09394232198955,"enemyBase":-0.3907437588239189,"support":4.508539115295779,"exposure":-0.15231122005492637},"pos36":{"P|friend|P|1":1.2055394855748032,"P|friend|P|2":-15.841269589785412,"P|friend|P|3":4.830240840937407,"P|friend|C|1":1.3608810504845026,"P|friend|C|2":8.0,"P|friend|C|3":-25.104626508121463,"P|enemy|C|1":1.7509849024412538,"P|enemy|C|2":-1.3466268873997684,"P|enemy|C|3":0.0,"P|enemy|A|1":-0.015647815044087743,"P|enemy|A|2":-10.339939074459018,"P|enemy|A|3":2.495563380063274,"C|friend|P|1":0.0,"C|friend|P|2":3.5,"C|friend|P|3":0.0,"C|friend|C|1":-10.0,"C|friend|C|2":-15.871018082630059,"C|friend|C|3":-0.3133068429464114,"C|enemy|P|1":0.0,"C|enemy|P|2":-29.234249019953808,"C|enemy|P|3":-0.0,"C|enemy|A|1":57.035763735257994,"C|enemy|A|2":-6.442804289680001,"C|enemy|A|3":-16.948731450796917,"A|friend|P|1":16.166767932509945,"A|friend|P|2":-19.050237122634933,"A|friend|P|3":1.2685016927109696,"A|friend|A|1":-1.006454522502279,"A|friend|A|2":-10.56324638249379,"A|friend|A|3":-12.437342267029003,"A|enemy|C|1":-23.020876342109222,"A|enemy|C|2":-7.391358861264622,"A|enemy|C|3":-1.1990667479201718,"A|enemy|P|1":1.8526838359977071,"A|enemy|P|2":-2.542147351794922,"A|enemy|P|3":24.228346377972517}},"sourceGeneration":65,"slot":"Sun enrollee #4 — G66 ecology rank 7","generation":66,"place":7,"note":"Unaligned; G66 ecology rank 7. Unmodified source general selected for Sun Tzu's G67 experiment."},{"id":"G66_0203","name":"G66 Cross 94","origin":"probabilistic-cross","parents":["G65_0301","G65_0059"],"father":"G65_0301","mother":"G65_0059","tags":["rare-locus-mutation","probabilistic-mutation","fatherhood:final-seven","sun:rare-ring-screen","sun-stance:adherent","probabilistic-father-lottery","stable-mate-litter","sun-hypothesis:archer-pressure","sun-position:dissenter","sun-multiplier:-0.5","probabilistic-father-lottery","stable-mate-litter"],"genes":{"action":{"progress":12.865034740107033,"support":15.071945278132915,"dispersion":-17.597904139105083,"force":-14.85498281549684,"exposure":-13.66790667146901,"repetition":-2.154558458875223,"center":21.601219004567838,"mobility":-6.027320952709532,"enemyBase":-17.92079689039864,"hold":16.81022316503504},"captureTarget":{"P":254.6055739340052,"A":128.53947540308351,"C":167.07343299817705},"attacker":{"P":30.268992000763422,"A":25.19490193848569,"C":-5.40285835097847},"cell":{"friend1_0":6.44626117291941,"friend1_1":-7.120364909382472,"friend1_2":-2.6594300174935017,"friend1_3":0.32637142818227716,"friend1_4":0.46296582292682253,"friend1_5":-11.347826906677447,"friend1_6":-6.945153256393405,"friend2_0":-5.78349566634517,"friend2_1":-2.488355598850756,"friend2_2":-10.195898789380927,"friend2_3":3.957642425269584,"friend2_4":6.238827115365862,"friend2_5":-12.988367578694778,"friend2_6":-13.544958297144401,"enemy1_0":5.832502008743109,"enemy1_1":-6.073562066397507,"enemy1_2":-3.2365028479795344,"enemy1_3":1.249212826701621,"enemy1_4":-1.156418248568135,"enemy1_5":16.857762852439286,"enemy1_6":26.553231498920468,"enemy2_0":14.396840660910526,"enemy2_1":8.682849316807566,"enemy2_2":-5.953777947340977,"enemy2_3":13.46470091698011,"enemy2_4":3.629031205250589,"enemy2_5":-4.879320410013839,"enemy2_6":0.07935172260223755},"sequence":{"secondAction":-44.859145532093265,"sameUnitCombo":-5.41756730642186,"coordinatedCombo":-56.641186008776195,"doubleCapture":26.864019720696596},"search":{"breadth":21.028447750622096,"exploration":-0.014156531201864955,"ordering":1.8873612101194606},"recruitBase":{"P":0.7087649305090573,"A":3.5618121445039996,"C":-0.8426637678651018},"recruitResponse":{"P>P":-0.215651756780396,"P>A":-0.6586196981442998,"P>C":-2.4723187767016706,"A>P":2.8521180595379834,"A>A":-1.2129279766247791,"A>C":-1.1424901705128436,"C>P":-2.078005616443545,"C>A":0.6117275389222698,"C>C":1.2696277565990641},"desiredRatio":{"P>P":2.529359815249718,"P>A":1.5840203547865799,"P>C":2.194138938738246,"A>P":3.0571390397546567,"A>A":1.7761207078285528,"A>C":0.9007559333323288,"C>P":-1.8597478783059525,"C>A":4.522232969756161,"C>C":3.584345877481061},"deploy":{"center":15.603688865373957,"enemyBase":-3.814399450909569,"support":-8.021977282994706,"exposure":-32.706118843542335},"pos36":{"P|friend|P|1":13.858021782180192,"P|friend|P|2":18.0,"P|friend|P|3":8.916028370392748,"P|friend|C|1":-10.961462287888015,"P|friend|C|2":0.09201141962439065,"P|friend|C|3":-0.819169352624125,"P|enemy|C|1":0.0,"P|enemy|C|2":0.0,"P|enemy|C|3":-0.24843380295519774,"P|enemy|A|1":0.0,"P|enemy|A|2":1.7842385710867685,"P|enemy|A|3":-6.987369315298732,"C|friend|P|1":-4.5,"C|friend|P|2":14.0,"C|friend|P|3":0.0,"C|friend|C|1":4.695889277192454,"C|friend|C|2":12.241359962352819,"C|friend|C|3":-0.0,"C|enemy|P|1":5.313496054810707,"C|enemy|P|2":-1.5482362917296761,"C|enemy|P|3":0.46904085087075525,"C|enemy|A|1":35.61404362046766,"C|enemy|A|2":-0.49103357165617156,"C|enemy|A|3":-1.6692117119247767,"A|friend|P|1":-10.0,"A|friend|P|2":-3.0,"A|friend|P|3":-2.7291255701489083,"A|friend|A|1":12.544785263378309,"A|friend|A|2":2.4526710470796473,"A|friend|A|3":0.0,"A|enemy|C|1":-26.612212617907858,"A|enemy|C|2":-6.456190059296613,"A|enemy|C|3":1.7867978212979598,"A|enemy|P|1":1.8242793699820061,"A|enemy|P|2":23.453016467352825,"A|enemy|P|3":6.913385511890069}},"sourceGeneration":65,"inheritanceRealization":{"father_exact":44,"mother_exact":47,"uniform_between":4,"empirical_prior":5,"mean":12},"clan":"Mercian","emuHeritage":0.016037500555624477,"pendaHeritage":0.20254946898941728,"macedonianAncestry":true,"karlMartellAncestry":true,"offaAncestry":true,"philipIAncestry":false,"mateSimilarity":0.7831981124828372,"mateRegime":"kin-band","litterFather":"G65_0301","litterMother":"G65_0059","slot":"Sun enrollee #5 — G66 ecology rank 16","generation":66,"place":16,"note":"Mercian; G66 ecology rank 16. Unmodified source general selected for Sun Tzu's G67 experiment."},{"id":"G66_0271","name":"Sun Dissenter reserve-and-sequence from Cassander the Ninth","origin":"sun-student","parents":["G65_0324"],"father":"G65_0324","tags":["academy-graduate-G4","sun:archer-depth","sun-stance:heretic","probabilistic-father-lottery","sun:rare-ring-screen","sun-stance:heretic","probabilistic-father-lottery","probabilistic-father-lottery","rare-locus:1","sun-hypothesis:reserve-and-sequence","sun-position:dissenter","sun-multiplier:-0.5"],"genes":{"action":{"progress":7.355298137300074,"support":31.079292211859798,"dispersion":0.4152136995690002,"force":-23.68554483002952,"exposure":-6.374117150282567,"repetition":-3.1240551508468855,"center":4.32966362514082,"mobility":1.9726790472904678,"enemyBase":5.377792395848447,"hold":-8.781447471789663},"captureTarget":{"P":220.5605554618049,"A":132.0889527569421,"C":212.16288973148897},"attacker":{"P":-9.200462380600538,"A":-3.338797342943683,"C":2.4190420752846062},"cell":{"friend1_0":-4.551344039712779,"friend1_1":-1.9003864286813972,"friend1_2":5.732519706587048,"friend1_3":-1.443514949077434,"friend1_4":-17.2095347492141,"friend1_5":19.731720742931245,"friend1_6":-7.069750158618084,"friend2_0":-3.8113835703442565,"friend2_1":0.7415422236915461,"friend2_2":-0.7323507426323765,"friend2_3":3.957642425269584,"friend2_4":10.201294050139987,"friend2_5":16.727533180230004,"friend2_6":-9.669264627515291,"enemy1_0":7.354706164903268,"enemy1_1":6.022586118319313,"enemy1_2":1.2347984041088629,"enemy1_3":-17.645277936963844,"enemy1_4":-1.0923874044974493,"enemy1_5":16.15411728081314,"enemy1_6":7.897581548652145,"enemy2_0":13.533549351815292,"enemy2_1":5.4654342505838205,"enemy2_2":-4.63279635818473,"enemy2_3":3.8081953929546724,"enemy2_4":6.874769002134546,"enemy2_5":-8.64941077706527,"enemy2_6":10.653091690390111},"sequence":{"secondAction":37.05844163402533,"sameUnitCombo":0.6868538656331343,"coordinatedCombo":-8.10024926840222,"doubleCapture":45.63703756643918},"search":{"breadth":29.696331398153198,"exploration":0.039816821022379184,"ordering":0.599555339968936},"recruitBase":{"P":0.8187382269738146,"A":2.514980680522317,"C":6.139967769659258},"recruitResponse":{"P>P":2.975149548462977,"P>A":-6.9560941810707435,"P>C":2.8184182858645714,"A>P":-1.0310526120699874,"A>A":2.2193526795759793,"A>C":-0.19625405410881985,"C>P":-0.7429691399435603,"C>A":3.6706462345471915,"C>C":0.9914868499159045},"desiredRatio":{"P>P":3.2028222756527334,"P>A":1.137369500464278,"P>C":-0.6701009058056717,"A>P":4.354432517943321,"A>A":0.44872820561709836,"A>C":4.052154312675601,"C>P":2.978518057162941,"C>A":1.844481947626687,"C>C":2.815140887179176},"deploy":{"center":10.094312589570897,"enemyBase":2.1143174024682025,"support":0.17998083052643954,"exposure":1.5991704268532818},"pos36":{"P|friend|P|1":-6.692182511791015,"P|friend|P|2":0.0,"P|friend|P|3":5.0,"P|friend|C|1":2.721762100969005,"P|friend|C|2":8.885615672100155,"P|friend|C|3":7.009715643515628,"P|enemy|C|1":12.777978607913273,"P|enemy|C|2":0.0,"P|enemy|C|3":4.374273908274253,"P|enemy|A|1":10.737054766983965,"P|enemy|A|2":0.0,"P|enemy|A|3":2.495563380063274,"C|friend|P|1":-4.5,"C|friend|P|2":14.0,"C|friend|P|3":-21.56796350893699,"C|friend|C|1":-10.0,"C|friend|C|2":-1.8228998956898854,"C|friend|C|3":12.982756677228387,"C|enemy|P|1":-24.0,"C|enemy|P|2":-29.234249019953808,"C|enemy|P|3":0.0,"C|enemy|A|1":0.825542814253569,"C|enemy|A|2":-7.00960726990993,"C|enemy|A|3":-6.613089349239447,"A|friend|P|1":-3.9582281008235256,"A|friend|P|2":-22.262559280658735,"A|friend|P|3":0.0,"A|friend|A|1":-8.332473098130839,"A|friend|A|2":-2.3905757784698602,"A|friend|A|3":-40.45492018967258,"A|enemy|C|1":-26.612212617907858,"A|enemy|C|2":-29.554129620882534,"A|enemy|C|3":-11.538417454406993,"A|enemy|P|1":-3.9168021657356187,"A|enemy|P|2":-16.84193616655325,"A|enemy|P|3":-3.9712872162530255}},"sourceGeneration":65,"inheritanceRealization":{"father_exact":48,"mother_exact":47,"mean":10,"empirical_prior":6,"uniform_between":1},"clan":"Macedonian","emuHeritage":0.06586079306831312,"pendaHeritage":0.08210232700288268,"macedonianAncestry":true,"karlMartellAncestry":false,"offaAncestry":true,"philipIAncestry":false,"survivalBasis":[">4-rampage-wins"],"mutationLoci":["pos36.A|friend|P|1"],"sunHypothesis":"G66 Sun hypothesis: winners are differentiated most strongly in reserve timing and coordinated sequencing; test moving the three clearest loci toward the winner-associated values versus equally far away.","sunMultiplier":-0.5,"slot":"Sun enrollee #6 — G66 ecology rank 22","generation":66,"place":22,"note":"Macedonian; G66 ecology rank 22. Unmodified source general selected for Sun Tzu's G67 experiment."},{"id":"G66_0333","name":"G66 Dense Positional Wildcard 8","origin":"dense-positional-wildcard","parents":[],"father":null,"mother":null,"clan":"Unaligned","emuHeritage":0.0,"pendaHeritage":0.0,"macedonianAncestry":false,"karlMartellAncestry":false,"offaAncestry":false,"philipIAncestry":false,"tags":["dense-positional-wildcard"],"genes":{"action":{"progress":12.865034740107033,"support":12.255991980546472,"dispersion":0.09270262188899803,"force":-17.098376846053004,"exposure":-16.005474686162643,"repetition":-1.7619864113331936,"center":21.601219004567838,"mobility":29.421799920943013,"enemyBase":-3.5416436593464917,"hold":-12.354599691820113},"captureTarget":{"P":182.46787168851657,"A":262.4777255455584,"C":115.7885642594807},"attacker":{"P":6.231635328603673,"A":-3.338797342943683,"C":-5.40285835097847},"cell":{"friend1_0":6.44626117291941,"friend1_1":-13.27421112303435,"friend1_2":4.869865819460979,"friend1_3":0.894298712168894,"friend1_4":0.8479192890047407,"friend1_5":-11.328251461070753,"friend1_6":-0.6882184087425249,"friend2_0":-4.112574031559093,"friend2_1":2.9655785709307327,"friend2_2":-6.456349770095021,"friend2_3":1.7075349658137806,"friend2_4":-1.1048671206553764,"friend2_5":16.727533180230004,"friend2_6":-9.522250188452134,"enemy1_0":3.698847964705448,"enemy1_1":-18.474136250849305,"enemy1_2":3.49102672586296,"enemy1_3":4.226862414922621,"enemy1_4":-12.975579742085298,"enemy1_5":16.15411728081314,"enemy1_6":-3.1938506659525654,"enemy2_0":7.427323458420679,"enemy2_1":5.855261258707262,"enemy2_2":-5.178058924148029,"enemy2_3":1.9978447733126106,"enemy2_4":5.959670628148199,"enemy2_5":-8.29333791405391,"enemy2_6":11.070167786436864},"sequence":{"secondAction":-19.97113716066888,"sameUnitCombo":-52.773626893821266,"coordinatedCombo":-53.99780486815385,"doubleCapture":43.525059595412},"search":{"breadth":16.455168092750085,"exploration":0.01017941829489194,"ordering":1.2749543466171747},"recruitBase":{"P":0.7087649305090573,"A":2.2734388212161227,"C":5.3457919643050955},"recruitResponse":{"P>P":2.715724532618924,"P>A":-1.3816124345945344,"P>C":-0.9001573716114528,"A>P":2.018956942221511,"A>A":3.4518115163563055,"A>C":-5.453292478859735,"C>P":3.210210465494614,"C>A":3.47874918489427,"C>C":2.0811565115934716},"desiredRatio":{"P>P":5.899715381143965,"P>A":0.9449374293091533,"P>C":1.4322939073202954,"A>P":4.354432517943321,"A>A":-2.278766937756636,"A>C":3.1313641623440365,"C>P":7.627065670327152,"C>A":1.6964302019031032,"C>C":2.815140887179176},"deploy":{"center":10.442708050034275,"enemyBase":-1.2220671993310281,"support":-1.4998425469438457,"exposure":-44.25221633666837},"pos36":{"P|friend|P|1":-22.08873988363147,"P|friend|P|2":14.035954397094027,"P|friend|P|3":-65.48559430104272,"P|friend|C|1":-5.996041453067173,"P|friend|C|2":11.496312493885801,"P|friend|C|3":-54.512405808194416,"P|enemy|C|1":0.48422909702466005,"P|enemy|C|2":2.759966377539483,"P|enemy|C|3":12.0,"P|enemy|A|1":32.99919925213331,"P|enemy|A|2":-9.387483313783054,"P|enemy|A|3":-30.131386764379435,"C|friend|P|1":-0.0,"C|friend|P|2":10.869691895845387,"C|friend|P|3":-31.341199231927696,"C|friend|C|1":10.228015499008452,"C|friend|C|2":12.241359962352819,"C|friend|C|3":-0.5653690418070242,"C|enemy|P|1":-15.332522039691304,"C|enemy|P|2":-15.137186798691125,"C|enemy|P|3":23.531729082864477,"C|enemy|A|1":28.57463320853263,"C|enemy|A|2":-6.442804289680001,"C|enemy|A|3":-22.116287547261194,"A|friend|P|1":28.993449903658252,"A|friend|P|2":-16.827828244730302,"A|friend|P|3":0.5280126133662812,"A|friend|A|1":12.544785263378309,"A|friend|A|2":0.98752303051951,"A|friend|A|3":-5.9331634570898695,"A|enemy|C|1":50.77746864026813,"A|enemy|C|2":-29.39879161149266,"A|enemy|C|3":-23.78107127223825,"A|enemy|P|1":-8.111477086028273,"A|enemy|P|2":-0.8596853510093535,"A|enemy|P|3":1.9754133298626715}},"sourceGeneration":65,"slot":"Sun enrollee #7 — G66 ecology rank 198","generation":66,"place":198,"note":"Unaligned; G66 ecology rank 198. Unmodified source general selected for Sun Tzu's G67 experiment."},{"id":"G66_0306","name":"Sun Dissenter reserve-and-sequence from G65 Dense Positional Wildcard 8","origin":"sun-student","parents":["G65_0333"],"father":"G65_0333","clan":"Unaligned","emuHeritage":0.0,"pendaHeritage":0.0,"macedonianAncestry":false,"karlMartellAncestry":false,"offaAncestry":false,"philipIAncestry":false,"tags":["dense-positional-wildcard","sun-hypothesis:reserve-and-sequence","sun-position:dissenter","sun-multiplier:-0.5"],"genes":{"action":{"progress":0.35529813730007387,"support":9.258144912679477,"dispersion":-11.068511226441927,"force":-12.611588784940677,"exposure":-16.005474686162643,"repetition":6.817161370491151,"center":21.109954446386478,"mobility":19.64912978534523,"enemyBase":-3.5416436593464917,"hold":14.861184157502983},"captureTarget":{"P":211.7906955959569,"A":128.53947540308351,"C":159.0961172391473},"attacker":{"P":11.746932123688886,"A":-4.224993652130756,"C":1.1977762226876845},"cell":{"friend1_0":5.7667423872412416,"friend1_1":-14.257811914544806,"friend1_2":5.732519706587048,"friend1_3":-11.621234081263554,"friend1_4":5.771265199802482,"friend1_5":-12.473881290012654,"friend1_6":-7.069750158618084,"friend2_0":-8.529300347248148,"friend2_1":13.011777352574038,"friend2_2":-10.195898789380927,"friend2_3":2.140594966649171,"friend2_4":9.544676489625699,"friend2_5":10.324134311586985,"friend2_6":-1.3376559247357127,"enemy1_0":9.519553838274117,"enemy1_1":-11.161781893912673,"enemy1_2":-3.2365028479795344,"enemy1_3":-9.895996927288223,"enemy1_4":-7.423590991161271,"enemy1_5":17.717506426073964,"enemy1_6":0.4370785448561565,"enemy2_0":16.243915049849242,"enemy2_1":8.658783993333804,"enemy2_2":-4.393123452853606,"enemy2_3":3.3928336932299565,"enemy2_4":2.4476066101027656,"enemy2_5":2.5354170083652208,"enemy2_6":0.6029522677991326},"sequence":{"secondAction":69.43251052702573,"sameUnitCombo":-40.79010483885551,"coordinatedCombo":-55.62972616409044,"doubleCapture":31.184506800604467},"search":{"breadth":16.455168092750085,"exploration":-0.2,"ordering":1.2749543466171747},"recruitBase":{"P":0.29286287264876276,"A":3.291977882786025,"C":4.070284114738866},"recruitResponse":{"P>P":2.715724532618924,"P>A":-2.191259737463446,"P>C":-2.971212352045086,"A>P":1.0763409525509553,"A>A":1.7897695610750817,"A>C":1.899949780284795,"C>P":-2.078005616443545,"C>A":0.21287170311779152,"C>C":0.9495864408939171},"desiredRatio":{"P>P":-5.056453890568761,"P>A":0.9449374293091533,"P>C":-0.7410964177778885,"A>P":5.833155703930365,"A>A":1.2575240324712915,"A>C":-0.5031588650568719,"C>P":4.33737480573715,"C>A":3.1944854639435656,"C>C":3.7571191035860005},"deploy":{"center":10.519398169497766,"enemyBase":-4.786850516019505,"support":-1.4671046476319982,"exposure":-0.15231122005492637},"pos36":{"P|friend|P|1":0.0,"P|friend|P|2":-18.0,"P|friend|P|3":-13.232961095399748,"P|friend|C|1":-14.797769548023092,"P|friend|C|2":14.992624987771602,"P|friend|C|3":12.455154980960994,"P|enemy|C|1":20.0,"P|enemy|C|2":27.91643653805333,"P|enemy|C|3":-14.079428744569277,"P|enemy|A|1":6.0882097361496825,"P|enemy|A|2":12.407944753712098,"P|enemy|A|3":1.247781690031637,"C|friend|P|1":0.0,"C|friend|P|2":0.0,"C|friend|P|3":8.396121548233523,"C|friend|C|1":5.85416686179542,"C|friend|C|2":12.241359962352819,"C|friend|C|3":11.717315479096488,"C|enemy|P|1":49.15558811655189,"C|enemy|P|2":-24.57397503846395,"C|enemy|P|3":23.312524485886637,"C|enemy|A|1":9.006895250374845,"C|enemy|A|2":0.0,"C|enemy|A|3":-40.033261001478515,"A|friend|P|1":1.5977832229672693,"A|friend|P|2":-23.34739044744858,"A|friend|P|3":0.20800352388225277,"A|friend|A|1":-8.70892260974129,"A|friend|A|2":-10.56324638249379,"A|friend|A|3":-21.1746556562538,"A|enemy|C|1":-26.612212617907858,"A|enemy|C|2":-5.347580564822438,"A|enemy|C|3":1.80298116983538,"A|enemy|P|1":10.0,"A|enemy|P|2":11.94581905804585,"A|enemy|P|3":0.0}},"sourceGeneration":65,"sunHypothesis":"G66 Sun hypothesis: winners are differentiated most strongly in reserve timing and coordinated sequencing; test moving the three clearest loci toward the winner-associated values versus equally far away.","sunMultiplier":-0.5,"slot":"Sun enrollee #8 — G66 ecology rank 91","generation":66,"place":91,"note":"Unaligned; G66 ecology rank 91. Unmodified source general selected for Sun Tzu's G67 experiment."}];
+
+const RADIUS=3, DIRS=[[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+const BASE={R:[-3,0],B:[3,0]}, TYPEV={P:100,A:105,C:110}, TYPES=["P","A","C"];
+const POS_CLASSES=[
+ ["P","friend","P"],["P","friend","C"],["P","enemy","C"],["P","enemy","A"],
+ ["C","friend","P"],["C","friend","C"],["C","enemy","P"],["C","enemy","A"],
+ ["A","friend","P"],["A","friend","A"],["A","enemy","C"],["A","enemy","P"]
+];
+const CELLS=[];
+for(let q=-RADIUS;q<=RADIUS;q++)for(let r=-RADIUS;r<=RADIUS;r++){
+  if(Math.max(Math.abs(q),Math.abs(r),Math.abs(-q-r))<=RADIUS)CELLS.push([q,r]);
+}
+const ckey=p=>p[0]+","+p[1], same=(a,b)=>a[0]===b[0]&&a[1]===b[1];
+const CELLSET=new Set(CELLS.map(ckey));
+const NEI={};
+for(const p of CELLS)NEI[ckey(p)]=DIRS.map(d=>[p[0]+d[0],p[1]+d[1]]).filter(n=>CELLSET.has(ckey(n)));
+const foe=s=>s==="R"?"B":"R";
+const dist=(a,b)=>Math.max(Math.abs(a[0]-b[0]),Math.abs(a[1]-b[1]),Math.abs((-a[0]-a[1])-(-b[0]-b[1])));
+const deep=o=>JSON.parse(JSON.stringify(o));
+const units=(g,s)=>g.units.filter(u=>u.side===s);
+const omap=g=>new Map(g.units.map(u=>[ckey(u.pos),u]));
+const unitById=(g,id)=>g.units.find(u=>u.id===id);
+
+let state=null, humanSide="R", aiSide="B", opponent=null, nextId=7;
+let mode="idle", selectedUnit=null, gameOver=false;
+let archerStartState=null, archerFirst=null, archerMoveDest=null, archerTargetId=null;
+let timeline=[], timelineIndex=-1, aiRunning=false, aiHistory=[], aiTimer=null, aiRunToken=0;
+const AI_STEP_MS=650;
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const yieldUI=()=>new Promise(resolve=>setTimeout(resolve,0));
+
+const svg=document.getElementById("board"), promptEl=document.getElementById("prompt");
+const actionBar=document.getElementById("actionBar"), recruitBar=document.getElementById("recruitBar");
+const logEl=document.getElementById("log");
+
+function initial(){
+ return {units:[
+  {id:1,side:"R",typ:"P",pos:[-2,0],active:true},
+  {id:2,side:"R",typ:"A",pos:[-3,1],active:true},
+  {id:3,side:"R",typ:"C",pos:[-2,-1],active:true},
+  {id:4,side:"B",typ:"P",pos:[2,0],active:true},
+  {id:5,side:"B",typ:"A",pos:[3,-1],active:true},
+  {id:6,side:"B",typ:"C",pos:[2,1],active:true}
+ ],pending:{R:null,B:null},rnd:1,captured:{R:0,B:0},repetition:{R:0,B:0},turn:"R"};
+}
+function boardText(g){
+ return g.units.slice().sort((a,b)=>(a.side+a.id).localeCompare(b.side+b.id))
+  .map(u=>`${u.side}${u.typ}${u.id}@(${u.pos[0]},${u.pos[1]})${u.active?"":"*"}`).join(" ");
+}
+function safeStore(key,value){
+ try{localStorage.setItem(key,value)}catch(err){console.warn("OutMatch storage unavailable",err)}
+}
+function safeLoad(key,fallback=""){
+ try{return localStorage.getItem(key)??fallback}catch(err){console.warn("OutMatch storage unavailable",err);return fallback}
+}
+function appendLog(s){
+ logEl.value += (logEl.value ? "\n" : "") + s;
+ safeStore("outmatch_sun_g67_current_log",logEl.value);
+}
+function saveCurrent(){safeStore("outmatch_sun_g67_current_log",logEl.value)}
+function resetTimeline(){timeline=[];timelineIndex=-1;updateReviewControls()}
+function recordFrame(label){
+ timeline.push({label,state:deep(state)});timelineIndex=timeline.length-1;updateReviewControls();
+}
+function isReviewing(){return timeline.length>0 && timelineIndex>=0 && timelineIndex<timeline.length-1}
+function viewState(){return isReviewing()?timeline[timelineIndex].state:state}
+function updateReviewControls(){
+ const rb=document.getElementById("rewindBtn"),fb=document.getElementById("forwardBtn"),rs=document.getElementById("reviewState");
+ if(!rb||!fb||!rs)return;
+ rb.disabled=timelineIndex<=0;fb.disabled=timelineIndex<0||timelineIndex>=timeline.length-1;
+ if(!timeline.length)rs.textContent="Live";
+ else if(isReviewing())rs.textContent=`Review ${timelineIndex+1}/${timeline.length}: ${timeline[timelineIndex].label}`;
+ else rs.textContent=`Live · ${timeline.length} steps`;
+}
+function rewindFrame(){
+ if(aiRunning||timelineIndex<=0)return;timelineIndex--;render();updateReviewControls();
+}
+function forwardFrame(){
+ if(aiRunning||timelineIndex<0||timelineIndex>=timeline.length-1)return;timelineIndex++;render();updateReviewControls();
+}
+function archiveLog(){
+ if(!logEl.value.trim())return;
+ const logs=JSON.parse(safeLoad("outmatch_sun_g67_archived_logs","[]"));
+ logs.push(logEl.value);
+ safeStore("outmatch_sun_g67_archived_logs",JSON.stringify(logs));
+ alert(`Archived. Stored games: ${logs.length}`);
+}
+function copyText(t){
+ navigator.clipboard?.writeText(t).then(()=>{}).catch(()=>{
+   const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();
+ });
+}
+function pikeZone(g,pos,side,mp=omap(g)){
+ return NEI[ckey(pos)].some(n=>{const u=mp.get(ckey(n));return u&&u.side===foe(side)&&u.typ==="P"});
+}
+function legalMoves(g,u){
+ const mp=omap(g);
+ if(u.typ==="C"){
+  const out=[], seen=new Set([ckey(u.pos)]), q=[[u.pos,0]];
+  while(q.length){
+   const [p,d]=q.shift(); if(d>=3)continue;
+   for(const n of NEI[ckey(p)]){
+    const nk=ckey(n); if(seen.has(nk))continue; seen.add(nk);
+    const o=mp.get(nk), stop=pikeZone(g,n,u.side,mp);
+    if(!o||o.side!==u.side)out.push(n);
+    if((!o||o.side===u.side)&&!stop)q.push([n,d+1]);
+   }
+  }
+  return out;
+ }
+ if(u.typ==="A")return NEI[ckey(u.pos)].filter(n=>!mp.has(ckey(n)));
+ return NEI[ckey(u.pos)].filter(n=>{const o=mp.get(ckey(n));return !o||o.side!==u.side});
+}
+function archTargets(g,u){
+ const mp=omap(g);return NEI[ckey(u.pos)].map(n=>mp.get(ckey(n))).filter(x=>x&&x.side!==u.side);
+}
+function actionList(g,u){
+ const out=[["hold",u.id,null]];
+ if(u.typ==="A"){
+  for(const t of archTargets(g,u))out.push(["shoot",u.id,t.id]);
+  for(const m of legalMoves(g,u))out.push(["move",u.id,m]);
+  for(const m of legalMoves(g,u)){
+   const gg=deep(g);applyAction(gg,["move",u.id,m],false);
+   const uu=unitById(gg,u.id);
+   for(const t of archTargets(gg,uu))out.push(["moveshoot",u.id,[m,t.id]]);
+  }
+  // Shoot -> move. The shot may open a destination, so generate moves post-shot.
+  for(const t of archTargets(g,u)){
+   const gg=deep(g);applyAction(gg,["shoot",u.id,t.id],false);
+   const uu=unitById(gg,u.id);
+   for(const m of legalMoves(gg,uu))out.push(["shootmove",u.id,[t.id,m]]);
+  }
+ }else for(const m of legalMoves(g,u))out.push(["move",u.id,m]);
+ return out;
+}
+function applyAction(g,a,mark=true){
+ const [kind,uid,arg]=a, u=unitById(g,uid); if(!u)return;
+ const side=u.side;
+ if(kind==="hold"){if(mark)u.active=false;return}
+ if(kind==="shoot"){
+  const t=unitById(g,arg); if(t){g.captured[side]+=TYPEV[t.typ];g.units=g.units.filter(x=>x.id!==t.id)}
+ }else if(kind==="move"){
+  const dest=arg, victim=g.units.find(x=>same(x.pos,dest)&&x.side!==side);
+  if(victim){g.captured[side]+=TYPEV[victim.typ];g.units=g.units.filter(x=>x.id!==victim.id)}
+  u.pos=[...dest];
+ }else if(kind==="moveshoot"){
+  const [dest,tid]=arg;u.pos=[...dest];const t=unitById(g,tid);
+  if(t){g.captured[side]+=TYPEV[t.typ];g.units=g.units.filter(x=>x.id!==t.id)}
+ }else if(kind==="shootmove"){
+  const [tid,dest]=arg;const t=unitById(g,tid);
+  if(t){g.captured[side]+=TYPEV[t.typ];g.units=g.units.filter(x=>x.id!==t.id)}
+  u.pos=[...dest];
+ }
+ if(mark)u.active=false;
+}
+function immediateCaptures(g,side){
+ const mp=omap(g);let n=0;
+ for(const u of units(g,side)){
+  if(u.typ==="A")n+=archTargets(g,u).length;
+  else n+=legalMoves(g,u).filter(m=>{const o=mp.get(ckey(m));return o&&o.side!==side}).length;
+ }
+ return n;
+}
+function featureScore(before,after,side,genome,action){
+ const G=genome.genes, own0=units(before,side), own=units(after,side), en0=units(before,foe(side)), en=units(after,foe(side));
+ const actor0=own0.find(u=>u.id===action[1]), actor=own.find(u=>u.id===action[1])||actor0; let sc=0;
+ const killed=en0.filter(u=>!en.some(v=>v.id===u.id));
+ for(const k of killed){sc+=G.captureTarget[k.typ];if(actor0)sc+=G.attacker[actor0.typ]}
+ if(actor0&&actor){
+  const prog=dist(actor0.pos,BASE[foe(side)])-dist(actor.pos,BASE[foe(side)]);
+  sc+=prog*G.action.progress;
+  sc+=(dist(actor0.pos,[0,0])-dist(actor.pos,[0,0]))*G.action.center;
+  sc+=prog*G.action.enemyBase;
+  sc+=(after.units.some(x=>x.id===actor.id)?legalMoves(after,actor).length:0)*G.action.mobility*.15;
+  const friends=own.filter(u=>u.id!==actor.id);
+  const nf=friends.filter(u=>dist(actor.pos,u.pos)===1).length;
+  sc+=nf*G.action.support + (-nf)*G.action.dispersion;
+  for(const [who,arr] of [["friend",friends],["enemy",en]]){
+   for(const rr of [1,2]){
+    const c=Math.min(6,arr.filter(u=>dist(actor.pos,u.pos)<=rr).length);
+    sc+=G.cell[`${who}${rr}_${c}`];
+   }
+  }
+  for(const u of friends){
+   const d=dist(actor.pos,u.pos); if(d>=1&&d<=3){
+    const k=`${actor.typ}|friend|${u.typ}|${d}`; sc+=G.pos36?.[k]||0;
+   }
+  }
+  for(const u of en){
+   const d=dist(actor.pos,u.pos); if(d>=1&&d<=3){
+    const k=`${actor.typ}|enemy|${u.typ}|${d}`; sc+=G.pos36?.[k]||0;
+   }
+  }
+ }
+ sc+=immediateCaptures(after,side)*G.action.force;
+ sc+=immediateCaptures(after,foe(side))*G.action.exposure;
+ if(action[0]==="hold")sc+=G.action.hold;
+ return sc;
+}
+function stateHash(g){
+ return g.units.slice().sort((a,b)=>a.id-b.id).map(u=>`${u.side}${u.typ}${u.pos[0]},${u.pos[1]},${u.active?1:0}`).join("|");
+}
+function orderedCandidateActions(g,side,genome){
+ const rawBreadth=Math.max(1,Math.round(genome.genes.search.breadth));
+ const breadth=Math.min(8,rawBreadth); // current candidate breadth cap
+ const explore=genome.genes.search.exploration, ordering=genome.genes.search.ordering;
+ let pool=[];const mp=omap(g);
+ for(const u of units(g,side).filter(u=>u.active))for(const a of actionList(g,u)){
+  let quick=0;
+  if(a[0]==="shoot"||a[0]==="moveshoot"||a[0]==="shootmove")quick+=100;
+  else if(a[0]==="move"){const o=mp.get(ckey(a[2]));if(o&&o.side!==side)quick+=100}
+  if(a[0]==="hold")quick-=5;
+  pool.push([quick*ordering,a]);
+ }
+ pool.sort((a,b)=>b[0]-a[0]);
+ if(!pool.length)return [];
+ const k=Math.max(1,Math.min(pool.length,breadth));
+ const ne=Math.min(k-1,Math.round(k*explore));
+ return pool.slice(0,k-ne).concat(ne>0?pool.slice(-ne):[]).map(x=>x[1]);
+}
+function actionIncrement(before,after,side,genome,a,prior){
+ let sc=featureScore(before,after,side,genome,a);
+ if(prior.length){
+  sc+=genome.genes.sequence.secondAction;
+  if(prior[prior.length-1][1]===a[1])sc+=genome.genes.sequence.sameUnitCombo;
+  else sc+=genome.genes.sequence.coordinatedCombo;
+  if(after.units.length<=before.units.length-1)sc+=genome.genes.sequence.doubleCapture;
+ }
+ return sc;
+}
+function lookahead(g,side,genome,depth,history){
+ let beam=[[0,deep(g),[]]];const trans=new Set;
+ for(let ply=0;ply<Math.max(1,depth);ply++){
+  let candidates=[],expanded=false;
+  for(const [baseSc,bg,seq] of beam){
+   if(!units(bg,side).some(u=>u.active)){candidates.push([baseSc,bg,seq]);continue}
+   const actions=orderedCandidateActions(bg,side,genome);
+   if(!actions.length){candidates.push([baseSc,bg,seq]);continue}
+   for(const a of actions){
+    const before=deep(bg),ng=deep(bg);applyAction(ng,a,true);
+    const h=stateHash(ng);if(trans.has(h))continue;trans.add(h);expanded=true;
+    const sc=baseSc+actionIncrement(before,ng,side,genome,a,history.concat(seq));
+    candidates.push([sc,ng,seq.concat([a])]);
+   }
+  }
+  if(!expanded)break;
+  candidates.sort((a,b)=>b[0]-a[0]);
+  beam=candidates.slice(0,Math.max(1,Math.min(4,candidates.length))); // carried beam cap
+ }
+ beam.sort((a,b)=>b[0]-a[0]);return beam[0]||[0,deep(g),[]];
+}
+async function lookaheadAsync(g,side,genome,depth,history,token){
+ let beam=[[0,deep(g),[]]];const trans=new Set;let work=0;
+ for(let ply=0;ply<Math.max(1,depth);ply++){
+  let candidates=[],expanded=false;
+  for(const [baseSc,bg,seq] of beam){
+   if(token!==aiRunToken)throw new Error("AI turn cancelled");
+   if(!units(bg,side).some(u=>u.active)){candidates.push([baseSc,bg,seq]);continue}
+   const actions=orderedCandidateActions(bg,side,genome);
+   if(!actions.length){candidates.push([baseSc,bg,seq]);continue}
+   for(const a of actions){
+    const before=deep(bg),ng=deep(bg);applyAction(ng,a,true);
+    const h=stateHash(ng);if(trans.has(h))continue;trans.add(h);expanded=true;
+    const sc=baseSc+actionIncrement(before,ng,side,genome,a,history.concat(seq));
+    candidates.push([sc,ng,seq.concat([a])]);
+    if((++work%4)===0)await yieldUI();
+   }
+  }
+  if(!expanded)break;
+  candidates.sort((a,b)=>b[0]-a[0]);
+  beam=candidates.slice(0,Math.max(1,Math.min(4,candidates.length)));
+  await yieldUI();
+ }
+ beam.sort((a,b)=>b[0]-a[0]);return beam[0]||[0,deep(g),[]];
+}
+function fallbackAIAction(g,side,genome){
+ const active=units(g,side).filter(u=>u.active);if(!active.length)return null;
+ const actions=orderedCandidateActions(g,side,genome);
+ if(!actions.length)return ["hold",active[0].id,null];
+ let best=actions[0],bestScore=-Infinity;
+ for(const a of actions){
+  try{const before=deep(g),after=deep(g);applyAction(after,a,true);const s=actionIncrement(before,after,side,genome,a,[]);if(s>bestScore){bestScore=s;best=a}}catch(err){}
+ }
+ return best;
+}
+
+function planTurn(g,side,genome,nodeBudget=3){
+ // nodeBudget is retained as the public argument name for compatibility; here it is lookahead depth.
+ let current=deep(g),history=[],totalSc=0;
+ while(true){
+  const active=units(current,side).filter(u=>u.active);if(!active.length)break;
+  const [, , seq]=lookahead(current,side,genome,Math.max(1,nodeBudget),history);
+  const a=seq.length?seq[0]:["hold",active[0].id,null];
+  const before=deep(current);applyAction(current,a,true);
+  totalSc+=actionIncrement(before,current,side,genome,a,history);history.push(a);
+ }
+ return [totalSc,current,history];
+}
+function recruitScores(g,side,genome){
+ const G=genome.genes, mc={P:0,A:0,C:0},ec={P:0,A:0,C:0};
+ units(g,side).forEach(u=>mc[u.typ]++);units(g,foe(side)).forEach(u=>ec[u.typ]++);
+ const scores={};
+ for(const t of TYPES){
+  let s=G.recruitBase[t];
+  for(const e of TYPES){s+=G.recruitResponse[`${t}>${e}`]*ec[e];s+=.7*(G.desiredRatio[`${t}>${e}`]*ec[e]-mc[t])}
+  scores[t]=s;
+ }return scores;
+}
+function aiRecruit(g,side,genome){
+ const s=recruitScores(g,side,genome);return TYPES.slice().sort((a,b)=>s[b]-s[a])[0];
+}
+function deploymentSpots(g,side){const mp=omap(g);return NEI[ckey(BASE[side])].filter(p=>!mp.has(ckey(p)))}
+function aiDeploy(g,side,genome){
+ if(!g.pending[side])return null;const spots=deploymentSpots(g,side);if(!spots.length)return null;
+ const G=genome.genes, own=units(g,side),en=units(g,foe(side));
+ const score=p=>{
+  const support=own.filter(u=>dist(p,u.pos)===1).length, exposure=en.filter(u=>dist(p,u.pos)===1).length;
+  return -dist(p,[0,0])*G.deploy.center-dist(p,BASE[foe(side)])*G.deploy.enemyBase+support*G.deploy.support+exposure*G.deploy.exposure;
+ };
+ spots.sort((a,b)=>score(b)-score(a));const p=spots[0],typ=g.pending[side];
+ g.units.push({id:nextId++,side,typ,pos:[...p],active:false});g.pending[side]=null;return {typ,pos:p};
+}
+function material(g){return g.units.reduce((s,u)=>s+TYPEV[u.typ]*(u.side==="R"?1:-1),0)}
+function pressure(g){
+ const r=units(g,"R").reduce((s,u)=>s+6-dist(u.pos,BASE.B),0);
+ const b=units(g,"B").reduce((s,u)=>s+6-dist(u.pos,BASE.R),0);return r-b;
+}
+function actionDescription(g,a){
+ const [k,uid,arg]=a,u=unitById(g,uid);if(!u)return JSON.stringify(a);
+ const me=`${u.side}${u.typ}${u.id}`;
+ if(k==="hold")return `${me} holds @(${u.pos})`;
+ if(k==="shoot"){const t=unitById(g,arg);return `${me}@(${u.pos}) shoots ${t?t.side+t.typ+t.id:"?"+arg}@(${t?t.pos:"?"})`}
+ if(k==="move"){
+  const v=g.units.find(x=>same(x.pos,arg)&&x.side!==u.side);return `${me} (${u.pos})->(${arg})${v?` captures ${v.side}${v.typ}${v.id}`:""}`;
+ }
+ if(k==="moveshoot"){
+  const [dest,tid]=arg,t=unitById(g,tid);return `${me} (${u.pos})->(${dest}), shoots ${t?t.side+t.typ+t.id:"?"+tid}@(${t?t.pos:"?"})`;
+ }
+ if(k==="shootmove"){
+  const [tid,dest]=arg,t=unitById(g,tid);return `${me}@(${u.pos}) shoots ${t?t.side+t.typ+t.id:"?"+tid}@(${t?t.pos:"?"}), then ->(${dest})`;
+ }
+ return JSON.stringify(a);
+}
+
+function axialToPixel(p){
+ const size=57, x=330+size*Math.sqrt(3)*(p[0]+p[1]/2), y=300+size*1.5*p[1];return [x,y];
+}
+function hexPoints(x,y,size=53){
+ let pts=[];for(let i=0;i<6;i++){const a=Math.PI/180*(60*i-30);pts.push(`${x+size*Math.cos(a)},${y+size*Math.sin(a)}`)}return pts.join(" ");
+}
+function render(){
+ const g=viewState();
+ svg.innerHTML="";
+ const legalCells=new Set(), legalTargets=new Set(), deployCells=new Set();
+ if(mode==="deploy")deploymentSpots(g,humanSide).forEach(p=>deployCells.add(ckey(p)));
+ if(selectedUnit && selectedUnit.side===humanSide && selectedUnit.active){
+  if(selectedUnit.typ==="A"){
+   if(archerFirst===null || archerFirst==="shoot") legalMoves(g,selectedUnit).forEach(p=>legalCells.add(ckey(p)));
+   if(archerFirst===null || archerFirst==="move") archTargets(g,selectedUnit).forEach(t=>legalTargets.add(t.id));
+  }else{
+   legalMoves(g,selectedUnit).forEach(p=>legalCells.add(ckey(p)));
+  }
+ }
+ for(const p of CELLS){
+  const [x,y]=axialToPixel(p), poly=document.createElementNS("http://www.w3.org/2000/svg","polygon");
+  poly.setAttribute("points",hexPoints(x,y));
+  let cls=`hex tone${((p[0]-p[1])%3+3)%3}`;if(same(p,BASE.R))cls+=" baseR";if(same(p,BASE.B))cls+=" baseB";
+  if(legalCells.has(ckey(p)))cls+=" legal";if(deployCells.has(ckey(p)))cls+=" deploy";
+  poly.setAttribute("class",cls);poly.dataset.q=p[0];poly.dataset.r=p[1];poly.onclick=()=>onCellClick(p);svg.appendChild(poly);
+  const coord=document.createElementNS("http://www.w3.org/2000/svg","text");coord.setAttribute("x",x);coord.setAttribute("y",y+43);
+  coord.setAttribute("text-anchor","middle");coord.setAttribute("font-size","9");coord.setAttribute("fill","#aaa");coord.textContent=`${p[0]},${p[1]}`;svg.appendChild(coord);
+ }
+ for(const u of g.units){
+  const [x,y]=axialToPixel(u.pos),gr=document.createElementNS("http://www.w3.org/2000/svg","g");
+  gr.setAttribute("class","unit"+(u.active?"":" inactive"));gr.dataset.id=u.id;gr.onclick=e=>{e.stopPropagation();onUnitClick(u.id)};
+  const c=document.createElementNS("http://www.w3.org/2000/svg","circle");c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r","22");
+  c.setAttribute("fill",u.side==="R"?"#b43a32":"#345f9f");
+  if(legalTargets.has(u.id)){c.setAttribute("stroke","#d39613");c.setAttribute("stroke-width","5")}
+  if(selectedUnit&&selectedUnit.id===u.id){c.setAttribute("stroke","#111");c.setAttribute("stroke-width","5")}
+  const tx=document.createElementNS("http://www.w3.org/2000/svg","text");tx.setAttribute("x",x);tx.setAttribute("y",y);const iconMap={P:"🛡",A:"➶",C:"♞"};tx.textContent=iconMap[u.typ]||u.typ;
+  gr.appendChild(c);gr.appendChild(tx);svg.appendChild(gr);
+ }
+ updateStatus(g);
+}
+function updateStatus(g=state){
+ document.getElementById("roundBadge").textContent=`Round ${g?.rnd??"—"}`;
+ document.getElementById("turnBadge").textContent=g?`${g.turn==="R"?"Red":"Blue"} turn`:"Turn —";
+ document.getElementById("captureBadge").textContent=g?`Captured R ${g.captured.R} / B ${g.captured.B}`:"Captured R 0 / B 0";
+ document.getElementById("queueBadge").textContent=g&&humanSide?`Your queued recruit: ${g.pending[humanSide]||"—"}`:"Your queued recruit: —";
+ updateReviewControls();
+}
+function setPrompt(s){promptEl.textContent=s}
+function clearBars(){actionBar.innerHTML="";recruitBar.innerHTML="";recruitBar.classList.remove("recruit-required");document.getElementById("recruitModal").classList.remove("active")}
+function button(txt,fn,parent=actionBar){const b=document.createElement("button");b.textContent=txt;b.onclick=fn;parent.appendChild(b);return b}
+
+function ensureOpponent(){
+ const sel=document.getElementById("opponent");
+ const idx=Math.max(0,Math.min(FINALISTS.length-1,Number(sel?.value)||0));
+ if(!opponent)opponent=FINALISTS[idx]||FINALISTS[0];
+ return opponent;
+}
+function preserveStaleCurrentLog(){
+ const stale=safeLoad("outmatch_sun_g67_current_log","");
+ if(stale)logEl.value=stale;
+}
+function archiveAbandonedGame(){
+ if(logEl.value.trim() && state && !gameOver) appendLog("\n=== GAME ABANDONED BY HUMAN ===");
+}
+function beginGame(){
+ archiveAbandonedGame();
+ // Cancel any in-flight AI turn before replacing state.
+ aiRunToken++;if(aiTimer)clearTimeout(aiTimer);aiRunning=false;
+ const idx=+document.getElementById("opponent").value;opponent=FINALISTS[idx];humanSide=document.getElementById("humanColor").value;aiSide=foe(humanSide);
+ document.getElementById("menu").classList.add("hidden");
+ document.getElementById("matchup").textContent=`YOU (${humanSide==="R"?"FIRST · RED":"SECOND · BLUE"})  VS  ${opponent.name.toUpperCase()}`;
+ safeStore("outmatch_sun_g67_selected_opponent",String(idx));
+ safeStore("outmatch_sun_g67_selected_color",humanSide);
+ state=initial();nextId=7;selectedUnit=null;gameOver=false;mode="idle";clearArcherPartial();aiHistory=[];resetTimeline();
+ if(logEl.value.trim()) appendLog("\n================ NEW GAME ================");
+ appendLog(`OUTMATCH HUMAN GAME`);
+ appendLog(`Opponent: ${opponent.slot} ${opponent.name} [${opponent.id}]`);
+ appendLog(`Human: ${humanSide==="R"?"Red":"Blue"}; AI: ${aiSide==="R"?"Red":"Blue"}`);
+ appendLog(`Rules: radius-3; round cap 20; depth-3 receding-horizon AI; candidate cap 8; beam cap 4; all units activate; Archer may move+shoot or shoot+move`);
+ appendLog(`Sun enrollee note: ${opponent.note}`);
+ appendLog(`START BOARD: ${boardText(state)}`);
+ recordFrame("Start");
+ startRound();
+}
+function startRound(){
+ if(gameOver)return;
+ if(state.rnd>20){finishAdjudication();return}
+ appendLog(`\n=== ROUND ${state.rnd} ===`);
+ state.turn="R";beginSideTurn("R"); // Red always starts. If the human chose Blue, this launches the Red AI immediately.
+}
+function beginSideTurn(side){
+ if(gameOver)return;state.turn=side;selectedUnit=null;clearArcherPartial();clearBars();
+ // reset existing units BEFORE deployment
+ units(state,side).forEach(u=>u.active=true);
+ appendLog(`-- ${side==="R"?"RED":"BLUE"} TURN --`);
+ if(side===aiSide){mode="ai";runAITurn();return}
+ // human deploy first
+ if(state.pending[side]){
+  const spots=deploymentSpots(state,side);
+  if(spots.length){mode="deploy";setPrompt(`Deploy queued ${state.pending[side]}: click a highlighted hex next to your base.`);render();return}
+  appendLog(`DEPLOY blocked: queued ${state.pending[side]} remains pending`);
+ }
+ humanRecruitThenActions();
+}
+function humanRecruitThenActions(){
+ if(state.rnd%2===1 && state.pending[humanSide]===null){
+  mode="recruit";clearBars();recruitBar.classList.add("recruit-required");
+  document.getElementById("recruitModal").classList.add("active");
+  setPrompt(`RECRUITMENT DUE — choose a unit now. It will deploy at the start of Round ${state.rnd+1}.`);
+  for(const typ of TYPES)button(`Commit ${{P:"🛡 Pikeman",A:"➶ Archer",C:"♞ Cavalry"}[typ]}`,()=>{
+   if(mode!=="recruit"||state.pending[humanSide]!==null)return;
+   state.pending[humanSide]=typ;recruitBar.classList.remove("recruit-required");
+   document.getElementById("recruitModal").classList.remove("active");
+   appendLog(`COMMIT Human ${humanSide}: ${typ}`);saveCurrent();humanActionPhase();
+  },recruitBar);
+  render();return;
+ }
+ recruitBar.classList.remove("recruit-required");
+ humanActionPhase();
+}
+function clearArcherPartial(){
+ archerStartState=null;archerFirst=null;archerMoveDest=null;archerTargetId=null;
+}
+function actionButtonsForSelection(){
+ actionBar.innerHTML="";
+ if(!selectedUnit)return;
+ if(selectedUnit.typ==="A" && archerFirst!==null){
+  button("Finish Archer",()=>finishSelectedActivation());
+  return;
+ }
+ button("Hold",()=>finishSelectedActivation());
+ button("Cancel",()=>humanActionPhase());
+}
+function selectActiveUnit(u){
+ selectedUnit=u;mode="unit_selected";clearArcherPartial();
+ if(u.typ==="A")setPrompt(`Archer ${u.id}: click a green hex to move or an outlined enemy to shoot. You may do both, in either order.`);
+ else setPrompt(`${u.typ==="P"?"Pikeman":"Cavalry"} ${u.id}: click a highlighted destination${u.typ==="C"?" (up to 3 hexes)":""}.`);
+ actionButtonsForSelection();render();
+}
+function humanActionPhase(){
+ mode="select";selectedUnit=null;clearArcherPartial();clearBars();
+ const active=units(state,humanSide).filter(u=>u.active);
+ if(!active.length){endHumanTurn();return}
+ setPrompt("Select one of your active units, then click its highlighted move or target.");
+ button("End Turn",()=>{
+  for(const u of units(state,humanSide).filter(u=>u.active)){
+   appendLog(`ACTION Human: ${actionDescription(state,["hold",u.id,null])}`);applyAction(state,["hold",u.id,null],true)
+  }
+  afterHumanAction();
+ });
+ render();
+}
+function finishSelectedActivation(){
+ if(!selectedUnit)return;
+ const uid=selectedUnit.id;
+ if(selectedUnit.typ!=="A" || archerFirst===null){
+  const a=["hold",uid,null];appendLog(`ACTION Human: ${actionDescription(state,a)}`);applyAction(state,a,true);
+ }else if(archerFirst==="move"){
+  const a=["move",uid,archerMoveDest];appendLog(`ACTION Human: ${actionDescription(archerStartState,a)}`);const u=unitById(state,uid);if(u)u.active=false;
+ }else if(archerFirst==="shoot"){
+  const a=["shoot",uid,archerTargetId];appendLog(`ACTION Human: ${actionDescription(archerStartState,a)}`);const u=unitById(state,uid);if(u)u.active=false;
+ }
+ afterHumanAction();
+}
+function onCellClick(p){
+ if(!opponent||!state||gameOver||aiRunning||isReviewing())return;
+ if(mode==="recruit")return;
+ if(mode==="deploy"){
+  if(!deploymentSpots(state,humanSide).some(x=>same(x,p)))return;
+  const typ=state.pending[humanSide];state.units.push({id:nextId++,side:humanSide,typ,pos:[...p],active:false});state.pending[humanSide]=null;
+  appendLog(`DEPLOY Human ${humanSide}: ${typ}@(${p})`);recordFrame(`Human deploy ${typ}`);humanRecruitThenActions();return;
+ }
+ if(!selectedUnit||selectedUnit.side!==humanSide||!selectedUnit.active)return;
+ const u=unitById(state,selectedUnit.id);if(!u)return;
+ if(!legalMoves(state,u).some(x=>same(x,p)))return;
+ if(u.typ!=="A"){
+  const a=["move",u.id,p];appendLog(`ACTION Human: ${actionDescription(state,a)}`);applyAction(state,a,true);afterHumanAction();return;
+ }
+ if(archerFirst===null){
+  archerStartState=deep(state);archerFirst="move";archerMoveDest=[...p];u.pos=[...p];
+  if(archTargets(state,u).length){setPrompt(`Archer ${u.id} moved. Shoot an outlined adjacent enemy, or Finish Archer.`);actionButtonsForSelection();render();return}
+  finishSelectedActivation();return;
+ }
+ if(archerFirst==="shoot"){
+  const start=archerStartState, tid=archerTargetId;u.pos=[...p];u.active=false;
+  const a=["shootmove",u.id,[tid,[...p]]];appendLog(`ACTION Human: ${actionDescription(start,a)}`);afterHumanAction();return;
+ }
+}
+function onUnitClick(id){
+ if(!opponent||!state||gameOver||aiRunning||isReviewing()||state.turn!==humanSide)return;
+ if(mode==="recruit"||mode==="deploy"||mode==="ai"||mode==="error")return;
+ if(mode!=="select"&&mode!=="unit_selected")return;
+ const clicked=unitById(state,id);if(!clicked)return;
+ if(clicked.side===humanSide){
+  if(!clicked.active)return;
+  if(selectedUnit && selectedUnit.typ==="A" && archerFirst!==null)return;
+  selectActiveUnit(clicked);return;
+ }
+ if(!selectedUnit||!selectedUnit.active)return;
+ const u=unitById(state,selectedUnit.id);if(!u)return;
+ if(u.typ!=="A"){
+  if(legalMoves(state,u).some(p=>same(p,clicked.pos))){
+   const a=["move",u.id,[...clicked.pos]];appendLog(`ACTION Human: ${actionDescription(state,a)}`);applyAction(state,a,true);afterHumanAction();
+  }
+  return;
+ }
+ if(!archTargets(state,u).some(t=>t.id===clicked.id))return;
+ if(archerFirst===null){
+  archerStartState=deep(state);archerFirst="shoot";archerTargetId=clicked.id;
+  applyAction(state,["shoot",u.id,clicked.id],false);
+  const live=unitById(state,u.id);
+  if(!units(state,foe(humanSide)).length){if(live)live.active=false;appendLog(`ACTION Human: ${actionDescription(archerStartState,["shoot",u.id,clicked.id])}`);afterHumanAction();return}
+  if(live&&legalMoves(state,live).length){selectedUnit=live;setPrompt(`Archer ${u.id} shot. Move to a highlighted hex, or Finish Archer.`);actionButtonsForSelection();render();return}
+  finishSelectedActivation();return;
+ }
+ if(archerFirst==="move"){
+  const start=archerStartState,dest=archerMoveDest,tid=clicked.id;
+  applyAction(state,["shoot",u.id,tid],false);const live=unitById(state,u.id);if(live)live.active=false;
+  const a=["moveshoot",u.id,[dest,tid]];appendLog(`ACTION Human: ${actionDescription(start,a)}`);afterHumanAction();return;
+ }
+}
+function afterHumanAction(){
+ saveCurrent();selectedUnit=null;clearArcherPartial();recordFrame("Human action");
+ if(checkElimination())return;
+ humanActionPhase();
+}
+function endHumanTurn(){
+ appendLog(`END ${humanSide} BOARD: ${boardText(state)}`);saveCurrent();
+ if(checkElimination())return;
+ if(humanSide==="R"){beginSideTurn("B")}
+ else{state.rnd++;startRound()}
+}
+async function runAITurn(){
+ ensureOpponent();
+ const side=aiSide, token=++aiRunToken;
+ aiRunning=true;aiHistory=[];mode="ai";clearBars();
+ try{
+  setPrompt(`${opponent.name} is taking the ${side==="R"?"Red":"Blue"} turn…`);render();
+  await sleep(100);
+  if(token!==aiRunToken||gameOver)return;
+  const dep=aiDeploy(state,side,opponent);
+  if(dep){appendLog(`DEPLOY AI ${side}: ${dep.typ}@(${dep.pos})`);recordFrame(`AI deploy ${dep.typ}`);render();await sleep(AI_STEP_MS)}
+  else if(state.pending[side])appendLog(`DEPLOY AI blocked: queued reinforcement remains pending`);
+  if(state.rnd%2===1&&state.pending[side]===null){
+   const typ=aiRecruit(state,side,opponent);state.pending[side]=typ;updateStatus();
+  }
+  while(!gameOver && token===aiRunToken){
+   const active=units(state,side).filter(u=>u.active);
+   if(!active.length)break;
+   setPrompt(`${opponent.name} is thinking…`);render();await yieldUI();
+   let a=null;
+   try{
+    const [, , seq]=await lookaheadAsync(state,side,opponent,3,aiHistory,token);
+    a=seq.length?seq[0]:null;
+   }catch(err){
+    if(token!==aiRunToken)return;
+    console.error("Depth-3 planner failed; using fallback",err);
+   }
+   if(!a)a=fallbackAIAction(state,side,opponent)||["hold",active[0].id,null];
+   const actor=unitById(state,a[1]);
+   if(!actor||!actor.active){a=["hold",active[0].id,null]}
+   const before=deep(state);appendLog(`ACTION AI: ${actionDescription(before,a)}`);applyAction(state,a,true);aiHistory.push(a);
+   recordFrame(`AI ${actionDescription(before,a)}`);saveCurrent();render();
+   if(checkElimination())return;
+   setPrompt(`${opponent.name} moved. Next activation…`);
+   await sleep(AI_STEP_MS);
+  }
+  if(token===aiRunToken&&!gameOver)finishAITurn(side);
+ }catch(err){
+  if(token!==aiRunToken)return;
+  console.error("AI turn error",err);
+  const msg=err?.message||String(err);
+  appendLog(`AI ERROR — GAME PAUSED: ${msg}`);
+  aiRunning=false;mode="error";
+  setPrompt(`AI error: ${msg}. Game paused; no AI actions were converted to holds.`);
+  render();
+ }
+}
+function finishAITurn(side){
+ appendLog(`END ${side} BOARD: ${boardText(state)}`);saveCurrent();render();aiRunning=false;aiHistory=[];
+ if(checkElimination())return;
+ if(side==="R"){beginSideTurn("B")}
+ else{state.rnd++;startRound()}
+}
+function checkElimination(){
+ if(!units(state,"R").length||!units(state,"B").length){
+  const w=units(state,"R").length?"R":"B";finishGame(w,"elimination");return true;
+ }return false;
+}
+function finishAdjudication(){
+ const m=material(state),p=pressure(state);let w=null;
+ if(m!==0)w=m>0?"R":"B";
+ else if(state.captured.R!==state.captured.B)w=state.captured.R>state.captured.B?"R":"B";
+ else if(p!==0)w=p>0?"R":"B";
+ finishGame(w,w?"adjudicated":"draw",m,p);
+}
+function finishGame(w,outcome,m=material(state),p=pressure(state)){
+ gameOver=true;aiRunning=false;aiRunToken++;if(aiTimer)clearTimeout(aiTimer);mode="gameover";clearBars();render();
+ appendLog(`\n=== GAME OVER ===`);
+ appendLog(`Result: ${w?`${w} ${outcome}`:"draw"} in round ${state.rnd}`);
+ appendLog(`Captured: R ${state.captured.R}, B ${state.captured.B}; material ${m}; pressure ${p}`);
+ appendLog(`FINAL BOARD: ${boardText(state)}`);
+ appendLog(`Human result: ${w===humanSide?"WIN":w?"LOSS":"DRAW"}`);
+ setPrompt(w?`${w===humanSide?"You win":"AI wins"} by ${outcome}. Log is preserved below.`:"Draw. Log is preserved below.");
+ saveCurrent();
+}
+document.getElementById("newGame").onclick=()=>document.getElementById("menu").classList.remove("hidden");
+document.getElementById("startBattle").onclick=beginGame;
+document.getElementById("rewindBtn").onclick=rewindFrame;
+document.getElementById("forwardBtn").onclick=forwardFrame;
+
+function populate(){
+ const sel=document.getElementById("opponent");
+ const colorSel=document.getElementById("humanColor");
+
+ FINALISTS.forEach((g,i)=>{
+  const o=document.createElement("option");
+  o.value=i;
+  o.textContent=`${g.name}`;
+  sel.appendChild(o);
+ });
+
+ function selectMenuColor(color){
+  colorSel.value=color;
+  document.querySelectorAll(".order-card").forEach(card=>card.classList.toggle("active",card.dataset.color===color));
+ }
+ document.querySelectorAll(".order-card").forEach(card=>card.onclick=()=>selectMenuColor(card.dataset.color));
+
+ const savedOpponent=Math.max(0,Math.min(FINALISTS.length-1,Number(safeLoad("outmatch_sun_g67_selected_opponent","0"))||0));
+ const savedColor=safeLoad("outmatch_sun_g67_selected_color","R");
+ sel.value=String(savedOpponent);
+ colorSel.value=(savedColor==="B"?"B":"R");
+ selectMenuColor(colorSel.value);
+
+ sel.onchange=()=>safeStore("outmatch_sun_g67_selected_opponent",sel.value);
+ colorSel.onchange=()=>safeStore("outmatch_sun_g67_selected_color",colorSel.value);
+
+ preserveStaleCurrentLog();
+
+ opponent=null;
+ humanSide=colorSel.value;
+ aiSide=foe(humanSide);
+ state=initial();
+ nextId=7;
+ gameOver=true;
+ mode="idle";
+ resetTimeline();
+ recordFrame("Initial board");
+ render();
+ setPrompt("Choose opponent and color, then press End / New Game.");
+}
+populate();
+</script>
+</body>
 </html>
