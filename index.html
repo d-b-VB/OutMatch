@@ -5,42 +5,54 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>OutMatch — Mercian Counterstrategy Panel</title>
 <style>
-:root{--bg:#f4efe6;--panel:#fffdf9;--ink:#24211e;--muted:#756d64;--line:#d7cec1;--red:#b33b32;--blue:#315f9b;--sel:#222;--legal:#d39613;--deploy:#1f8a4c}
+:root{--bg:#171c22;--panel:#fffaf0;--ink:#252019;--muted:#756d64;--line:#d4c5ad;--red:#b33b32;--blue:#315f9b;--sel:#222;--legal:#f0b429;--deploy:#2ba568;--gold:#c89032}
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
-header{padding:7px 12px;border-bottom:1px solid var(--line);background:var(--panel);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-h1{font-size:18px;margin:0;white-space:nowrap}.sub{font-size:12px;color:var(--muted)}
+body{margin:0;font-family:Georgia,"Times New Roman",serif;background:radial-gradient(circle at 50% 20%,#34404a 0,#1b2229 48%,#11161b 100%);color:var(--ink);overflow:hidden}
+header{padding:11px 18px;border-bottom:1px solid #a7772c;background:linear-gradient(90deg,#131920,#252d34,#131920);color:#f7ead2;display:flex;align-items:center;gap:14px;box-shadow:0 3px 18px #0008;position:relative;z-index:3}
+h1{font-size:20px;margin:0;white-space:nowrap;letter-spacing:.04em}.sub{font-size:12px;color:var(--muted)}
 .controls{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-left:auto}
 .controls label{font-size:12px;color:var(--muted);display:flex;gap:5px;align-items:center;margin:0}
-select,button{font:inherit;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);padding:6px 8px}
-select{max-width:240px}button{cursor:pointer}button:hover{border-color:#8f867b}button.primary{font-weight:700}button:disabled{opacity:.45;cursor:not-allowed}
-main{display:grid;grid-template-columns:minmax(500px,1fr) 350px;gap:8px;padding:6px 8px;max-width:1180px;margin:auto;align-items:start;height:calc(100vh - 50px);overflow:hidden}
-#boardWrap{background:var(--panel);border:1px solid var(--line);border-radius:9px;height:min(520px,calc(100vh - 64px));min-height:0;display:flex;justify-content:center;align-items:center;padding:2px;overflow:hidden}
+select,button{font:inherit;border:1px solid var(--line);border-radius:7px;background:#fffaf0;color:var(--ink);padding:7px 10px}button{cursor:pointer}button:hover{border-color:var(--gold);transform:translateY(-1px)}button.primary{font-weight:700;background:linear-gradient(#e4b55c,#bd7f26);color:#1b160f;border-color:#f3cf83;box-shadow:0 3px 10px #0003}button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+main{display:grid;grid-template-columns:minmax(500px,1fr) 350px;gap:12px;padding:12px;max-width:1200px;margin:auto;align-items:start;height:calc(100vh - 56px);overflow:hidden}
+#boardWrap{background:radial-gradient(circle,#f7f0e1 0,#e5d7bd 72%,#c4ab82 100%);border:2px solid #b48848;border-radius:14px;height:min(620px,calc(100vh - 80px));min-height:0;display:flex;justify-content:center;align-items:center;padding:10px;overflow:hidden;box-shadow:0 12px 32px #0008,inset 0 0 38px #76501f40}
 #board{height:100%;width:auto;max-width:100%;display:block}
-.hex{stroke:#b8afa3;stroke-width:2;fill:#eee5d7;cursor:pointer}.hex.baseR{fill:#efd5d0}.hex.baseB{fill:#d8e3f2}.hex.legal{stroke:var(--legal);stroke-width:5}.hex.deploy{stroke:var(--deploy);stroke-width:5}.hex.selected{stroke:var(--sel);stroke-width:6}
+.hex{stroke:#fff8;stroke-width:3;cursor:pointer;filter:drop-shadow(0 2px 1px #5b452c55);transition:filter .15s}.hex.tone0{fill:#d3b16d}.hex.tone1{fill:#78968a}.hex.tone2{fill:#a97668}.hex:hover{filter:brightness(1.08) drop-shadow(0 2px 2px #0005)}.hex.baseR{fill:#c65b54}.hex.baseB{fill:#537dab}.hex.legal{stroke:var(--legal);stroke-width:6}.hex.deploy{stroke:var(--deploy);stroke-width:6}.hex.selected{stroke:var(--sel);stroke-width:6}
 .unit circle{stroke:#fff;stroke-width:2.2}.unit text{fill:#fff;font-weight:800;font-size:19px;text-anchor:middle;dominant-baseline:middle;pointer-events:none}.unit.inactive circle{opacity:.45}.unit{cursor:pointer}
-aside{display:flex;flex-direction:column;gap:6px;height:min(520px,calc(100vh - 64px));overflow-y:auto;padding-right:2px}.card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:10px}.card h2{font-size:12px;margin:0 0 7px;text-transform:uppercase;letter-spacing:.05em;color:#5d554d}
+aside{display:flex;flex-direction:column;gap:9px;height:min(620px,calc(100vh - 80px));overflow-y:auto;padding-right:3px}.card{background:linear-gradient(135deg,#fffdf7,#f2e7d3);border:1px solid #c4a77c;border-radius:11px;padding:12px;box-shadow:0 5px 16px #0004}.card h2{font-size:12px;margin:0 0 7px;text-transform:uppercase;letter-spacing:.12em;color:#704b22}
 #prompt{font-size:15px;font-weight:700;min-height:22px;margin-bottom:6px}.status{display:flex;gap:5px;flex-wrap:wrap;font-size:11px;margin-bottom:7px}.badge{border:1px solid var(--line);border-radius:99px;padding:2px 6px;background:#fff}
 .row,#actionBar,#recruitBar,.logbuttons,#reviewBar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}#actionBar:empty,#recruitBar:empty{display:none}#reviewBar{margin-top:7px}#reviewBar button{padding:5px 8px}#reviewState{font-size:11px;color:var(--muted);margin-left:2px}
 #actionBar button,#recruitBar button{padding:6px 8px;min-width:0}#recruitBar button{min-width:112px;font-weight:800}#recruitBar.recruit-required{padding:7px;border:2px solid #d39613;border-radius:8px;background:#fff8df}
 .small{font-size:11px;color:var(--muted);line-height:1.35}.sideR{color:var(--red);font-weight:700}.sideB{color:var(--blue);font-weight:700}
 #log{width:100%;height:145px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;line-height:1.3;border:1px solid var(--line);border-radius:6px;padding:7px;background:#fff;margin-top:7px}
 .logbuttons button{font-size:11px;padding:5px 7px}
+.menu{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 10%,#47535cdd,#11171bf2 70%);backdrop-filter:blur(5px)}.menu.hidden{display:none}.menu-panel{width:min(900px,100%);max-height:calc(100vh - 36px);overflow:auto;background:linear-gradient(145deg,#fffaf0,#e8d6b8);border:2px solid #d1a24d;border-radius:20px;box-shadow:0 25px 80px #000c,inset 0 0 60px #fff8;padding:30px}.menu-kicker{text-align:center;color:#93641e;font-size:12px;letter-spacing:.24em;font-weight:700}.menu h2{text-align:center;font-size:38px;margin:7px 0 5px}.menu-lede{text-align:center;color:#65594a;margin:0 auto 24px;max-width:570px}.menu-label{font-size:11px;letter-spacing:.16em;font-weight:700;color:#755125;margin:18px 0 9px}.opponent-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.opponent-card{padding:12px;text-align:left;min-height:91px;background:#fff9ed;border:1px solid #cdbb9d}.opponent-card b,.opponent-card small{display:block}.opponent-card b{font-size:14px;line-height:1.15}.opponent-card small{margin-top:7px;color:#847562;font-size:10px}.opponent-card.active{border:2px solid #a86e1e;background:#f4ddae;box-shadow:inset 0 0 0 2px #fff7}.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.order-card{padding:13px;text-align:left;background:#fff9ed}.order-card b,.order-card small{display:block}.order-card small{color:#746756;margin-top:3px}.order-card.active{border:2px solid currentColor;box-shadow:inset 0 0 0 2px #fff}.order-card.red{color:#9f332d}.order-card.blue{color:#294f82}.menu-actions{text-align:center;margin-top:20px}.menu-actions button{font-size:17px;padding:12px 35px}.header-note{font-size:11px;color:#c9b99e;margin-left:auto;letter-spacing:.08em}
 @media(max-width:900px){body{overflow:auto}header{align-items:flex-start}.controls{margin-left:0;width:100%}main{grid-template-columns:1fr;height:auto;overflow:visible}#boardWrap{height:auto;min-height:430px}#board{height:auto;width:min(100%,570px);max-height:520px}aside{height:auto;overflow:visible;display:grid;grid-template-columns:1fr 1fr}.logcard{grid-column:1/-1}}
-@media(max-width:620px){aside{display:flex}.controls label:first-child{width:100%}.controls label:first-child select{flex:1;max-width:none}#boardWrap{min-height:430px}}
+@media(max-width:700px){.opponent-grid{grid-template-columns:1fr 1fr}.menu-panel{padding:19px}.menu h2{font-size:29px}}@media(max-width:620px){aside{display:flex}#boardWrap{min-height:430px}.header-note{display:none}}
 </style>
 </head>
 <body>
 <header>
   <h1>OutMatch — Sun Tzu G67 Enrollees</h1>
   <div class="controls">
-    <label>Opponent <select id="opponent"></select></label>
-    <label>You play <select id="humanColor"><option value="R">Red</option><option value="B">Blue</option></select></label>
-    <button class="primary" id="newGame">End / New Game</button>
+    <span class="header-note" id="matchup">CHOOSE YOUR MATCH</span>
+    <button class="primary" id="newGame">New battle</button>
   </div>
 </header>
+<section class="menu" id="menu" aria-label="New battle setup">
+ <div class="menu-panel">
+  <div class="menu-kicker">THE WAR ROOM</div><h2>Choose your rival</h2>
+  <p class="menu-lede">Eight evolved generals await. Study their lineage, choose your place in the turn order, then take command.</p>
+  <div class="menu-label">I. SELECT AN OPPONENT</div><div class="opponent-grid" id="opponentGrid"></div>
+  <div class="menu-label">II. CHOOSE THE INITIATIVE</div><div class="order-grid">
+   <button class="order-card red" data-color="R"><b>Go first · Red</b><small>Seize the initiative and open the battle.</small></button>
+   <button class="order-card blue" data-color="B"><b>Go second · Blue</b><small>Read the field and answer the opening move.</small></button>
+  </div>
+  <div class="menu-actions"><button class="primary" id="startBattle">Enter the board →</button></div>
+  <select id="opponent" hidden></select><select id="humanColor" hidden><option value="R">Red</option><option value="B">Blue</option></select>
+ </div>
+</section>
 <main>
-  <section id="boardWrap"><svg id="board" viewBox="0 0 660 600"></svg></section>
+  <section id="boardWrap"><svg id="board" viewBox="-30 -30 720 660" aria-label="OutMatch game board"></svg></section>
   <aside>
     <div class="card">
       <div id="prompt">Choose an opponent and start a game.</div>
@@ -438,7 +450,7 @@ function render(){
  for(const p of CELLS){
   const [x,y]=axialToPixel(p), poly=document.createElementNS("http://www.w3.org/2000/svg","polygon");
   poly.setAttribute("points",hexPoints(x,y));
-  let cls="hex";if(same(p,BASE.R))cls+=" baseR";if(same(p,BASE.B))cls+=" baseB";
+  let cls=`hex tone${((p[0]-p[1])%3+3)%3}`;if(same(p,BASE.R))cls+=" baseR";if(same(p,BASE.B))cls+=" baseB";
   if(legalCells.has(ckey(p)))cls+=" legal";if(deployCells.has(ckey(p)))cls+=" deploy";
   poly.setAttribute("class",cls);poly.dataset.q=p[0];poly.dataset.r=p[1];poly.onclick=()=>onCellClick(p);svg.appendChild(poly);
   const coord=document.createElementNS("http://www.w3.org/2000/svg","text");coord.setAttribute("x",x);coord.setAttribute("y",y+43);
@@ -485,6 +497,8 @@ function beginGame(){
  // Cancel any in-flight AI turn before replacing state.
  aiRunToken++;if(aiTimer)clearTimeout(aiTimer);aiRunning=false;
  const idx=+document.getElementById("opponent").value;opponent=FINALISTS[idx];humanSide=document.getElementById("humanColor").value;aiSide=foe(humanSide);
+ document.getElementById("menu").classList.add("hidden");
+ document.getElementById("matchup").textContent=`YOU (${humanSide==="R"?"FIRST · RED":"SECOND · BLUE"})  VS  ${opponent.name.toUpperCase()}`;
  safeStore("outmatch_sun_g67_selected_opponent",String(idx));
  safeStore("outmatch_sun_g67_selected_color",humanSide);
  state=initial();nextId=7;selectedUnit=null;gameOver=false;mode="idle";clearArcherPartial();aiHistory=[];resetTimeline();
@@ -719,7 +733,8 @@ function finishGame(w,outcome,m=material(state),p=pressure(state)){
  setPrompt(w?`${w===humanSide?"You win":"AI wins"} by ${outcome}. Log is preserved below.`:"Draw. Log is preserved below.");
  saveCurrent();
 }
-document.getElementById("newGame").onclick=beginGame;
+document.getElementById("newGame").onclick=()=>document.getElementById("menu").classList.remove("hidden");
+document.getElementById("startBattle").onclick=beginGame;
 document.getElementById("rewindBtn").onclick=rewindFrame;
 document.getElementById("forwardBtn").onclick=forwardFrame;
 
@@ -734,10 +749,27 @@ function populate(){
   sel.appendChild(o);
  });
 
+ const grid=document.getElementById("opponentGrid");
+ FINALISTS.forEach((g,i)=>{
+  const card=document.createElement("button");card.className="opponent-card";card.dataset.opponent=i;
+  card.innerHTML=`<b>${g.name}</b><small>${g.clan||"Unaligned"} · ecology rank ${g.place??"—"}</small>`;
+  card.onclick=()=>{sel.value=String(i);selectMenuOpponent(i)};grid.appendChild(card);
+ });
+ function selectMenuOpponent(i){
+  grid.querySelectorAll(".opponent-card").forEach((card,n)=>card.classList.toggle("active",n===i));
+  document.getElementById("opponentDesc").textContent=FINALISTS[i].note;
+ }
+ function selectMenuColor(color){
+  colorSel.value=color;
+  document.querySelectorAll(".order-card").forEach(card=>card.classList.toggle("active",card.dataset.color===color));
+ }
+ document.querySelectorAll(".order-card").forEach(card=>card.onclick=()=>selectMenuColor(card.dataset.color));
+
  const savedOpponent=Math.max(0,Math.min(FINALISTS.length-1,Number(safeLoad("outmatch_sun_g67_selected_opponent","0"))||0));
  const savedColor=safeLoad("outmatch_sun_g67_selected_color","R");
  sel.value=String(savedOpponent);
  colorSel.value=(savedColor==="B"?"B":"R");
+ selectMenuOpponent(savedOpponent);selectMenuColor(colorSel.value);
 
  sel.onchange=()=>{
   document.getElementById("opponentDesc").textContent=FINALISTS[+sel.value].note;

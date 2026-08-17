@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Open the address shown by the local server. Choose one of the eight Sun Tzu G67 enrollees, choose Red or Blue, and press **End / New Game**.
+Open the address shown by the local server. The War Room menu lets you choose one of the eight Sun Tzu G67 enrollees and decide whether to take the first move as Red or answer as Blue. Select **Enter the board** to begin.
 
 ## How to play
 
