@@ -13,8 +13,8 @@ h1{font-size:20px;margin:0;white-space:nowrap;letter-spacing:.04em}.sub{font-siz
 .controls{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-left:auto}
 .controls label{font-size:12px;color:var(--muted);display:flex;gap:5px;align-items:center;margin:0}
 select,button{font:inherit;border:1px solid var(--line);border-radius:7px;background:#fffaf0;color:var(--ink);padding:7px 10px}button{cursor:pointer}button:hover{border-color:var(--gold);transform:translateY(-1px)}button.primary{font-weight:700;background:linear-gradient(#e4b55c,#bd7f26);color:#1b160f;border-color:#f3cf83;box-shadow:0 3px 10px #0003}button:disabled{opacity:.45;cursor:not-allowed;transform:none}
-main{display:grid;grid-template-columns:minmax(500px,1fr) 350px;gap:12px;padding:12px;max-width:1200px;margin:auto;align-items:start;height:calc(100vh - 56px);overflow:hidden}
-#boardWrap{background:radial-gradient(circle,#f7f0e1 0,#e5d7bd 72%,#c4ab82 100%);border:2px solid #b48848;border-radius:14px;height:min(620px,calc(100vh - 80px));min-height:0;display:flex;justify-content:center;align-items:center;padding:10px;overflow:hidden;box-shadow:0 12px 32px #0008,inset 0 0 38px #76501f40}
+main{display:grid;grid-template-columns:minmax(500px,1fr) 300px;gap:12px;padding:12px;max-width:1150px;margin:auto;align-items:start;height:calc(100vh - 56px);overflow:hidden}
+#boardWrap{position:relative;background:radial-gradient(circle,#f7f0e1 0,#e5d7bd 72%,#c4ab82 100%);border:2px solid #b48848;border-radius:14px;height:min(620px,calc(100vh - 80px));min-height:0;display:flex;justify-content:center;align-items:center;padding:10px;overflow:hidden;box-shadow:0 12px 32px #0008,inset 0 0 38px #76501f40}
 #board{height:100%;width:auto;max-width:100%;display:block}
 .hex{stroke:#fff8;stroke-width:3;cursor:pointer;filter:drop-shadow(0 2px 1px #5b452c55);transition:filter .15s}.hex.tone0{fill:#d3b16d}.hex.tone1{fill:#78968a}.hex.tone2{fill:#a97668}.hex:hover{filter:brightness(1.08) drop-shadow(0 2px 2px #0005)}.hex.baseR{fill:#c65b54}.hex.baseB{fill:#537dab}.hex.legal{stroke:var(--legal);stroke-width:6}.hex.deploy{stroke:var(--deploy);stroke-width:6}.hex.selected{stroke:var(--sel);stroke-width:6}
 .unit circle{stroke:#fff;stroke-width:2.2}.unit text{fill:#fff;font-weight:800;font-size:19px;text-anchor:middle;dominant-baseline:middle;pointer-events:none}.unit.inactive circle{opacity:.45}.unit{cursor:pointer}
@@ -25,14 +25,15 @@ aside{display:flex;flex-direction:column;gap:9px;height:min(620px,calc(100vh - 8
 .small{font-size:11px;color:var(--muted);line-height:1.35}.sideR{color:var(--red);font-weight:700}.sideB{color:var(--blue);font-weight:700}
 #log{width:100%;height:145px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;line-height:1.3;border:1px solid var(--line);border-radius:6px;padding:7px;background:#fff;margin-top:7px}
 .logbuttons button{font-size:11px;padding:5px 7px}
-.menu{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 10%,#47535cdd,#11171bf2 70%);backdrop-filter:blur(5px)}.menu.hidden{display:none}.menu-panel{width:min(900px,100%);max-height:calc(100vh - 36px);overflow:auto;background:linear-gradient(145deg,#fffaf0,#e8d6b8);border:2px solid #d1a24d;border-radius:20px;box-shadow:0 25px 80px #000c,inset 0 0 60px #fff8;padding:30px}.menu-kicker{text-align:center;color:#93641e;font-size:12px;letter-spacing:.24em;font-weight:700}.menu h2{text-align:center;font-size:38px;margin:7px 0 5px}.menu-lede{text-align:center;color:#65594a;margin:0 auto 24px;max-width:570px}.menu-label{font-size:11px;letter-spacing:.16em;font-weight:700;color:#755125;margin:18px 0 9px}.opponent-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.opponent-card{padding:12px;text-align:left;min-height:91px;background:#fff9ed;border:1px solid #cdbb9d}.opponent-card b,.opponent-card small{display:block}.opponent-card b{font-size:14px;line-height:1.15}.opponent-card small{margin-top:7px;color:#847562;font-size:10px}.opponent-card.active{border:2px solid #a86e1e;background:#f4ddae;box-shadow:inset 0 0 0 2px #fff7}.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.order-card{padding:13px;text-align:left;background:#fff9ed}.order-card b,.order-card small{display:block}.order-card small{color:#746756;margin-top:3px}.order-card.active{border:2px solid currentColor;box-shadow:inset 0 0 0 2px #fff}.order-card.red{color:#9f332d}.order-card.blue{color:#294f82}.menu-actions{text-align:center;margin-top:20px}.menu-actions button{font-size:17px;padding:12px 35px}.header-note{font-size:11px;color:#c9b99e;margin-left:auto;letter-spacing:.08em}
+.menu{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px;background:#11171bf2;backdrop-filter:blur(5px)}.menu.hidden{display:none}.menu-panel{width:min(440px,100%);background:linear-gradient(145deg,#fffaf0,#e8d6b8);border:2px solid #d1a24d;border-radius:20px;box-shadow:0 25px 80px #000c;padding:28px}.menu h2{text-align:center;font-size:32px;margin:0 0 22px}.menu-label{display:block;font-size:12px;font-weight:700;color:#755125;margin:16px 0 7px}.menu select{display:block;width:100%;max-width:none;padding:11px;background:#fff}.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.order-card{padding:13px;text-align:left;background:#fff9ed}.order-card b{display:block}.order-card.active{border:2px solid currentColor}.order-card.red{color:#9f332d}.order-card.blue{color:#294f82}.menu-actions{text-align:center;margin-top:20px}.menu-actions button{font-size:17px;padding:12px 35px}.header-note{font-size:11px;color:#c9b99e;margin-left:auto;letter-spacing:.08em}.recruit-modal{display:none;position:absolute;z-index:8;inset:0;place-items:center;background:#15202aaa;backdrop-filter:blur(2px)}.recruit-modal.active{display:grid}.recruit-box{width:min(390px,calc(100% - 32px));padding:24px;background:#fff8e9;border:2px solid #d39a38;border-radius:16px;text-align:center;box-shadow:0 18px 50px #0009}.recruit-box h2{margin:0 0 7px}.recruit-box p{margin:0 0 16px;color:#6d604f}.recruit-box .row{justify-content:center}.recruit-box button{min-width:105px}
+.menu select[hidden]{display:none}
 @media(max-width:900px){body{overflow:auto}header{align-items:flex-start}.controls{margin-left:0;width:100%}main{grid-template-columns:1fr;height:auto;overflow:visible}#boardWrap{height:auto;min-height:430px}#board{height:auto;width:min(100%,570px);max-height:520px}aside{height:auto;overflow:visible;display:grid;grid-template-columns:1fr 1fr}.logcard{grid-column:1/-1}}
 @media(max-width:700px){.opponent-grid{grid-template-columns:1fr 1fr}.menu-panel{padding:19px}.menu h2{font-size:29px}}@media(max-width:620px){aside{display:flex}#boardWrap{min-height:430px}.header-note{display:none}}
 </style>
 </head>
 <body>
 <header>
-  <h1>OutMatch — Sun Tzu G67 Enrollees</h1>
+  <h1>OutMatch</h1>
   <div class="controls">
     <span class="header-note" id="matchup">CHOOSE YOUR MATCH</span>
     <button class="primary" id="newGame">New battle</button>
@@ -40,19 +41,18 @@ aside{display:flex;flex-direction:column;gap:9px;height:min(620px,calc(100vh - 8
 </header>
 <section class="menu" id="menu" aria-label="New battle setup">
  <div class="menu-panel">
-  <div class="menu-kicker">THE WAR ROOM</div><h2>Choose your rival</h2>
-  <p class="menu-lede">Eight evolved generals await. Study their lineage, choose your place in the turn order, then take command.</p>
-  <div class="menu-label">I. SELECT AN OPPONENT</div><div class="opponent-grid" id="opponentGrid"></div>
-  <div class="menu-label">II. CHOOSE THE INITIATIVE</div><div class="order-grid">
-   <button class="order-card red" data-color="R"><b>Go first · Red</b><small>Seize the initiative and open the battle.</small></button>
-   <button class="order-card blue" data-color="B"><b>Go second · Blue</b><small>Read the field and answer the opening move.</small></button>
+  <h2>New battle</h2>
+  <label class="menu-label" for="opponent">Choose opponent</label><select id="opponent"></select>
+  <span class="menu-label">Turn order</span><div class="order-grid">
+   <button class="order-card red" data-color="R"><b>Go first</b></button>
+   <button class="order-card blue" data-color="B"><b>Go second</b></button>
   </div>
-  <div class="menu-actions"><button class="primary" id="startBattle">Enter the board →</button></div>
-  <select id="opponent" hidden></select><select id="humanColor" hidden><option value="R">Red</option><option value="B">Blue</option></select>
+  <div class="menu-actions"><button class="primary" id="startBattle">Play</button></div>
+  <select id="humanColor" hidden><option value="R">Red</option><option value="B">Blue</option></select>
  </div>
 </section>
 <main>
-  <section id="boardWrap"><svg id="board" viewBox="-30 -30 720 660" aria-label="OutMatch game board"></svg></section>
+  <section id="boardWrap"><svg id="board" viewBox="-30 -30 720 660" aria-label="OutMatch game board"></svg><div class="recruit-modal" id="recruitModal"><div class="recruit-box"><h2>Choose a reinforcement</h2><p>Choose before moving your pieces.</p><div id="recruitBar" class="row"></div></div></div></section>
   <aside>
     <div class="card">
       <div id="prompt">Choose an opponent and start a game.</div>
@@ -65,20 +65,7 @@ aside{display:flex;flex-direction:column;gap:9px;height:min(620px,calc(100vh - 8
       <div id="actionBar" class="row"></div>
       <div id="reviewBar"><button id="rewindBtn">◀ Rewind</button><button id="forwardBtn">Forward ▶</button><span id="reviewState">Live</span><span class="small" style="margin-left:auto">Sun G67 · unmodified sources</span></div>
     </div>
-    <div class="card">
-      <h2>Recruitment</h2>
-      <div id="recruitBar" class="row"></div>
-      <div class="small" style="margin-top:6px">Recruitment is due in Rounds 1, 3, 5…; committed units deploy the following round beside your base.</div>
-    </div>
-    <div class="card">
-      <h2>Opponent</h2>
-      <div id="opponentDesc" class="small">Choose one of Sun Tzu’s eight G67 enrollees. These are the unmodified G66 source generals.</div>
-    </div>
-    <div class="card logcard">
-      <h2>Game log</h2>
-      <div class="small">The log is editable. Type comments directly into it at any point; later moves will append below them. Starting a new game keeps prior games in this same selectable textarea.</div>
-      <textarea id="log" spellcheck="false"></textarea>
-    </div>
+    <textarea id="log" hidden></textarea>
   </aside>
 </main>
 <script>
@@ -476,7 +463,7 @@ function updateStatus(g=state){
  updateReviewControls();
 }
 function setPrompt(s){promptEl.textContent=s}
-function clearBars(){actionBar.innerHTML="";recruitBar.innerHTML="";recruitBar.classList.remove("recruit-required")}
+function clearBars(){actionBar.innerHTML="";recruitBar.innerHTML="";recruitBar.classList.remove("recruit-required");document.getElementById("recruitModal").classList.remove("active")}
 function button(txt,fn,parent=actionBar){const b=document.createElement("button");b.textContent=txt;b.onclick=fn;parent.appendChild(b);return b}
 
 function ensureOpponent(){
@@ -503,7 +490,6 @@ function beginGame(){
  safeStore("outmatch_sun_g67_selected_color",humanSide);
  state=initial();nextId=7;selectedUnit=null;gameOver=false;mode="idle";clearArcherPartial();aiHistory=[];resetTimeline();
  if(logEl.value.trim()) appendLog("\n================ NEW GAME ================");
- document.getElementById("opponentDesc").textContent=opponent.note;
  appendLog(`OUTMATCH HUMAN GAME`);
  appendLog(`Opponent: ${opponent.slot} ${opponent.name} [${opponent.id}]`);
  appendLog(`Human: ${humanSide==="R"?"Red":"Blue"}; AI: ${aiSide==="R"?"Red":"Blue"}`);
@@ -536,10 +522,12 @@ function beginSideTurn(side){
 function humanRecruitThenActions(){
  if(state.rnd%2===1 && state.pending[humanSide]===null){
   mode="recruit";clearBars();recruitBar.classList.add("recruit-required");
+  document.getElementById("recruitModal").classList.add("active");
   setPrompt(`RECRUITMENT DUE — choose a unit now. It will deploy at the start of Round ${state.rnd+1}.`);
   for(const typ of TYPES)button(`Commit ${{P:"🛡 Pikeman",A:"➶ Archer",C:"♞ Cavalry"}[typ]}`,()=>{
    if(mode!=="recruit"||state.pending[humanSide]!==null)return;
    state.pending[humanSide]=typ;recruitBar.classList.remove("recruit-required");
+   document.getElementById("recruitModal").classList.remove("active");
    appendLog(`COMMIT Human ${humanSide}: ${typ}`);saveCurrent();humanActionPhase();
   },recruitBar);
   render();return;
@@ -567,7 +555,7 @@ function selectActiveUnit(u){
  actionButtonsForSelection();render();
 }
 function humanActionPhase(){
- mode="select";selectedUnit=null;clearArcherPartial();actionBar.innerHTML="";recruitBar.innerHTML="";recruitBar.classList.remove("recruit-required");
+ mode="select";selectedUnit=null;clearArcherPartial();clearBars();
  const active=units(state,humanSide).filter(u=>u.active);
  if(!active.length){endHumanTurn();return}
  setPrompt("Select one of your active units, then click its highlighted move or target.");
@@ -749,16 +737,6 @@ function populate(){
   sel.appendChild(o);
  });
 
- const grid=document.getElementById("opponentGrid");
- FINALISTS.forEach((g,i)=>{
-  const card=document.createElement("button");card.className="opponent-card";card.dataset.opponent=i;
-  card.innerHTML=`<b>${g.name}</b><small>${g.clan||"Unaligned"} · ecology rank ${g.place??"—"}</small>`;
-  card.onclick=()=>{sel.value=String(i);selectMenuOpponent(i)};grid.appendChild(card);
- });
- function selectMenuOpponent(i){
-  grid.querySelectorAll(".opponent-card").forEach((card,n)=>card.classList.toggle("active",n===i));
-  document.getElementById("opponentDesc").textContent=FINALISTS[i].note;
- }
  function selectMenuColor(color){
   colorSel.value=color;
   document.querySelectorAll(".order-card").forEach(card=>card.classList.toggle("active",card.dataset.color===color));
@@ -769,15 +747,11 @@ function populate(){
  const savedColor=safeLoad("outmatch_sun_g67_selected_color","R");
  sel.value=String(savedOpponent);
  colorSel.value=(savedColor==="B"?"B":"R");
- selectMenuOpponent(savedOpponent);selectMenuColor(colorSel.value);
+ selectMenuColor(colorSel.value);
 
- sel.onchange=()=>{
-  document.getElementById("opponentDesc").textContent=FINALISTS[+sel.value].note;
-  safeStore("outmatch_sun_g67_selected_opponent",sel.value);
- };
+ sel.onchange=()=>safeStore("outmatch_sun_g67_selected_opponent",sel.value);
  colorSel.onchange=()=>safeStore("outmatch_sun_g67_selected_color",colorSel.value);
 
- document.getElementById("opponentDesc").textContent=FINALISTS[savedOpponent].note;
  preserveStaleCurrentLog();
 
  opponent=null;

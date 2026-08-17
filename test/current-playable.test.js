@@ -5,7 +5,7 @@ import { readFile } from "node:fs/promises";
 const playable = await readFile(new URL("../index.html", import.meta.url), "utf8");
 
 test("ships the current G67 playable and its eight AI opponents", () => {
-  assert.match(playable, /OutMatch — Sun Tzu G67 Enrollees/);
+  assert.match(playable, /<h1>OutMatch<\/h1>/);
   const roster = playable.match(/const FINALISTS = (\[[\s\S]*?\]);\n\nconst RADIUS=/);
   assert.ok(roster, "embedded G67 opponent roster is present");
   assert.equal(JSON.parse(roster[1]).length, 8);
@@ -22,7 +22,7 @@ test("preserves the authoritative current planner and rules constants", () => {
 });
 
 test("offers a dedicated battle menu and a proper three-color hex tiling", () => {
-  assert.match(playable, /id="opponentGrid"/);
+  assert.match(playable, /for="opponent">Choose opponent/);
   assert.match(playable, /data-color="R"/);
   assert.match(playable, /data-color="B"/);
   assert.match(playable, /tone\$\{\(\(p\[0\]-p\[1\]\)%3\+3\)%3\}/);
@@ -38,4 +38,12 @@ test("offers a dedicated battle menu and a proper three-color hex tiling", () =>
       }
     }
   }
+});
+
+test("requires recruitment from a board modal", () => {
+  assert.match(playable, /id="recruitModal"/);
+  assert.match(playable, /Choose before moving your pieces/);
+  assert.match(playable, /recruitModal"\)\.classList\.add\("active"\)/);
+  assert.doesNotMatch(playable, /<h2>Game log<\/h2>/);
+  assert.doesNotMatch(playable, /<h2>Opponent<\/h2>/);
 });
