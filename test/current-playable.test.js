@@ -25,11 +25,12 @@ test("preserves the authoritative current planner and rules constants", () => {
   assert.match(playable, /function aiDeploy\(/);
 });
 
-test("offers a dedicated battle menu and a proper three-color hex tiling", () => {
+test("offers a dedicated battle menu and a muted three-tone hex tiling", () => {
   assert.match(playable, /for="opponent">Choose opponent/);
   assert.match(playable, /data-color="R"/);
   assert.match(playable, /data-color="B"/);
   assert.match(playable, /tone\$\{\(\(p\[0\]-p\[1\]\)%3\+3\)%3\}/);
+  assert.match(playable, /\.hex\.tone0\{fill:#a59c8a\}\.hex\.tone1\{fill:#969b91\}\.hex\.tone2\{fill:#a0968e\}/);
 
   const directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]];
   const tone = ([q, r]) => ((q - r) % 3 + 3) % 3;
