@@ -474,7 +474,8 @@ function render(overrideState=null){
  }
  for(const u of g.units){
   const [x,y]=axialToPixel(u.pos),gr=document.createElementNS("http://www.w3.org/2000/svg","g");
-  gr.setAttribute("class","unit"+(u.active?"":" inactive"));gr.dataset.id=u.id;gr.onclick=e=>{e.stopPropagation();onUnitClick(u.id)};
+  const opening=g.rnd===1&&g.turn===humanSide&&u.side===humanSide&&u.id<=6;
+  gr.setAttribute("class","unit"+(u.active?"":" inactive")+(opening?" opening":""));gr.dataset.id=u.id;gr.onclick=e=>{e.stopPropagation();onUnitClick(u.id)};
   const c=document.createElementNS("http://www.w3.org/2000/svg","circle");c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r","22");
   c.setAttribute("fill",u.side==="R"?"#b43a32":"#345f9f");
   if(legalTargets.has(u.id)){c.setAttribute("stroke","#d39613");c.setAttribute("stroke-width","5")}
