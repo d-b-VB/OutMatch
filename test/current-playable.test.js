@@ -3,12 +3,16 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 const playable = await readFile(new URL("../index.html", import.meta.url), "utf8");
+const latestOpponentFile = JSON.parse(await readFile(new URL("../OutMatch_G82_human_opponents_selected16.txt", import.meta.url), "utf8"));
 
-test("ships the current G67 playable and its eight AI opponents", () => {
+test("ships the current playable and its sixteen selected G82 AI opponents", () => {
   assert.match(playable, /<h1>OutMatch<\/h1>/);
-  const roster = playable.match(/const FINALISTS = (\[[\s\S]*?\]);\n\nconst RADIUS=/);
-  assert.ok(roster, "embedded G67 opponent roster is present");
-  assert.equal(JSON.parse(roster[1]).length, 8);
+  const roster = playable.match(/const FINALISTS = (\[[\s\S]*?\]);\n/);
+  assert.ok(roster, "embedded G82 opponent roster is present");
+  const opponents = JSON.parse(roster[1]);
+  assert.equal(opponents.length, 16);
+  assert.ok(opponents.every(opponent => opponent.id.startsWith("G82_") && opponent.round_robin_record));
+  assert.equal(JSON.stringify(opponents), JSON.stringify(latestOpponentFile.opponents));
 });
 
 test("preserves the authoritative current planner and rules constants", () => {
@@ -67,4 +71,19 @@ test("how-to-play orders units and illustrates their matchups", () => {
   assert.match(playable, /aria-label="Archer moves then attacks an adjacent pikeman"/);
   assert.match(playable, /class="shot"/);
   assert.match(playable, /Archer attacks an adjacent tile before or after moving\./);
+});
+
+test("shows star difficulty and a tactical clue emoji in the opponent dropdown", () => {
+  assert.match(playable, /Math\.max\(1,Math\.min\(5,Math\.round\(g\.round_robin_record\.win_rate\*10-1\)\)\)/);
+  assert.match(playable, /`\$\{g\.name\} — \$\{"★"\.repeat\(difficulty\)\} \$\{OPPONENT_EMOJIS\[g\.name\]\}`/);
+
+  const emojiSource = playable.match(/const OPPONENT_EMOJIS=Object\.freeze\((\{[\s\S]*?\})\);/);
+  assert.ok(emojiSource, "opponent emoji map should be embedded");
+  const emojis = JSON.parse(emojiSource[1]);
+  assert.deepEqual(emojis, {
+    "Æthelwulf": "🏹", "Æthelberht": "🏹", Menelaus: "🐎", Cenwulf: "🏃",
+    Aeropus: "⚔️", Sigeric: "🏹", Alcetas: "🐎", Eadberht: "🏹",
+    Heliodoros: "🛡️", Hector: "🏰", Aeneas: "🤝", Beornred: "🏹",
+    Polemon: "🛡️", Helenus: "🏰", Deiphobus: "🤝", Argaeus: "🐎",
+  });
 });
