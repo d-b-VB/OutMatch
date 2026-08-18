@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Open the address shown by the local server. The War Room menu lets you choose one of the 16 selected G82 opponents (shown with their round-robin win/loss record and win rate) and decide whether to take the first move as Red or answer as Blue. Select **Enter the board** to begin.
+Open the address shown by the local server. The War Room menu lets you choose one of the 16 selected G82 opponents (rated from one to five stars for difficulty based on round-robin win rate, followed by an emoji clue for their tactical style) and decide whether to take the first move as Red or answer as Blue. Select **Enter the board** to begin.
 
 ## How to play
 

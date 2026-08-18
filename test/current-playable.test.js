@@ -7,7 +7,7 @@ const latestOpponentFile = JSON.parse(await readFile(new URL("../OutMatch_G82_hu
 
 test("ships the current playable and its sixteen selected G82 AI opponents", () => {
   assert.match(playable, /<h1>OutMatch<\/h1>/);
-  const roster = playable.match(/const FINALISTS = (\[[\s\S]*?\]);\n\nconst RADIUS=/);
+  const roster = playable.match(/const FINALISTS = (\[[\s\S]*?\]);\n/);
   assert.ok(roster, "embedded G82 opponent roster is present");
   const opponents = JSON.parse(roster[1]);
   assert.equal(opponents.length, 16);
@@ -73,7 +73,17 @@ test("how-to-play orders units and illustrates their matchups", () => {
   assert.match(playable, /Archer attacks an adjacent tile before or after moving\./);
 });
 
-test("shows each opponent's win/loss record and win rate in the dropdown", () => {
-  assert.match(playable, /`\$\{g\.name\} — \$\{record\.wins\} W \/ \$\{record\.losses\} L/);
-  assert.match(playable, /\(\$\{\(record\.win_rate\*100\)\.toFixed\(1\)\}%\)/);
+test("shows star difficulty and a tactical clue emoji in the opponent dropdown", () => {
+  assert.match(playable, /Math\.max\(1,Math\.min\(5,Math\.round\(g\.round_robin_record\.win_rate\*10-1\)\)\)/);
+  assert.match(playable, /`\$\{g\.name\} — \$\{"★"\.repeat\(difficulty\)\} \$\{OPPONENT_EMOJIS\[g\.name\]\}`/);
+
+  const emojiSource = playable.match(/const OPPONENT_EMOJIS=Object\.freeze\((\{[\s\S]*?\})\);/);
+  assert.ok(emojiSource, "opponent emoji map should be embedded");
+  const emojis = JSON.parse(emojiSource[1]);
+  assert.deepEqual(emojis, {
+    "Æthelwulf": "🏹", "Æthelberht": "🏹", Menelaus: "🐎", Cenwulf: "🏃",
+    Aeropus: "⚔️", Sigeric: "🏹", Alcetas: "🐎", Eadberht: "🏹",
+    Heliodoros: "🛡️", Hector: "🏰", Aeneas: "🤝", Beornred: "🏹",
+    Polemon: "🛡️", Helenus: "🏰", Deiphobus: "🤝", Argaeus: "🐎",
+  });
 });
