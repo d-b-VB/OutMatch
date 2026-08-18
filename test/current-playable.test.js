@@ -55,3 +55,13 @@ test("offers concise help and a downloadable text game log", () => {
   assert.match(playable, /link\.download=`outmatch-game-\$\{stamp\}\.txt`/);
   assert.match(playable, /URL\.revokeObjectURL\(url\)/);
 });
+
+test("how-to-play orders units and illustrates their matchups", () => {
+  const cavalry = playable.indexOf("<b>Cavalry</b>");
+  const pikeman = playable.indexOf("<b>Pikeman</b>");
+  const archer = playable.indexOf("<b>Archer</b>");
+  assert.ok(cavalry < pikeman && pikeman < archer);
+  assert.match(playable, /aria-label="Cavalry captures an archer"/);
+  assert.match(playable, /aria-label="Pikeman stops cavalry"/);
+  assert.match(playable, /aria-label="Archer kills a pikeman"/);
+});
