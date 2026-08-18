@@ -61,7 +61,10 @@ test("how-to-play orders units and illustrates their matchups", () => {
   const pikeman = playable.indexOf("<b>Pikeman</b>");
   const archer = playable.indexOf("<b>Archer</b>");
   assert.ok(cavalry < pikeman && pikeman < archer);
-  assert.match(playable, /aria-label="Cavalry captures an archer"/);
-  assert.match(playable, /aria-label="Pikeman stops cavalry"/);
-  assert.match(playable, /aria-label="Archer kills a pikeman"/);
+  assert.match(playable, /aria-label="Cavalry moves three spaces to capture an archer"/);
+  assert.match(playable, /Cavalry can move 3 spaces\./);
+  assert.match(playable, /aria-label="Pikeman stops cavalry one space away"/);
+  assert.match(playable, /aria-label="Archer moves then attacks an adjacent pikeman"/);
+  assert.match(playable, /class="shot"/);
+  assert.match(playable, /Archer attacks an adjacent tile before or after moving\./);
 });
