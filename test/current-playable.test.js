@@ -94,15 +94,19 @@ test("animates movement, arrows, and defeated pieces", () => {
   assert.match(playable, /const points=cavalryPath\(before,actor,dest\)\.map\(axialToPixel\)/);
   assert.match(playable, /for\(let i=1;i<points\.length;i\+\+\)/);
   assert.match(playable, /async function animateArrow\(before,uid,tid,shooterPos=null\)/);
-  assert.match(playable, /arrow\.textContent="➶"/);
+  assert.match(playable, /head\.setAttribute\("points","14,0 4,-7 4,7"\)/);
+  assert.match(playable, /const angle=Math\.atan2\(ty-sy,tx-sx\)\*180\/Math\.PI/);
+  assert.match(playable, /translate\(\$\{tx\}px,\$\{ty\}px\) rotate\(\$\{angle\}deg\)/);
   assert.match(playable, /async function animateDeath\(id\)/);
   assert.match(playable, /\{opacity:0,transform:"scale\(\.05\)"\}/);
   assert.match(playable, /await applyAnimatedAction\(state,a,true\)/);
 });
 
 test("highlights opening units and redirects full-tile clicks", () => {
-  assert.match(playable, /\.unit\.opening circle,\.reinforcement-nudge \.hex\.deploy\{animation:goldenPulse 1\.8s ease-in-out infinite\}/);
-  assert.match(playable, /const opening=g\.rnd===1&&g\.turn===humanSide&&u\.side===humanSide&&u\.id<=6/);
+  assert.match(playable, /\.hex\.opening,\.reinforcement-nudge \.hex\.deploy\{animation:goldenPulse 1\.8s ease-in-out infinite\}/);
+  assert.match(playable, /if\(openingHint&&g\.rnd===1&&g\.turn===humanSide\)units\(g,humanSide\)\.filter\(u=>u\.id<=6\)\.forEach\(u=>openingCells\.add\(ckey\(u\.pos\)\)\)/);
+  assert.match(playable, /if\(openingCells\.has\(ckey\(p\)\)\)cls\+=" opening"/);
+  assert.match(playable, /function selectActiveUnit\(u\)\{\n openingHint=false/);
   assert.match(playable, /const occupant=omap\(state\)\.get\(ckey\(p\)\)/);
   assert.match(playable, /if\(occupant\)\{await onUnitClick\(occupant\.id\);return\}/);
   assert.match(playable, /coord\.setAttribute\("pointer-events","none"\)/);

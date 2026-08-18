@@ -17,7 +17,7 @@ main{display:grid;grid-template-columns:minmax(500px,1fr) 300px;gap:12px;padding
 #boardWrap{position:relative;background:radial-gradient(circle,#f7f0e1 0,#e5d7bd 72%,#c4ab82 100%);border:2px solid #b48848;border-radius:14px;height:min(620px,calc(100vh - 80px));min-height:0;display:flex;justify-content:center;align-items:center;padding:10px;overflow:hidden;box-shadow:0 12px 32px #0008,inset 0 0 38px #76501f40}
 #board{height:100%;width:auto;max-width:100%;display:block}
 .hex{stroke:#fff8;stroke-width:3;cursor:pointer;filter:drop-shadow(0 2px 1px #5b452c55);transition:filter .15s}.hex.tone0{fill:#b8a477}.hex.tone1{fill:#849991}.hex.tone2{fill:#aa8378}.hex:hover{filter:brightness(1.08) drop-shadow(0 2px 2px #0005)}.hex.baseR{fill:#c65b54}.hex.baseB{fill:#537dab}.hex.legal{stroke:var(--legal);stroke-width:6}.hex.deploy{stroke:var(--deploy);stroke-width:6}.hex.selected{stroke:var(--sel);stroke-width:6}
-.unit circle{stroke:#fff;stroke-width:2.2}.unit text{fill:#fff;font-weight:800;font-size:19px;text-anchor:middle;dominant-baseline:middle;pointer-events:none}.unit.inactive circle{opacity:.45}.unit{cursor:pointer}.unit.dying{pointer-events:none;transform-box:fill-box;transform-origin:center}.battle-arrow{font-size:30px;pointer-events:none;transform-box:fill-box;transform-origin:center;filter:drop-shadow(0 2px 1px #0008)}.unit.opening circle,.reinforcement-nudge .hex.deploy{animation:goldenPulse 1.8s ease-in-out infinite}@keyframes goldenPulse{0%,100%{stroke:#c99324;stroke-width:4;filter:drop-shadow(0 0 1px #d7a62a)}50%{stroke:#ffe08a;stroke-width:7;filter:drop-shadow(0 0 7px #f5c84f)}}
+.unit circle{stroke:#fff;stroke-width:2.2}.unit text{fill:#fff;font-weight:800;font-size:19px;text-anchor:middle;dominant-baseline:middle;pointer-events:none}.unit.inactive circle{opacity:.45}.unit{cursor:pointer}.unit.dying{pointer-events:none;transform-box:fill-box;transform-origin:center}.battle-arrow{pointer-events:none;transform-origin:0 0;filter:drop-shadow(0 2px 1px #0008)}.battle-arrow line{stroke:#3b2612;stroke-width:4;stroke-linecap:round}.battle-arrow polygon{fill:#3b2612}.hex.opening,.reinforcement-nudge .hex.deploy{animation:goldenPulse 1.8s ease-in-out infinite}@keyframes goldenPulse{0%,100%{stroke:#c99324;stroke-width:4;filter:drop-shadow(0 0 1px #d7a62a)}50%{stroke:#ffe08a;stroke-width:7;filter:drop-shadow(0 0 7px #f5c84f)}}
 aside{display:flex;flex-direction:column;gap:9px;height:min(620px,calc(100vh - 80px));overflow-y:auto;padding-right:3px}.card{background:linear-gradient(135deg,#fffdf7,#f2e7d3);border:1px solid #c4a77c;border-radius:11px;padding:12px;box-shadow:0 5px 16px #0004}.card h2{font-size:12px;margin:0 0 7px;text-transform:uppercase;letter-spacing:.12em;color:#704b22}
 #prompt{font-size:15px;font-weight:700;min-height:22px;margin-bottom:6px}.status{display:flex;gap:5px;flex-wrap:wrap;font-size:11px;margin-bottom:7px}.badge{border:1px solid var(--line);border-radius:99px;padding:2px 6px;background:#fff}
 .row,#actionBar,#recruitBar,.logbuttons,#reviewBar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}#actionBar:empty,#recruitBar:empty{display:none}#reviewBar{margin-top:7px}#reviewBar button{padding:5px 8px}#reviewState{font-size:11px;color:var(--muted);margin-left:2px}
@@ -123,7 +123,7 @@ const omap=g=>new Map(g.units.map(u=>[ckey(u.pos),u]));
 const unitById=(g,id)=>g.units.find(u=>u.id===id);
 
 let state=null, humanSide="R", aiSide="B", opponent=null, nextId=7;
-let mode="idle", selectedUnit=null, gameOver=false;
+let mode="idle", selectedUnit=null, gameOver=false, openingHint=false;
 let archerStartState=null, archerFirst=null, archerMoveDest=null, archerTargetId=null;
 let timeline=[], timelineIndex=-1, aiRunning=false, aiHistory=[], aiTimer=null, aiRunToken=0, animationRunning=false, reinforcementNudgeTimer=null;
 const AI_STEP_MS=650;
@@ -452,7 +452,8 @@ function hexPoints(x,y,size=53){
 function render(overrideState=null){
  const g=overrideState||viewState();
  svg.innerHTML="";
- const legalCells=new Set(), legalTargets=new Set(), deployCells=new Set();
+ const legalCells=new Set(), legalTargets=new Set(), deployCells=new Set(), openingCells=new Set();
+ if(openingHint&&g.rnd===1&&g.turn===humanSide)units(g,humanSide).filter(u=>u.id<=6).forEach(u=>openingCells.add(ckey(u.pos)));
  if(mode==="deploy")deploymentSpots(g,humanSide).forEach(p=>deployCells.add(ckey(p)));
  if(selectedUnit && selectedUnit.side===humanSide && selectedUnit.active){
   if(selectedUnit.typ==="A"){
@@ -466,7 +467,7 @@ function render(overrideState=null){
   const [x,y]=axialToPixel(p), poly=document.createElementNS("http://www.w3.org/2000/svg","polygon");
   poly.setAttribute("points",hexPoints(x,y));
   let cls=`hex tone${((p[0]-p[1])%3+3)%3}`;if(same(p,BASE.R))cls+=" baseR";if(same(p,BASE.B))cls+=" baseB";
-  if(legalCells.has(ckey(p)))cls+=" legal";if(deployCells.has(ckey(p)))cls+=" deploy";
+  if(legalCells.has(ckey(p)))cls+=" legal";if(deployCells.has(ckey(p)))cls+=" deploy";if(openingCells.has(ckey(p)))cls+=" opening";
   poly.setAttribute("class",cls);poly.dataset.q=p[0];poly.dataset.r=p[1];poly.onclick=()=>onCellClick(p);svg.appendChild(poly);
   const coord=document.createElementNS("http://www.w3.org/2000/svg","text");coord.setAttribute("x",x);coord.setAttribute("y",y+43);
   coord.setAttribute("text-anchor","middle");coord.setAttribute("font-size","9");coord.setAttribute("fill","#aaa");coord.setAttribute("pointer-events","none");coord.textContent=`${p[0]},${p[1]}`;svg.appendChild(coord);
@@ -524,12 +525,14 @@ async function animateDeath(id){
 async function animateArrow(before,uid,tid,shooterPos=null){
  const shooter=unitById(before,uid),target=unitById(before,tid);if(!shooter||!target)return;
  const [sx,sy]=axialToPixel(shooterPos||shooter.pos),[tx,ty]=axialToPixel(target.pos);
- const arrow=document.createElementNS("http://www.w3.org/2000/svg","text");arrow.setAttribute("class","battle-arrow");arrow.setAttribute("x",sx);arrow.setAttribute("y",sy);arrow.textContent="➶";svg.appendChild(arrow);
+ const arrow=document.createElementNS("http://www.w3.org/2000/svg","g");arrow.setAttribute("class","battle-arrow");
+ const shaft=document.createElementNS("http://www.w3.org/2000/svg","line");shaft.setAttribute("x1","-14");shaft.setAttribute("y1","0");shaft.setAttribute("x2","10");shaft.setAttribute("y2","0");
+ const head=document.createElementNS("http://www.w3.org/2000/svg","polygon");head.setAttribute("points","14,0 4,-7 4,7");arrow.append(shaft,head);svg.appendChild(arrow);
  const angle=Math.atan2(ty-sy,tx-sx)*180/Math.PI;
  await playAnimation(arrow,[
-  {opacity:0,transform:`translate(0px,0px) rotate(${angle}deg) scale(.7)`},
-  {opacity:1,offset:.15,transform:`translate(0px,0px) rotate(${angle}deg) scale(1)`},
-  {opacity:1,transform:`translate(${tx-sx}px,${ty-sy}px) rotate(${angle}deg) scale(1)`}
+  {opacity:0,transform:`translate(${sx}px,${sy}px) rotate(${angle}deg) scale(.7)`},
+  {opacity:1,offset:.15,transform:`translate(${sx}px,${sy}px) rotate(${angle}deg) scale(1)`},
+  {opacity:1,transform:`translate(${tx}px,${ty}px) rotate(${angle}deg) scale(1)`}
  ],{duration:320,easing:"linear"});
  arrow.remove();
  await animateDeath(tid);
@@ -590,7 +593,7 @@ function beginGame(){
  document.getElementById("matchup").textContent=`YOU (${humanSide==="R"?"FIRST · RED":"SECOND · BLUE"})  VS  ${opponent.name.toUpperCase()}`;
  safeStore("outmatch_g82_selected_opponent",String(idx));
  safeStore("outmatch_sun_g67_selected_color",humanSide);
- state=initial();nextId=7;selectedUnit=null;gameOver=false;mode="idle";clearArcherPartial();aiHistory=[];resetTimeline();
+ state=initial();nextId=7;selectedUnit=null;gameOver=false;openingHint=true;mode="idle";clearArcherPartial();aiHistory=[];resetTimeline();
  if(logEl.value.trim()) appendLog("\n================ NEW GAME ================");
  appendLog(`OUTMATCH HUMAN GAME`);
  appendLog(`Opponent: ${opponent.name} [${opponent.id}] · round robin ${opponent.round_robin_record.wins}W/${opponent.round_robin_record.losses}L${opponent.round_robin_record.ties ? `/${opponent.round_robin_record.ties}T` : ""}`);
@@ -651,7 +654,7 @@ function actionButtonsForSelection(){
  button("Cancel",()=>humanActionPhase());
 }
 function selectActiveUnit(u){
- selectedUnit=u;mode="unit_selected";clearArcherPartial();
+ openingHint=false;selectedUnit=u;mode="unit_selected";clearArcherPartial();
  if(u.typ==="A")setPrompt(`Archer ${u.id}: click a green hex to move or an outlined enemy to shoot. You may do both, in either order.`);
  else setPrompt(`${u.typ==="P"?"Pikeman":"Cavalry"} ${u.id}: click a highlighted destination${u.typ==="C"?" (up to 3 hexes)":""}.`);
  actionButtonsForSelection();render();
