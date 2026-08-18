@@ -2,7 +2,7 @@
 
 **OutMatch** is a playable tactical strategy game on a radius-3, 37-hex board. Command Pikemen, Archers, and Cavalry, secretly recruit reinforcements, and eliminate the opposing army before the round-20 adjudication.
 
-This build uses the exact current playable from the two newest G67 handoffs. The v2 handoff is authoritative: its browser engine, depth-3 genome evaluator, recruitment logic, deployment logic, and eight unmodified G66 opponents are preserved in `index.html`. The older `OutMatch_Codex_Handoff.zip` and the modular files under `src/` remain historical background only; they are not used by the playable.
+This build preserves the authoritative browser engine, depth-3 genome evaluator, recruitment logic, and deployment logic from the G67 v2 handoff. Its opponent roster has been updated to the 16 selected G82 opponents from `OutMatch_G82_human_opponents_selected16.txt`, including their round-robin records. The older `OutMatch_Codex_Handoff.zip` and the modular files under `src/` remain historical background only; they are not used by the playable.
 
 ## Play locally
 
@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Open the address shown by the local server. The War Room menu lets you choose one of the eight Sun Tzu G67 enrollees and decide whether to take the first move as Red or answer as Blue. Select **Enter the board** to begin.
+Open the address shown by the local server. The War Room menu lets you choose one of the 16 selected G82 opponents (rated from one to five stars for difficulty based on round-robin win rate, followed by an emoji clue for their tactical style) and decide whether to take the first move as Red or answer as Blue. Select **Enter the board** to begin.
 
 ## How to play
 

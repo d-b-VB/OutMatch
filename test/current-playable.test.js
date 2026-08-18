@@ -3,12 +3,16 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 const playable = await readFile(new URL("../index.html", import.meta.url), "utf8");
+const latestOpponentFile = JSON.parse(await readFile(new URL("../OutMatch_G82_human_opponents_selected16.txt", import.meta.url), "utf8"));
 
-test("ships the current G67 playable and its eight AI opponents", () => {
+test("ships the current playable and its sixteen selected G82 AI opponents", () => {
   assert.match(playable, /<h1>OutMatch<\/h1>/);
-  const roster = playable.match(/const FINALISTS = (\[[\s\S]*?\]);\n\nconst RADIUS=/);
-  assert.ok(roster, "embedded G67 opponent roster is present");
-  assert.equal(JSON.parse(roster[1]).length, 8);
+  const roster = playable.match(/const FINALISTS = (\[[\s\S]*?\]);\n/);
+  assert.ok(roster, "embedded G82 opponent roster is present");
+  const opponents = JSON.parse(roster[1]);
+  assert.equal(opponents.length, 16);
+  assert.ok(opponents.every(opponent => opponent.id.startsWith("G82_") && opponent.round_robin_record));
+  assert.equal(JSON.stringify(opponents), JSON.stringify(latestOpponentFile.opponents));
 });
 
 test("preserves the authoritative current planner and rules constants", () => {
@@ -21,11 +25,12 @@ test("preserves the authoritative current planner and rules constants", () => {
   assert.match(playable, /function aiDeploy\(/);
 });
 
-test("offers a dedicated battle menu and a proper three-color hex tiling", () => {
+test("offers a dedicated battle menu and a subdued three-tone hex tiling", () => {
   assert.match(playable, /for="opponent">Choose opponent/);
   assert.match(playable, /data-color="R"/);
   assert.match(playable, /data-color="B"/);
   assert.match(playable, /tone\$\{\(\(p\[0\]-p\[1\]\)%3\+3\)%3\}/);
+  assert.match(playable, /\.hex\.tone0\{fill:#b8a477\}\.hex\.tone1\{fill:#849991\}\.hex\.tone2\{fill:#aa8378\}/);
 
   const directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]];
   const tone = ([q, r]) => ((q - r) % 3 + 3) % 3;
@@ -67,4 +72,43 @@ test("how-to-play orders units and illustrates their matchups", () => {
   assert.match(playable, /aria-label="Archer moves then attacks an adjacent pikeman"/);
   assert.match(playable, /class="shot"/);
   assert.match(playable, /Archer attacks an adjacent tile before or after moving\./);
+});
+
+test("shows star difficulty and a tactical clue emoji in the opponent dropdown", () => {
+  assert.match(playable, /Math\.max\(1,Math\.min\(5,Math\.round\(g\.round_robin_record\.win_rate\*10-1\)\)\)/);
+  assert.match(playable, /`\$\{g\.name\} — \$\{"★"\.repeat\(difficulty\)\} \$\{OPPONENT_EMOJIS\[g\.name\]\}`/);
+
+  const emojiSource = playable.match(/const OPPONENT_EMOJIS=Object\.freeze\((\{[\s\S]*?\})\);/);
+  assert.ok(emojiSource, "opponent emoji map should be embedded");
+  const emojis = JSON.parse(emojiSource[1]);
+  assert.deepEqual(emojis, {
+    "Æthelwulf": "🏹", "Æthelberht": "🏹", Menelaus: "🐎", Cenwulf: "🏃",
+    Aeropus: "⚔️", Sigeric: "🏹", Alcetas: "🐎", Eadberht: "🏹",
+    Heliodoros: "🛡️", Hector: "🏰", Aeneas: "🤝", Beornred: "🏹",
+    Polemon: "🛡️", Helenus: "🏰", Deiphobus: "🤝", Argaeus: "🐎",
+  });
+});
+
+test("animates movement, arrows, and defeated pieces", () => {
+  assert.match(playable, /async function animateMove\(before,uid,dest\)/);
+  assert.match(playable, /const points=cavalryPath\(before,actor,dest\)\.map\(axialToPixel\)/);
+  assert.match(playable, /for\(let i=1;i<points\.length;i\+\+\)/);
+  assert.match(playable, /async function animateArrow\(before,uid,tid,shooterPos=null\)/);
+  assert.match(playable, /head\.setAttribute\("points","14,0 4,-7 4,7"\)/);
+  assert.match(playable, /const angle=Math\.atan2\(ty-sy,tx-sx\)\*180\/Math\.PI/);
+  assert.match(playable, /translate\(\$\{tx\}px,\$\{ty\}px\) rotate\(\$\{angle\}deg\)/);
+  assert.match(playable, /async function animateDeath\(id\)/);
+  assert.match(playable, /\{opacity:0,transform:"scale\(\.05\)"\}/);
+  assert.match(playable, /await applyAnimatedAction\(state,a,true\)/);
+});
+
+test("highlights opening units and redirects full-tile clicks", () => {
+  assert.match(playable, /\.hex\.opening,\.reinforcement-nudge \.hex\.deploy\{animation:goldenPulse 1\.8s ease-in-out infinite\}/);
+  assert.match(playable, /if\(openingHint&&g\.rnd===1&&g\.turn===humanSide\)units\(g,humanSide\)\.filter\(u=>u\.id<=6\)\.forEach\(u=>openingCells\.add\(ckey\(u\.pos\)\)\)/);
+  assert.match(playable, /if\(openingCells\.has\(ckey\(p\)\)\)cls\+=" opening"/);
+  assert.match(playable, /function selectActiveUnit\(u\)\{\n openingHint=false/);
+  assert.match(playable, /const occupant=omap\(state\)\.get\(ckey\(p\)\)/);
+  assert.match(playable, /if\(occupant\)\{await onUnitClick\(occupant\.id\);return\}/);
+  assert.match(playable, /coord\.setAttribute\("pointer-events","none"\)/);
+  assert.match(playable, /if\(mode==="deploy"\)\{nudgeReinforcementPlacement\(\);return\}/);
 });
