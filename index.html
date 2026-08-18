@@ -16,8 +16,8 @@ select,button{font:inherit;border:1px solid var(--line);border-radius:7px;backgr
 main{display:grid;grid-template-columns:minmax(500px,1fr) 300px;gap:12px;padding:12px;max-width:1150px;margin:auto;align-items:start;height:calc(100vh - 56px);overflow:hidden}
 #boardWrap{position:relative;background:radial-gradient(circle,#f7f0e1 0,#e5d7bd 72%,#c4ab82 100%);border:2px solid #b48848;border-radius:14px;height:min(620px,calc(100vh - 80px));min-height:0;display:flex;justify-content:center;align-items:center;padding:10px;overflow:hidden;box-shadow:0 12px 32px #0008,inset 0 0 38px #76501f40}
 #board{height:100%;width:auto;max-width:100%;display:block}
-.hex{stroke:#fff8;stroke-width:3;cursor:pointer;filter:drop-shadow(0 2px 1px #5b452c55);transition:filter .15s}.hex.tone0{fill:#a59c8a}.hex.tone1{fill:#969b91}.hex.tone2{fill:#a0968e}.hex:hover{filter:brightness(1.08) drop-shadow(0 2px 2px #0005)}.hex.baseR{fill:#c65b54}.hex.baseB{fill:#537dab}.hex.legal{stroke:var(--legal);stroke-width:6}.hex.deploy{stroke:var(--deploy);stroke-width:6}.hex.selected{stroke:var(--sel);stroke-width:6}
-.unit circle{stroke:#fff;stroke-width:2.2}.unit text{fill:#fff;font-weight:800;font-size:19px;text-anchor:middle;dominant-baseline:middle;pointer-events:none}.unit.inactive circle{opacity:.45}.unit{cursor:pointer}
+.hex{stroke:#fff8;stroke-width:3;cursor:pointer;filter:drop-shadow(0 2px 1px #5b452c55);transition:filter .15s}.hex.tone0{fill:#b8a477}.hex.tone1{fill:#849991}.hex.tone2{fill:#aa8378}.hex:hover{filter:brightness(1.08) drop-shadow(0 2px 2px #0005)}.hex.baseR{fill:#c65b54}.hex.baseB{fill:#537dab}.hex.legal{stroke:var(--legal);stroke-width:6}.hex.deploy{stroke:var(--deploy);stroke-width:6}.hex.selected{stroke:var(--sel);stroke-width:6}
+.unit circle{stroke:#fff;stroke-width:2.2}.unit text{fill:#fff;font-weight:800;font-size:19px;text-anchor:middle;dominant-baseline:middle;pointer-events:none}.unit.inactive circle{opacity:.45}.unit{cursor:pointer}.unit.dying{pointer-events:none;transform-box:fill-box;transform-origin:center}.battle-arrow{font-size:30px;pointer-events:none;transform-box:fill-box;transform-origin:center;filter:drop-shadow(0 2px 1px #0008)}.unit.opening circle,.reinforcement-nudge .hex.deploy{animation:goldenPulse 1.8s ease-in-out infinite}@keyframes goldenPulse{0%,100%{stroke:#c99324;stroke-width:4;filter:drop-shadow(0 0 1px #d7a62a)}50%{stroke:#ffe08a;stroke-width:7;filter:drop-shadow(0 0 7px #f5c84f)}}
 aside{display:flex;flex-direction:column;gap:9px;height:min(620px,calc(100vh - 80px));overflow-y:auto;padding-right:3px}.card{background:linear-gradient(135deg,#fffdf7,#f2e7d3);border:1px solid #c4a77c;border-radius:11px;padding:12px;box-shadow:0 5px 16px #0004}.card h2{font-size:12px;margin:0 0 7px;text-transform:uppercase;letter-spacing:.12em;color:#704b22}
 #prompt{font-size:15px;font-weight:700;min-height:22px;margin-bottom:6px}.status{display:flex;gap:5px;flex-wrap:wrap;font-size:11px;margin-bottom:7px}.badge{border:1px solid var(--line);border-radius:99px;padding:2px 6px;background:#fff}
 .row,#actionBar,#recruitBar,.logbuttons,#reviewBar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}#actionBar:empty,#recruitBar:empty{display:none}#reviewBar{margin-top:7px}#reviewBar button{padding:5px 8px}#reviewState{font-size:11px;color:var(--muted);margin-left:2px}
@@ -125,7 +125,7 @@ const unitById=(g,id)=>g.units.find(u=>u.id===id);
 let state=null, humanSide="R", aiSide="B", opponent=null, nextId=7;
 let mode="idle", selectedUnit=null, gameOver=false;
 let archerStartState=null, archerFirst=null, archerMoveDest=null, archerTargetId=null;
-let timeline=[], timelineIndex=-1, aiRunning=false, aiHistory=[], aiTimer=null, aiRunToken=0;
+let timeline=[], timelineIndex=-1, aiRunning=false, aiHistory=[], aiTimer=null, aiRunToken=0, animationRunning=false, reinforcementNudgeTimer=null;
 const AI_STEP_MS=650;
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const yieldUI=()=>new Promise(resolve=>setTimeout(resolve,0));
@@ -449,8 +449,8 @@ function axialToPixel(p){
 function hexPoints(x,y,size=53){
  let pts=[];for(let i=0;i<6;i++){const a=Math.PI/180*(60*i-30);pts.push(`${x+size*Math.cos(a)},${y+size*Math.sin(a)}`)}return pts.join(" ");
 }
-function render(){
- const g=viewState();
+function render(overrideState=null){
+ const g=overrideState||viewState();
  svg.innerHTML="";
  const legalCells=new Set(), legalTargets=new Set(), deployCells=new Set();
  if(mode==="deploy")deploymentSpots(g,humanSide).forEach(p=>deployCells.add(ckey(p)));
@@ -469,11 +469,12 @@ function render(){
   if(legalCells.has(ckey(p)))cls+=" legal";if(deployCells.has(ckey(p)))cls+=" deploy";
   poly.setAttribute("class",cls);poly.dataset.q=p[0];poly.dataset.r=p[1];poly.onclick=()=>onCellClick(p);svg.appendChild(poly);
   const coord=document.createElementNS("http://www.w3.org/2000/svg","text");coord.setAttribute("x",x);coord.setAttribute("y",y+43);
-  coord.setAttribute("text-anchor","middle");coord.setAttribute("font-size","9");coord.setAttribute("fill","#aaa");coord.textContent=`${p[0]},${p[1]}`;svg.appendChild(coord);
+  coord.setAttribute("text-anchor","middle");coord.setAttribute("font-size","9");coord.setAttribute("fill","#aaa");coord.setAttribute("pointer-events","none");coord.textContent=`${p[0]},${p[1]}`;svg.appendChild(coord);
  }
  for(const u of g.units){
   const [x,y]=axialToPixel(u.pos),gr=document.createElementNS("http://www.w3.org/2000/svg","g");
-  gr.setAttribute("class","unit"+(u.active?"":" inactive"));gr.dataset.id=u.id;gr.onclick=e=>{e.stopPropagation();onUnitClick(u.id)};
+  const opening=g.rnd===1&&g.turn===humanSide&&u.side===humanSide&&u.id<=6;
+  gr.setAttribute("class","unit"+(u.active?"":" inactive")+(opening?" opening":""));gr.dataset.id=u.id;gr.onclick=e=>{e.stopPropagation();onUnitClick(u.id)};
   const c=document.createElementNS("http://www.w3.org/2000/svg","circle");c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r","22");
   c.setAttribute("fill",u.side==="R"?"#b43a32":"#345f9f");
   if(legalTargets.has(u.id)){c.setAttribute("stroke","#d39613");c.setAttribute("stroke-width","5")}
@@ -483,6 +484,73 @@ function render(){
  }
  updateStatus(g);
 }
+function playAnimation(element,keyframes,options){
+ if(!element)return Promise.resolve();
+ if(typeof element.animate!=="function")return sleep(options.duration||0);
+ const motion=element.animate(keyframes,{...options,fill:"forwards"});
+ return motion.finished.catch(()=>{});
+}
+function cavalryPath(g,u,dest){
+ if(u.typ!=="C")return [u.pos,dest];
+ const mp=omap(g), start=ckey(u.pos), goal=ckey(dest), queue=[[u.pos]],seen=new Set([start]);
+ while(queue.length){
+  const path=queue.shift(),p=path[path.length-1];if(path.length>4)continue;
+  for(const n of NEI[ckey(p)]){
+   const nk=ckey(n);if(seen.has(nk))continue;
+   const occupant=mp.get(nk),isGoal=nk===goal,stop=pikeZone(g,n,u.side,mp);
+   if(occupant&&occupant.side!==u.side&&!isGoal)continue;
+   const next=[...path,n];if(isGoal)return next;
+   seen.add(nk);if((!occupant||occupant.side===u.side)&&!stop)queue.push(next);
+  }
+ }
+ return [u.pos,dest];
+}
+async function animateMove(before,uid,dest){
+ const actor=unitById(before,uid),node=svg.querySelector(`.unit[data-id="${uid}"]`);if(!actor||!node)return;
+ const points=cavalryPath(before,actor,dest).map(axialToPixel),origin=points[0];
+ for(let i=1;i<points.length;i++){
+  const from=points[i-1],to=points[i];
+  await playAnimation(node,[
+   {transform:`translate(${from[0]-origin[0]}px,${from[1]-origin[1]}px)`},
+   {transform:`translate(${to[0]-origin[0]}px,${to[1]-origin[1]}px)`}
+  ],{duration:actor.typ==="C"?180:260,easing:"ease-in-out"});
+ }
+}
+async function animateDeath(id){
+ const node=svg.querySelector(`.unit[data-id="${id}"]`);if(!node)return;
+ node.classList.add("dying");
+ await playAnimation(node,[{opacity:1,transform:"scale(1)"},{opacity:0,transform:"scale(.05)"}],{duration:280,easing:"ease-in"});
+}
+async function animateArrow(before,uid,tid,shooterPos=null){
+ const shooter=unitById(before,uid),target=unitById(before,tid);if(!shooter||!target)return;
+ const [sx,sy]=axialToPixel(shooterPos||shooter.pos),[tx,ty]=axialToPixel(target.pos);
+ const arrow=document.createElementNS("http://www.w3.org/2000/svg","text");arrow.setAttribute("class","battle-arrow");arrow.setAttribute("x",sx);arrow.setAttribute("y",sy);arrow.textContent="➶";svg.appendChild(arrow);
+ const angle=Math.atan2(ty-sy,tx-sx)*180/Math.PI;
+ await playAnimation(arrow,[
+  {opacity:0,transform:`translate(0px,0px) rotate(${angle}deg) scale(.7)`},
+  {opacity:1,offset:.15,transform:`translate(0px,0px) rotate(${angle}deg) scale(1)`},
+  {opacity:1,transform:`translate(${tx-sx}px,${ty-sy}px) rotate(${angle}deg) scale(1)`}
+ ],{duration:320,easing:"linear"});
+ arrow.remove();
+ await animateDeath(tid);
+}
+async function animateAppliedAction(before,a){
+ const [kind,uid,arg]=a;animationRunning=true;render(before);
+ try{
+  if(kind==="shoot")await animateArrow(before,uid,arg);
+  else if(kind==="move"){
+   const victim=before.units.find(x=>same(x.pos,arg)&&x.side!==unitById(before,uid)?.side);
+   await animateMove(before,uid,arg);if(victim)await animateDeath(victim.id);
+  }else if(kind==="moveshoot"){
+   const [dest,tid]=arg;await animateMove(before,uid,dest);await animateArrow(before,uid,tid,dest);
+  }else if(kind==="shootmove"){
+   const [tid,dest]=arg;await animateArrow(before,uid,tid);await animateMove(before,uid,dest);
+  }
+ }finally{animationRunning=false;render()}
+}
+async function applyAnimatedAction(g,a,mark=true){
+ const before=deep(g);applyAction(g,a,mark);await animateAppliedAction(before,a);
+}
 function updateStatus(g=state){
  document.getElementById("roundBadge").textContent=`Round ${g?.rnd??"—"}`;
  document.getElementById("turnBadge").textContent=g?`${g.turn==="R"?"Red":"Blue"} turn`:"Turn —";
@@ -491,6 +559,12 @@ function updateStatus(g=state){
  updateReviewControls();
 }
 function setPrompt(s){promptEl.textContent=s}
+function nudgeReinforcementPlacement(){
+ svg.classList.remove("reinforcement-nudge");void svg.getBoundingClientRect();svg.classList.add("reinforcement-nudge");
+ if(reinforcementNudgeTimer)clearTimeout(reinforcementNudgeTimer);
+ reinforcementNudgeTimer=setTimeout(()=>svg.classList.remove("reinforcement-nudge"),3600);
+ setPrompt(`Place your queued reinforcement first: click a pulsing golden deployment tile.`);
+}
 function clearBars(){actionBar.innerHTML="";recruitBar.innerHTML="";recruitBar.classList.remove("recruit-required");document.getElementById("recruitModal").classList.remove("active")}
 function button(txt,fn,parent=actionBar){const b=document.createElement("button");b.textContent=txt;b.onclick=fn;parent.appendChild(b);return b}
 
@@ -607,9 +681,11 @@ function finishSelectedActivation(){
  }
  afterHumanAction();
 }
-function onCellClick(p){
- if(!opponent||!state||gameOver||aiRunning||isReviewing())return;
+async function onCellClick(p){
+ if(!opponent||!state||gameOver||aiRunning||animationRunning||isReviewing())return;
  if(mode==="recruit")return;
+ const occupant=omap(state).get(ckey(p));
+ if(occupant){await onUnitClick(occupant.id);return}
  if(mode==="deploy"){
   if(!deploymentSpots(state,humanSide).some(x=>same(x,p)))return;
   const typ=state.pending[humanSide];state.units.push({id:nextId++,side:humanSide,typ,pos:[...p],active:false});state.pending[humanSide]=null;
@@ -619,21 +695,22 @@ function onCellClick(p){
  const u=unitById(state,selectedUnit.id);if(!u)return;
  if(!legalMoves(state,u).some(x=>same(x,p)))return;
  if(u.typ!=="A"){
-  const a=["move",u.id,p];appendLog(`ACTION Human: ${actionDescription(state,a)}`);applyAction(state,a,true);afterHumanAction();return;
+  const a=["move",u.id,p];appendLog(`ACTION Human: ${actionDescription(state,a)}`);await applyAnimatedAction(state,a,true);afterHumanAction();return;
  }
  if(archerFirst===null){
-  archerStartState=deep(state);archerFirst="move";archerMoveDest=[...p];u.pos=[...p];
+  archerStartState=deep(state);archerFirst="move";archerMoveDest=[...p];await applyAnimatedAction(state,["move",u.id,[...p]],false);
   if(archTargets(state,u).length){setPrompt(`Archer ${u.id} moved. Shoot an outlined adjacent enemy, or Finish Archer.`);actionButtonsForSelection();render();return}
   finishSelectedActivation();return;
  }
  if(archerFirst==="shoot"){
-  const start=archerStartState, tid=archerTargetId;u.pos=[...p];u.active=false;
+  const start=archerStartState, tid=archerTargetId;await applyAnimatedAction(state,["move",u.id,[...p]],false);u.active=false;
   const a=["shootmove",u.id,[tid,[...p]]];appendLog(`ACTION Human: ${actionDescription(start,a)}`);afterHumanAction();return;
  }
 }
-function onUnitClick(id){
- if(!opponent||!state||gameOver||aiRunning||isReviewing()||state.turn!==humanSide)return;
- if(mode==="recruit"||mode==="deploy"||mode==="ai"||mode==="error")return;
+async function onUnitClick(id){
+ if(!opponent||!state||gameOver||aiRunning||animationRunning||isReviewing()||state.turn!==humanSide)return;
+ if(mode==="deploy"){nudgeReinforcementPlacement();return}
+ if(mode==="recruit"||mode==="ai"||mode==="error")return;
  if(mode!=="select"&&mode!=="unit_selected")return;
  const clicked=unitById(state,id);if(!clicked)return;
  if(clicked.side===humanSide){
@@ -645,14 +722,14 @@ function onUnitClick(id){
  const u=unitById(state,selectedUnit.id);if(!u)return;
  if(u.typ!=="A"){
   if(legalMoves(state,u).some(p=>same(p,clicked.pos))){
-   const a=["move",u.id,[...clicked.pos]];appendLog(`ACTION Human: ${actionDescription(state,a)}`);applyAction(state,a,true);afterHumanAction();
+   const a=["move",u.id,[...clicked.pos]];appendLog(`ACTION Human: ${actionDescription(state,a)}`);await applyAnimatedAction(state,a,true);afterHumanAction();
   }
   return;
  }
  if(!archTargets(state,u).some(t=>t.id===clicked.id))return;
  if(archerFirst===null){
   archerStartState=deep(state);archerFirst="shoot";archerTargetId=clicked.id;
-  applyAction(state,["shoot",u.id,clicked.id],false);
+  await applyAnimatedAction(state,["shoot",u.id,clicked.id],false);
   const live=unitById(state,u.id);
   if(!units(state,foe(humanSide)).length){if(live)live.active=false;appendLog(`ACTION Human: ${actionDescription(archerStartState,["shoot",u.id,clicked.id])}`);afterHumanAction();return}
   if(live&&legalMoves(state,live).length){selectedUnit=live;setPrompt(`Archer ${u.id} shot. Move to a highlighted hex, or Finish Archer.`);actionButtonsForSelection();render();return}
@@ -660,7 +737,7 @@ function onUnitClick(id){
  }
  if(archerFirst==="move"){
   const start=archerStartState,dest=archerMoveDest,tid=clicked.id;
-  applyAction(state,["shoot",u.id,tid],false);const live=unitById(state,u.id);if(live)live.active=false;
+  await applyAnimatedAction(state,["shoot",u.id,tid],false);const live=unitById(state,u.id);if(live)live.active=false;
   const a=["moveshoot",u.id,[dest,tid]];appendLog(`ACTION Human: ${actionDescription(start,a)}`);afterHumanAction();return;
  }
 }
@@ -704,7 +781,7 @@ async function runAITurn(){
    if(!a)a=fallbackAIAction(state,side,opponent)||["hold",active[0].id,null];
    const actor=unitById(state,a[1]);
    if(!actor||!actor.active){a=["hold",active[0].id,null]}
-   const before=deep(state);appendLog(`ACTION AI: ${actionDescription(before,a)}`);applyAction(state,a,true);aiHistory.push(a);
+   const before=deep(state);appendLog(`ACTION AI: ${actionDescription(before,a)}`);await applyAnimatedAction(state,a,true);aiHistory.push(a);
    recordFrame(`AI ${actionDescription(before,a)}`);saveCurrent();render();
    if(checkElimination())return;
    setPrompt(`${opponent.name} moved. Next activation…`);

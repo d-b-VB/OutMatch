@@ -25,12 +25,12 @@ test("preserves the authoritative current planner and rules constants", () => {
   assert.match(playable, /function aiDeploy\(/);
 });
 
-test("offers a dedicated battle menu and a muted three-tone hex tiling", () => {
+test("offers a dedicated battle menu and a subdued three-tone hex tiling", () => {
   assert.match(playable, /for="opponent">Choose opponent/);
   assert.match(playable, /data-color="R"/);
   assert.match(playable, /data-color="B"/);
   assert.match(playable, /tone\$\{\(\(p\[0\]-p\[1\]\)%3\+3\)%3\}/);
-  assert.match(playable, /\.hex\.tone0\{fill:#a59c8a\}\.hex\.tone1\{fill:#969b91\}\.hex\.tone2\{fill:#a0968e\}/);
+  assert.match(playable, /\.hex\.tone0\{fill:#b8a477\}\.hex\.tone1\{fill:#849991\}\.hex\.tone2\{fill:#aa8378\}/);
 
   const directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]];
   const tone = ([q, r]) => ((q - r) % 3 + 3) % 3;
@@ -87,4 +87,24 @@ test("shows star difficulty and a tactical clue emoji in the opponent dropdown",
     Heliodoros: "🛡️", Hector: "🏰", Aeneas: "🤝", Beornred: "🏹",
     Polemon: "🛡️", Helenus: "🏰", Deiphobus: "🤝", Argaeus: "🐎",
   });
+});
+
+test("animates movement, arrows, and defeated pieces", () => {
+  assert.match(playable, /async function animateMove\(before,uid,dest\)/);
+  assert.match(playable, /const points=cavalryPath\(before,actor,dest\)\.map\(axialToPixel\)/);
+  assert.match(playable, /for\(let i=1;i<points\.length;i\+\+\)/);
+  assert.match(playable, /async function animateArrow\(before,uid,tid,shooterPos=null\)/);
+  assert.match(playable, /arrow\.textContent="➶"/);
+  assert.match(playable, /async function animateDeath\(id\)/);
+  assert.match(playable, /\{opacity:0,transform:"scale\(\.05\)"\}/);
+  assert.match(playable, /await applyAnimatedAction\(state,a,true\)/);
+});
+
+test("highlights opening units and redirects full-tile clicks", () => {
+  assert.match(playable, /\.unit\.opening circle,\.reinforcement-nudge \.hex\.deploy\{animation:goldenPulse 1\.8s ease-in-out infinite\}/);
+  assert.match(playable, /const opening=g\.rnd===1&&g\.turn===humanSide&&u\.side===humanSide&&u\.id<=6/);
+  assert.match(playable, /const occupant=omap\(state\)\.get\(ckey\(p\)\)/);
+  assert.match(playable, /if\(occupant\)\{await onUnitClick\(occupant\.id\);return\}/);
+  assert.match(playable, /coord\.setAttribute\("pointer-events","none"\)/);
+  assert.match(playable, /if\(mode==="deploy"\)\{nudgeReinforcementPlacement\(\);return\}/);
 });
