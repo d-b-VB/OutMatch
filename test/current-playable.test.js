@@ -47,3 +47,11 @@ test("requires recruitment from a board modal", () => {
   assert.doesNotMatch(playable, /<h2>Game log<\/h2>/);
   assert.doesNotMatch(playable, /<h2>Opponent<\/h2>/);
 });
+
+test("offers concise help and a downloadable text game log", () => {
+  assert.match(playable, /id="howToPlay">How to Play/);
+  assert.match(playable, /id="downloadGame">Download Game/);
+  assert.match(playable, /new Blob\(\[text\+"\\n"\],\{type:"text\/plain;charset=utf-8"\}\)/);
+  assert.match(playable, /link\.download=`outmatch-game-\$\{stamp\}\.txt`/);
+  assert.match(playable, /URL\.revokeObjectURL\(url\)/);
+});

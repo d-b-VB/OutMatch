@@ -25,7 +25,7 @@ aside{display:flex;flex-direction:column;gap:9px;height:min(620px,calc(100vh - 8
 .small{font-size:11px;color:var(--muted);line-height:1.35}.sideR{color:var(--red);font-weight:700}.sideB{color:var(--blue);font-weight:700}
 #log{width:100%;height:145px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;line-height:1.3;border:1px solid var(--line);border-radius:6px;padding:7px;background:#fff;margin-top:7px}
 .logbuttons button{font-size:11px;padding:5px 7px}
-.menu{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px;background:#11171bf2;backdrop-filter:blur(5px)}.menu.hidden{display:none}.menu-panel{width:min(440px,100%);background:linear-gradient(145deg,#fffaf0,#e8d6b8);border:2px solid #d1a24d;border-radius:20px;box-shadow:0 25px 80px #000c;padding:28px}.menu h2{text-align:center;font-size:32px;margin:0 0 22px}.menu-label{display:block;font-size:12px;font-weight:700;color:#755125;margin:16px 0 7px}.menu select{display:block;width:100%;max-width:none;padding:11px;background:#fff}.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.order-card{padding:13px;text-align:left;background:#fff9ed}.order-card b{display:block}.order-card.active{border:2px solid currentColor}.order-card.red{color:#9f332d}.order-card.blue{color:#294f82}.menu-actions{text-align:center;margin-top:20px}.menu-actions button{font-size:17px;padding:12px 35px}.header-note{font-size:11px;color:#c9b99e;margin-left:auto;letter-spacing:.08em}.recruit-modal{display:none;position:absolute;z-index:8;inset:0;place-items:center;background:#15202aaa;backdrop-filter:blur(2px)}.recruit-modal.active{display:grid}.recruit-box{width:min(390px,calc(100% - 32px));padding:24px;background:#fff8e9;border:2px solid #d39a38;border-radius:16px;text-align:center;box-shadow:0 18px 50px #0009}.recruit-box h2{margin:0 0 7px}.recruit-box p{margin:0 0 16px;color:#6d604f}.recruit-box .row{justify-content:center}.recruit-box button{min-width:105px}
+.menu{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px;background:#11171bf2;backdrop-filter:blur(5px)}.menu.hidden{display:none}.menu-panel{width:min(440px,100%);background:linear-gradient(145deg,#fffaf0,#e8d6b8);border:2px solid #d1a24d;border-radius:20px;box-shadow:0 25px 80px #000c;padding:28px}.menu h2{text-align:center;font-size:32px;margin:0 0 22px}.menu-label{display:block;font-size:12px;font-weight:700;color:#755125;margin:16px 0 7px}.menu select{display:block;width:100%;max-width:none;padding:11px;background:#fff}.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.order-card{padding:13px;text-align:left;background:#fff9ed}.order-card b{display:block}.order-card.active{border:2px solid currentColor}.order-card.red{color:#9f332d}.order-card.blue{color:#294f82}.menu-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:20px}.menu-actions button{padding:10px 18px}.header-note{font-size:11px;color:#c9b99e;margin-left:auto;letter-spacing:.08em}.how-panel{position:fixed;z-index:30;left:50%;top:50%;transform:translate(-50%,-50%);width:min(400px,calc(100% - 32px));padding:24px;background:#fffaf0;border:2px solid #d1a24d;border-radius:16px;box-shadow:0 20px 60px #000b}.how-panel.hidden{display:none}.how-panel h2{margin:0 0 12px}.how-panel ul{margin:0 0 18px;padding-left:20px;line-height:1.55}.how-panel button{width:100%}.recruit-modal{display:none;position:absolute;z-index:8;inset:0;place-items:center;background:#15202aaa;backdrop-filter:blur(2px)}.recruit-modal.active{display:grid}.recruit-box{width:min(390px,calc(100% - 32px));padding:24px;background:#fff8e9;border:2px solid #d39a38;border-radius:16px;text-align:center;box-shadow:0 18px 50px #0009}.recruit-box h2{margin:0 0 7px}.recruit-box p{margin:0 0 16px;color:#6d604f}.recruit-box .row{justify-content:center}.recruit-box button{min-width:105px}
 .menu select[hidden]{display:none}
 @media(max-width:900px){body{overflow:auto}header{align-items:flex-start}.controls{margin-left:0;width:100%}main{grid-template-columns:1fr;height:auto;overflow:visible}#boardWrap{height:auto;min-height:430px}#board{height:auto;width:min(100%,570px);max-height:520px}aside{height:auto;overflow:visible;display:grid;grid-template-columns:1fr 1fr}.logcard{grid-column:1/-1}}
 @media(max-width:700px){.opponent-grid{grid-template-columns:1fr 1fr}.menu-panel{padding:19px}.menu h2{font-size:29px}}@media(max-width:620px){aside{display:flex}#boardWrap{min-height:430px}.header-note{display:none}}
@@ -47,10 +47,11 @@ aside{display:flex;flex-direction:column;gap:9px;height:min(620px,calc(100vh - 8
    <button class="order-card red" data-color="R"><b>Go first</b></button>
    <button class="order-card blue" data-color="B"><b>Go second</b></button>
   </div>
-  <div class="menu-actions"><button class="primary" id="startBattle">Play</button></div>
+  <div class="menu-actions"><button class="primary" id="startBattle">Play</button><button id="howToPlay">How to Play</button><button id="downloadGame">Download Game</button></div>
   <select id="humanColor" hidden><option value="R">Red</option><option value="B">Blue</option></select>
  </div>
 </section>
+<section class="how-panel hidden" id="howPanel" aria-label="How to play"><h2>How to Play</h2><ul><li>Eliminate every enemy unit.</li><li>Move each piece once per turn.</li><li>Choose reinforcements on odd rounds.</li><li>Pikemen move 1, Archers move and shoot, Cavalry move up to 3.</li></ul><button id="closeHow">Close</button></section>
 <main>
   <section id="boardWrap"><svg id="board" viewBox="-30 -30 720 660" aria-label="OutMatch game board"></svg><div class="recruit-modal" id="recruitModal"><div class="recruit-box"><h2>Choose a reinforcement</h2><p>Choose before moving your pieces.</p><div id="recruitBar" class="row"></div></div></div></section>
   <aside>
@@ -723,6 +724,17 @@ function finishGame(w,outcome,m=material(state),p=pressure(state)){
 }
 document.getElementById("newGame").onclick=()=>document.getElementById("menu").classList.remove("hidden");
 document.getElementById("startBattle").onclick=beginGame;
+document.getElementById("howToPlay").onclick=()=>document.getElementById("howPanel").classList.remove("hidden");
+document.getElementById("closeHow").onclick=()=>document.getElementById("howPanel").classList.add("hidden");
+document.getElementById("downloadGame").onclick=()=>{
+ const text=logEl.value.trim();
+ if(!text){alert("Play a game first.");return}
+ const blob=new Blob([text+"\n"],{type:"text/plain;charset=utf-8"});
+ const url=URL.createObjectURL(blob),link=document.createElement("a");
+ const stamp=new Date().toISOString().slice(0,10);
+ link.href=url;link.download=`outmatch-game-${stamp}.txt`;document.body.appendChild(link);link.click();link.remove();
+ URL.revokeObjectURL(url);
+};
 document.getElementById("rewindBtn").onclick=rewindFrame;
 document.getElementById("forwardBtn").onclick=forwardFrame;
 
