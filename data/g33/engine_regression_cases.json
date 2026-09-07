@@ -1,0 +1,149 @@
+{
+  "engineSha256": "842e472816bfff1f66cdded41d54a45d66d3fcd33b1c0321297676157cd9e8bb",
+  "cases": [
+    {
+      "red": "G31_ORD_042",
+      "redName": "Éowyn",
+      "blue": "APG16_HGW_08693",
+      "blueName": "Doran",
+      "winner": "D",
+      "round": 20,
+      "outcome": "draw"
+    },
+    {
+      "red": "APG16_HGW_08693",
+      "redName": "Doran",
+      "blue": "G31_ORD_042",
+      "blueName": "Éowyn",
+      "winner": "R",
+      "round": 17,
+      "outcome": "elimination"
+    },
+    {
+      "red": "APG16_HGW_08693",
+      "redName": "Doran",
+      "blue": "G33_CHAMP_03",
+      "blueName": "Friar Tuck",
+      "winner": "B",
+      "round": 12,
+      "outcome": "elimination"
+    },
+    {
+      "red": "G33_CHAMP_03",
+      "redName": "Friar Tuck",
+      "blue": "APG16_HGW_08693",
+      "blueName": "Doran",
+      "winner": "R",
+      "round": 8,
+      "outcome": "elimination"
+    },
+    {
+      "red": "G33_SYN_archer_hunter14_mean",
+      "redName": "Marcellus",
+      "blue": "G33_SYN_G49_mode",
+      "blueName": "Proteus",
+      "winner": "B",
+      "round": 9,
+      "outcome": "elimination"
+    },
+    {
+      "red": "G33_SYN_G49_mode",
+      "redName": "Proteus",
+      "blue": "G33_SYN_archer_hunter14_mean",
+      "blueName": "Marcellus",
+      "winner": "R",
+      "round": 11,
+      "outcome": "elimination"
+    },
+    {
+      "red": "G33_ORD_110",
+      "redName": "Bellerophon",
+      "blue": "G33_SYN_G49_mode",
+      "blueName": "Proteus",
+      "winner": "R",
+      "round": 12,
+      "outcome": "elimination"
+    },
+    {
+      "red": "G33_SYN_G49_mode",
+      "redName": "Proteus",
+      "blue": "G33_ORD_110",
+      "blueName": "Bellerophon",
+      "winner": "B",
+      "round": 9,
+      "outcome": "elimination"
+    },
+    {
+      "red": "G32_ORD_207",
+      "redName": "Moros",
+      "blue": "G33_SYN_archer_hunter14_mean",
+      "blueName": "Marcellus",
+      "winner": "R",
+      "round": 12,
+      "outcome": "elimination"
+    },
+    {
+      "red": "G33_SYN_archer_hunter14_mean",
+      "redName": "Marcellus",
+      "blue": "G32_ORD_207",
+      "blueName": "Moros",
+      "winner": "B",
+      "round": 13,
+      "outcome": "elimination"
+    },
+    {
+      "red": "G27_SYN_archer_lord14_median",
+      "redName": "Idril",
+      "blue": "G32_ORD_091",
+      "blueName": "Khonsu",
+      "winner": "R",
+      "round": 8,
+      "outcome": "elimination"
+    },
+    {
+      "red": "G32_ORD_091",
+      "redName": "Khonsu",
+      "blue": "G27_SYN_archer_lord14_median",
+      "blueName": "Idril",
+      "winner": "B",
+      "round": 11,
+      "outcome": "elimination"
+    },
+    {
+      "red": "APG16_HGW_13790",
+      "redName": "Gerold Dayne",
+      "blue": "G31_ORD_042",
+      "blueName": "Éowyn",
+      "winner": "R",
+      "round": 14,
+      "outcome": "elimination"
+    },
+    {
+      "red": "G31_ORD_042",
+      "redName": "Éowyn",
+      "blue": "APG16_HGW_13790",
+      "blueName": "Gerold Dayne",
+      "winner": "D",
+      "round": 20,
+      "outcome": "draw"
+    },
+    {
+      "red": "G33_GUAR_015",
+      "redName": "Will Stutely",
+      "blue": "G33_ORD_114",
+      "blueName": "Rahu",
+      "winner": "D",
+      "round": 20,
+      "outcome": "draw"
+    },
+    {
+      "red": "G33_ORD_114",
+      "redName": "Rahu",
+      "blue": "G33_GUAR_015",
+      "blueName": "Will Stutely",
+      "winner": "D",
+      "round": 20,
+      "outcome": "draw"
+    }
+  ]
+}
