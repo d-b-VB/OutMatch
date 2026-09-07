@@ -137,7 +137,9 @@ test("embeds all 44 authoritative G33 Lords and Hunters", async () => {
 test("lets a human pike choose advance or fall back after attacking", () => {
   assert.match(playable, /async function beginPikeAttack\(u,target\)/);
   assert.match(playable, /pikeOrigin=\[\.\.\.u\.pos\];pikeTargetPos=\[\.\.\.target\.pos\]/);
+  assert.match(playable, /mode="pike_attacking"/);
   assert.match(playable, /await applyAnimatedAction\(state,\["poke",u\.id,target\.id\],false\)/);
+  assert.match(playable, /if\(kind==="poke"&&mode==="pike_attacking"\)mode="pike_choice"/);
   assert.match(playable, /button\("Advance",\(\)=>finishPikeAttack\(true\)\)/);
   assert.match(playable, /button\("Fall back",\(\)=>finishPikeAttack\(false\)\)/);
   assert.match(playable, /if\(advance\)u\.pos=\[\.\.\.pikeTargetPos\];u\.active=false/);
@@ -147,8 +149,13 @@ test("lets a human pike choose advance or fall back after attacking", () => {
 
 test("shows a held spear thrust and highlights both pike choices", () => {
   assert.match(playable, /async function animatePoke\(before,uid,tid\)/);
-  assert.match(playable, /const holdBetween=mode==="pike_choice",lungeX=\(tx-sx\)\/2,lungeY=\(ty-sy\)\/2/);
-  assert.match(playable, /transform:holdBetween\?`translate/);
+  assert.match(playable, /const PIKE_TIMING=Object\.freeze\(\{windup:240,thrust:520,impact:220,retract:460\}\)/);
+  assert.match(playable, /await playAnimation\(pikeNode,[\s\S]*PIKE_TIMING\.windup/);
+  assert.match(playable, /const readyBase=[\s\S]*impactBase=/);
+  assert.match(playable, /transform:`\$\{impactBase\} scaleX\(\.55\)`/);
+  assert.match(playable, /await Promise\.all\(\[[\s\S]*PIKE_TIMING\.thrust/);
+  assert.match(playable, /await sleep\(PIKE_TIMING\.impact\)/);
+  assert.match(playable, /animateDeathOver\(tid,PIKE_TIMING\.retract\)/);
   assert.match(playable, /choiceOrigins\.add\(ckey\(pikeOrigin\)\);choiceTargets\.add\(ckey\(pikeTargetPos\)\)/);
   assert.match(playable, /cls\+=" choice-origin"/);
   assert.match(playable, /cls\+=" choice-target"/);
@@ -158,4 +165,23 @@ test("keeps canonical pike move and poke actions available to the G33 planner", 
   assert.match(playable, /if\(usesReachRules\(\)\)for\(const t of archTargets\(g,u\)\)out\.push\(\["poke",u\.id,t\.id\]\)/);
   assert.match(playable, /for\(const m of legalMoves\(g,u\)\)out\.push\(\["move",u\.id,m\]\)/);
   assert.match(playable, /if\(kind==="shoot"\|\|kind==="poke"\)/);
+});
+
+test("celebrates wins and treats losses somberly at game end", () => {
+  assert.match(playable, /id="endgame" role="dialog"/);
+  assert.match(playable, /const result=w===humanSide\?"win":w\?"loss":"draw"/);
+  assert.match(playable, /kind==="win"\?64:kind==="loss"\?28:0/);
+  assert.match(playable, /\.endgame\.win\.red\{--c1:#c63f35/);
+  assert.match(playable, /\.endgame\.win\.blue\{--c1:#3975bd/);
+  assert.match(playable, /\.endgame\.loss\{background:radial-gradient/);
+  assert.match(playable, /className=kind==="win"\?"confetti":"ash"/);
+  assert.match(playable, /showEndgame\(w,outcome\)/);
+});
+
+test("offers replay and timeline review from the result screen", () => {
+  assert.match(playable, /id="playAgain">Play again/);
+  assert.match(playable, /id="reviewGame">Review game/);
+  assert.match(playable, /getElementById\("playAgain"\)\.onclick=beginGame/);
+  assert.match(playable, /getElementById\("reviewGame"\)\.onclick=reviewFinishedGame/);
+  assert.match(playable, /timelineIndex=timeline\.length\?0:-1;render\(\);updateReviewControls\(\)/);
 });

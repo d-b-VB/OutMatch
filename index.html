@@ -25,6 +25,7 @@ aside{display:flex;flex-direction:column;gap:9px;height:min(620px,calc(100vh - 8
 .small{font-size:11px;color:var(--muted);line-height:1.35}.sideR{color:var(--red);font-weight:700}.sideB{color:var(--blue);font-weight:700}
 #log{width:100%;height:145px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;line-height:1.3;border:1px solid var(--line);border-radius:6px;padding:7px;background:#fff;margin-top:7px}
 .logbuttons button{font-size:11px;padding:5px 7px}
+.endgame{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:24px;overflow:hidden;background:#10161dcc;backdrop-filter:blur(4px);animation:endFade .45s ease-out}.endgame.hidden{display:none}.endgame-card{position:relative;z-index:2;width:min(430px,100%);padding:30px;text-align:center;border-radius:20px;background:linear-gradient(145deg,#fffdf6,#ead9bc);border:2px solid #cf9b40;box-shadow:0 24px 80px #000c}.endgame-card h2{margin:0 0 8px;font-size:36px}.endgame-card p{margin:0 0 22px;color:#675c4f;line-height:1.45}.endgame-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.endgame-actions button{min-width:145px;padding:11px 16px}.endgame.loss{background:radial-gradient(circle at 50% 45%,#27303ad9,#090c10f2)}.endgame.loss .endgame-card{filter:saturate(.35);border-color:#78756f;background:linear-gradient(145deg,#e5e1d8,#aca8a0);animation:somberSettle .8s ease-out}.endgame.draw .endgame-card{filter:saturate(.65)}.endgame-effects{position:absolute;inset:0;pointer-events:none;overflow:hidden}.confetti,.ash{position:absolute;top:-12%;width:10px;height:20px;border-radius:2px;animation:confettiFall 2.8s cubic-bezier(.2,.7,.4,1) infinite;transform:rotate(var(--spin))}.ash{width:5px;height:5px;border-radius:50%;background:#aaa;opacity:.5;animation-name:ashFall;animation-duration:4.5s}.endgame.loss .endgame-card h2{color:#353b42}.endgame.win.red{--c1:#c63f35;--c2:#ffcf5a;--c3:#f8eee0}.endgame.win.blue{--c1:#3975bd;--c2:#8fc8ff;--c3:#f8eee0}.endgame.win .confetti:nth-child(3n+1){background:var(--c1)}.endgame.win .confetti:nth-child(3n+2){background:var(--c2)}.endgame.win .confetti:nth-child(3n){background:var(--c3)}@keyframes endFade{from{opacity:0}to{opacity:1}}@keyframes confettiFall{0%{translate:0 -10vh;rotate:0deg}60%{opacity:1}100%{translate:var(--drift) 115vh;rotate:720deg;opacity:.15}}@keyframes ashFall{0%{translate:0 -5vh;opacity:0}20%{opacity:.55}100%{translate:var(--drift) 112vh;opacity:0}}@keyframes somberSettle{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){.endgame,.endgame-card,.confetti,.ash{animation:none!important}.confetti,.ash{display:none}}
 .menu{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px;background:#11171bf2;backdrop-filter:blur(5px)}.menu.hidden{display:none}.menu-panel{width:min(440px,100%);background:linear-gradient(145deg,#fffaf0,#e8d6b8);border:2px solid #d1a24d;border-radius:20px;box-shadow:0 25px 80px #000c;padding:28px}.menu h2{text-align:center;font-size:32px;margin:0 0 22px}.edition-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.edition-card{padding:16px 12px;text-align:left;background:#fff9ed;border:2px solid transparent}.edition-card b{display:block;font-size:16px;margin-bottom:4px}.edition-card small{display:block;color:#756d64;line-height:1.3}.edition-card.active{border-color:#a66c1f;background:#fff;box-shadow:0 3px 12px #8b5d2133}.menu-label{display:block;font-size:12px;font-weight:700;color:#755125;margin:16px 0 7px}.menu select{display:block;width:100%;max-width:none;padding:11px;background:#fff}.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.order-card{padding:13px;text-align:left;background:#fff9ed}.order-card b{display:block}.order-card.active{border:2px solid currentColor}.order-card.red{color:#9f332d}.order-card.blue{color:#294f82}.menu-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:20px}.menu-actions button{padding:10px 18px}.header-note{font-size:11px;color:#c9b99e;margin-left:auto;letter-spacing:.08em}.how-panel{position:fixed;z-index:30;left:50%;top:50%;transform:translate(-50%,-50%);width:min(520px,calc(100% - 32px));padding:24px;background:#fffaf0;border:2px solid #d1a24d;border-radius:16px;box-shadow:0 20px 60px #000b}.how-panel.hidden{display:none}.how-panel h2{margin:0 0 12px}.unit-rules{display:grid;gap:8px;margin-bottom:14px}.unit-rule{display:grid;grid-template-columns:34px 78px 1fr;align-items:center;gap:8px}.unit-rule .symbol{font-size:24px;text-align:center}.unit-rule small{color:#6d604f}.examples{display:grid;gap:10px;margin:10px 0 18px}.example{display:grid;grid-template-columns:190px 1fr;align-items:center;gap:10px;padding:8px;background:#eee1c9;border:1px solid #cfb98f;border-radius:9px}.example svg{display:block;width:190px;height:70px}.example polygon{fill:#d8c59f;stroke:#fff8;stroke-width:2}.example text{font-size:19px;text-anchor:middle;dominant-baseline:central}.example line{stroke:#7c3f28;stroke-width:3}.example line.shot{stroke-dasharray:5 4}.example small{color:#574a39;font-weight:700}.how-panel button{width:100%}.recruit-modal{display:none;position:absolute;z-index:8;inset:0;place-items:center;background:#15202aaa;backdrop-filter:blur(2px)}.recruit-modal.active{display:grid}.recruit-box{width:min(390px,calc(100% - 32px));padding:24px;background:#fff8e9;border:2px solid #d39a38;border-radius:16px;text-align:center;box-shadow:0 18px 50px #0009}.recruit-box h2{margin:0 0 7px}.recruit-box p{margin:0 0 16px;color:#6d604f}.recruit-box .row{justify-content:center}.recruit-box button{min-width:105px}
 .menu select[hidden]{display:none}
 @media(max-width:900px){body{overflow:auto}header{align-items:flex-start}.controls{margin-left:0;width:100%}main{grid-template-columns:1fr;height:auto;overflow:visible}#boardWrap{height:auto;min-height:430px}#board{height:auto;width:min(100%,570px);max-height:520px}aside{height:auto;overflow:visible;display:grid;grid-template-columns:1fr 1fr}.logcard{grid-column:1/-1}}
@@ -76,6 +77,15 @@ aside{display:flex;flex-direction:column;gap:9px;height:min(620px,calc(100vh - 8
   </div>
  </div>
  <button id="closeHow">Close</button></section>
+<section class="endgame hidden" id="endgame" role="dialog" aria-modal="true" aria-labelledby="endgameTitle" aria-describedby="endgameMessage">
+ <div class="endgame-effects" id="endgameEffects" aria-hidden="true"></div>
+ <div class="endgame-card">
+  <div class="small" id="endgameKicker">BATTLE COMPLETE</div>
+  <h2 id="endgameTitle">Battle complete</h2>
+  <p id="endgameMessage"></p>
+  <div class="endgame-actions"><button class="primary" id="playAgain">Play again</button><button id="reviewGame">Review game</button></div>
+ </div>
+</section>
 <main>
   <section id="boardWrap"><svg id="board" viewBox="-30 -30 720 660" aria-label="OutMatch game board"></svg><div class="recruit-modal" id="recruitModal"><div class="recruit-box"><h2>Choose a reinforcement</h2><p>Choose before moving your pieces.</p><div id="recruitBar" class="row"></div></div></div></section>
   <aside>
@@ -136,6 +146,7 @@ let archerStartState=null, archerFirst=null, archerMoveDest=null, archerTargetId
 let pikeStartState=null, pikeOrigin=null, pikeTargetPos=null, pikeTargetId=null;
 let timeline=[], timelineIndex=-1, aiRunning=false, aiHistory=[], aiTimer=null, aiRunToken=0, animationRunning=false, reinforcementNudgeTimer=null;
 const AI_STEP_MS=650;
+const PIKE_TIMING=Object.freeze({windup:240,thrust:520,impact:220,retract:460});
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const yieldUI=()=>new Promise(resolve=>setTimeout(resolve,0));
 
@@ -477,7 +488,7 @@ function render(overrideState=null){
  if(mode==="pike_choice"){
   choiceOrigins.add(ckey(pikeOrigin));choiceTargets.add(ckey(pikeTargetPos));
  }
- if(mode!=="pike_choice"&&selectedUnit && selectedUnit.side===humanSide && selectedUnit.active){
+ if(mode!=="pike_choice"&&mode!=="pike_attacking"&&selectedUnit && selectedUnit.side===humanSide && selectedUnit.active){
   if(selectedUnit.typ==="A"){
    if(archerFirst===null || archerFirst==="shoot") legalMoves(g,selectedUnit).forEach(p=>legalCells.add(ckey(p)));
    if(archerFirst===null || archerFirst==="move") archTargets(g,selectedUnit).forEach(t=>legalTargets.add(t.id));
@@ -545,11 +556,12 @@ async function animateMove(before,uid,dest){
   ],{duration:actor.typ==="C"?180:260,easing:"ease-in-out"});
  }
 }
-async function animateDeath(id){
+async function animateDeathOver(id,duration){
  const node=svg.querySelector(`.unit[data-id="${id}"]`);if(!node)return;
  node.classList.add("dying");
- await playAnimation(node,[{opacity:1,transform:"scale(1)"},{opacity:0,transform:"scale(.05)"}],{duration:280,easing:"ease-in"});
+ await playAnimation(node,[{opacity:1,transform:"scale(1)"},{opacity:0,transform:"scale(.05)"}],{duration,easing:"ease-in"});
 }
+async function animateDeath(id){return animateDeathOver(id,280)}
 async function animateArrow(before,uid,tid,shooterPos=null){
  const shooter=unitById(before,uid),target=unitById(before,tid);if(!shooter||!target)return;
  const [sx,sy]=axialToPixel(shooterPos||shooter.pos),[tx,ty]=axialToPixel(target.pos);
@@ -572,13 +584,24 @@ async function animatePoke(before,uid,tid){
  const spear=document.createElementNS("http://www.w3.org/2000/svg","g");spear.setAttribute("class","battle-poke");
  const shaft=document.createElementNS("http://www.w3.org/2000/svg","line");shaft.setAttribute("class","shaft");shaft.setAttribute("x1","18");shaft.setAttribute("y1","0");shaft.setAttribute("x2","78");shaft.setAttribute("y2","0");
  const tip=document.createElementNS("http://www.w3.org/2000/svg","polygon");tip.setAttribute("class","tip");tip.setAttribute("points","92,0 76,-9 79,0 76,9");spear.append(shaft,tip);svg.appendChild(spear);
- const base=`translate(${sx}px,${sy}px) rotate(${angle}deg)`;
- const holdBetween=mode==="pike_choice",lungeX=(tx-sx)/2,lungeY=(ty-sy)/2;
+ const halfX=(tx-sx)/2,halfY=(ty-sy)/2,backX=-halfX*.12,backY=-halfY*.12;
+ const readyBase=`translate(${sx+backX}px,${sy+backY}px) rotate(${angle}deg)`,impactBase=`translate(${sx+halfX}px,${sy+halfY}px) rotate(${angle}deg)`;
+ spear.style.opacity="0";
+ // Draw back first, then move the pike and its held spear forward together.
+ await playAnimation(pikeNode,[{transform:"translate(0,0)"},{transform:`translate(${backX}px,${backY}px)`}],{duration:PIKE_TIMING.windup,easing:"ease-out"});
  await Promise.all([
-  playAnimation(spear,[{opacity:0,transform:`${base} scaleX(.45)`},{opacity:1,offset:.28,transform:`${base} scaleX(1)`},{opacity:1,offset:.7,transform:`${base} scaleX(1)`},{opacity:0,transform:`${base} scaleX(.45)`}],{duration:360,easing:"ease-in-out"}),
-  playAnimation(pikeNode,[{transform:"translate(0,0)"},{transform:`translate(${lungeX}px,${lungeY}px)`,offset:.45},{transform:holdBetween?`translate(${lungeX}px,${lungeY}px)`:"translate(0,0)"}],{duration:360,easing:"ease-in-out"})
+  playAnimation(pikeNode,[{transform:`translate(${backX}px,${backY}px)`},{transform:`translate(${halfX}px,${halfY}px)`}],{duration:PIKE_TIMING.thrust,easing:"cubic-bezier(.2,.75,.25,1)"}),
+  playAnimation(spear,[{opacity:.15,transform:`${readyBase} scaleX(.28)`},{opacity:1,transform:`${impactBase} scaleX(.55)`}],{duration:PIKE_TIMING.thrust,easing:"cubic-bezier(.2,.75,.25,1)"})
  ]);
- spear.remove();await animateDeath(tid);
+ // Let the impact read before the victim falls and the same spear retracts.
+ await sleep(PIKE_TIMING.impact);
+ const holdBetween=mode==="pike_attacking"||mode==="pike_choice",restBase=holdBetween?impactBase:`translate(${sx}px,${sy}px) rotate(${angle}deg)`;
+ await Promise.all([
+  playAnimation(spear,[{opacity:1,transform:`${impactBase} scaleX(.55)`},{opacity:0,transform:`${restBase} scaleX(.28)`}],{duration:PIKE_TIMING.retract,easing:"ease-in-out"}),
+  playAnimation(pikeNode,[{transform:`translate(${halfX}px,${halfY}px)`},{transform:holdBetween?`translate(${halfX}px,${halfY}px)`:"translate(0,0)"}],{duration:PIKE_TIMING.retract,easing:"ease-in-out"}),
+  animateDeathOver(tid,PIKE_TIMING.retract)
+ ]);
+ spear.remove();
 }
 async function animateAppliedAction(before,a){
  const [kind,uid,arg]=a;animationRunning=true;render(before);
@@ -593,7 +616,10 @@ async function animateAppliedAction(before,a){
   }else if(kind==="shootmove"){
    const [tid,dest]=arg;await animateArrow(before,uid,tid);await animateMove(before,uid,dest);
   }
- }finally{animationRunning=false;render()}
+ }finally{
+  if(kind==="poke"&&mode==="pike_attacking")mode="pike_choice";
+  animationRunning=false;render();
+ }
 }
 async function applyAnimatedAction(g,a,mark=true){
  const before=deep(g);applyAction(g,a,mark);await animateAppliedAction(before,a);
@@ -629,7 +655,7 @@ function archiveAbandonedGame(){
  if(logEl.value.trim() && state && !gameOver) appendLog("\n=== GAME ABANDONED BY HUMAN ===");
 }
 function beginGame(){
- archiveAbandonedGame();
+ hideEndgame();archiveAbandonedGame();
  // Cancel any in-flight AI turn before replacing state.
  aiRunToken++;if(aiTimer)clearTimeout(aiTimer);aiRunning=false;
  const idx=+document.getElementById("opponent").value;opponent=activeRoster[idx];humanSide=document.getElementById("humanColor").value;aiSide=foe(humanSide);
@@ -738,7 +764,8 @@ function finishSelectedActivation(){
  afterHumanAction();
 }
 async function beginPikeAttack(u,target){
- pikeStartState=deep(state);pikeOrigin=[...u.pos];pikeTargetPos=[...target.pos];pikeTargetId=target.id;mode="pike_choice";
+ pikeStartState=deep(state);pikeOrigin=[...u.pos];pikeTargetPos=[...target.pos];pikeTargetId=target.id;mode="pike_attacking";
+ setPrompt(`Pikeman ${u.id} readies its spear…`);
  await applyAnimatedAction(state,["poke",u.id,target.id],false);
  setPrompt(`Pikeman ${u.id} struck from between the hexes. Choose the blue original hex to fall back or the green target hex to advance.`);
  actionButtonsForSelection();render();
@@ -893,6 +920,28 @@ function finishAdjudication(){
  else if(p!==0)w=p>0?"R":"B";
  finishGame(w,w?"adjudicated":"draw",m,p);
 }
+function hideEndgame(){
+ const panel=document.getElementById("endgame");panel.className="endgame hidden";document.getElementById("endgameEffects").innerHTML="";
+}
+function fillEndgameEffects(kind){
+ const effects=document.getElementById("endgameEffects"),count=kind==="win"?64:kind==="loss"?28:0;effects.innerHTML="";
+ for(let i=0;i<count;i++){
+  const bit=document.createElement("i");bit.className=kind==="win"?"confetti":"ash";
+  bit.style.left=`${(i*47)%101}%`;bit.style.animationDelay=`-${((i*37)%240)/100}s`;bit.style.setProperty("--drift",`${((i*29)%90)-45}px`);bit.style.setProperty("--spin",`${(i*53)%360}deg`);effects.appendChild(bit);
+ }
+}
+function showEndgame(w,outcome){
+ const result=w===humanSide?"win":w?"loss":"draw",panel=document.getElementById("endgame");
+ panel.className=`endgame ${result}${result==="win"?` ${humanSide==="R"?"red":"blue"}`:""}`;
+ document.getElementById("endgameKicker").textContent=result==="win"?`${humanSide==="R"?"RED":"BLUE"} VICTORY`:result==="loss"?"THE FIELD FALLS QUIET":"STALEMATE";
+ document.getElementById("endgameTitle").textContent=result==="win"?"Victory!":result==="loss"?"Defeat":"Draw";
+ document.getElementById("endgameMessage").textContent=result==="win"?`You defeated ${opponent.name} by ${outcome}.`:result==="loss"?`${opponent.name} won by ${outcome}. Review the battle or muster the same forces again.`:"Neither army broke the other. Review the battle or try again.";
+ fillEndgameEffects(result);
+ document.getElementById("playAgain").focus();
+}
+function reviewFinishedGame(){
+ hideEndgame();timelineIndex=timeline.length?0:-1;render();updateReviewControls();setPrompt("Reviewing from the opening position. Use Forward and Rewind to inspect the battle.");
+}
 function finishGame(w,outcome,m=material(state),p=pressure(state)){
  gameOver=true;aiRunning=false;aiRunToken++;if(aiTimer)clearTimeout(aiTimer);mode="gameover";clearBars();render();
  appendLog(`\n=== GAME OVER ===`);
@@ -901,9 +950,11 @@ function finishGame(w,outcome,m=material(state),p=pressure(state)){
  appendLog(`FINAL BOARD: ${boardText(state)}`);
  appendLog(`Human result: ${w===humanSide?"WIN":w?"LOSS":"DRAW"}`);
  setPrompt(w?`${w===humanSide?"You win":"AI wins"} by ${outcome}. Log is preserved below.`:"Draw. Log is preserved below.");
- saveCurrent();
+ saveCurrent();showEndgame(w,outcome);
 }
-document.getElementById("newGame").onclick=()=>document.getElementById("menu").classList.remove("hidden");
+document.getElementById("newGame").onclick=()=>{hideEndgame();document.getElementById("menu").classList.remove("hidden")};
+document.getElementById("playAgain").onclick=beginGame;
+document.getElementById("reviewGame").onclick=reviewFinishedGame;
 document.getElementById("startBattle").onclick=beginGame;
 document.getElementById("howToPlay").onclick=()=>document.getElementById("howPanel").classList.remove("hidden");
 document.getElementById("closeHow").onclick=()=>document.getElementById("howPanel").classList.add("hidden");
