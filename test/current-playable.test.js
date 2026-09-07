@@ -112,3 +112,50 @@ test("highlights opening units and redirects full-tile clicks", () => {
   assert.match(playable, /coord\.setAttribute\("pointer-events","none"\)/);
   assert.match(playable, /if\(mode==="deploy"\)\{nudgeReinforcementPlacement\(\);return\}/);
 });
+
+test("offers both playable versions from the opening screen", () => {
+  assert.match(playable, /data-version="classic"><b>Mercians &amp; Macedonians<\/b>/);
+  assert.match(playable, /data-version="g33"><b>Lords &amp; Hunters<\/b>/);
+  assert.match(playable, /const usesReachRules=\(\)=>gameVersion==="g33"/);
+  assert.match(playable, /activeRoster=gameVersion==="g33"\?G33_OPPONENTS:CLASSIC_FINALISTS/);
+});
+
+test("embeds all 44 authoritative G33 Lords and Hunters", async () => {
+  const roster = playable.match(/const G33_OPPONENTS=(\[[\s\S]*?\]);\nlet activeRoster=/);
+  assert.ok(roster, "embedded G33 roster is present");
+  const opponents = JSON.parse(roster[1]);
+  const handoff = JSON.parse(await readFile(new URL("../data/g33/g33_human_opponents.engine.json", import.meta.url), "utf8"));
+  assert.equal(opponents.length, 44);
+  assert.deepEqual(opponents, handoff);
+  assert.ok(opponents.every(general =>
+    general.genomeSchema === "outmatch-core112-complete-position-v1" &&
+    general.numericGenomeLoci === 112 &&
+    Object.keys(general.genes.position).length === 54
+  ));
+});
+
+test("lets a human pike choose advance or fall back after attacking", () => {
+  assert.match(playable, /async function beginPikeAttack\(u,target\)/);
+  assert.match(playable, /pikeOrigin=\[\.\.\.u\.pos\];pikeTargetPos=\[\.\.\.target\.pos\]/);
+  assert.match(playable, /await applyAnimatedAction\(state,\["poke",u\.id,target\.id\],false\)/);
+  assert.match(playable, /button\("Advance",\(\)=>finishPikeAttack\(true\)\)/);
+  assert.match(playable, /button\("Fall back",\(\)=>finishPikeAttack\(false\)\)/);
+  assert.match(playable, /if\(advance\)u\.pos=\[\.\.\.pikeTargetPos\];u\.active=false/);
+  assert.match(playable, /if\(same\(p,pikeOrigin\)\)\{finishPikeAttack\(false\)/);
+  assert.match(playable, /if\(same\(p,pikeTargetPos\)\)\{finishPikeAttack\(true\)/);
+});
+
+test("shows a held spear thrust and highlights both pike choices", () => {
+  assert.match(playable, /async function animatePoke\(before,uid,tid\)/);
+  assert.match(playable, /const holdBetween=mode==="pike_choice",lungeX=\(tx-sx\)\/2,lungeY=\(ty-sy\)\/2/);
+  assert.match(playable, /transform:holdBetween\?`translate/);
+  assert.match(playable, /choiceOrigins\.add\(ckey\(pikeOrigin\)\);choiceTargets\.add\(ckey\(pikeTargetPos\)\)/);
+  assert.match(playable, /cls\+=" choice-origin"/);
+  assert.match(playable, /cls\+=" choice-target"/);
+});
+
+test("keeps canonical pike move and poke actions available to the G33 planner", () => {
+  assert.match(playable, /if\(usesReachRules\(\)\)for\(const t of archTargets\(g,u\)\)out\.push\(\["poke",u\.id,t\.id\]\)/);
+  assert.match(playable, /for\(const m of legalMoves\(g,u\)\)out\.push\(\["move",u\.id,m\]\)/);
+  assert.match(playable, /if\(kind==="shoot"\|\|kind==="poke"\)/);
+});
