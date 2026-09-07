@@ -1,0 +1,359 @@
+[
+  [
+    "Éowyn",
+    "Doran",
+    "Finrod",
+    "Pyrrhus",
+    "Friar Tuck"
+  ],
+  [
+    "Éowyn",
+    "Doran",
+    "Celebrimbor",
+    "Pyrrhus",
+    "Friar Tuck"
+  ],
+  [
+    "Éowyn",
+    "Finrod",
+    "Gerold Dayne",
+    "Anders Yronwood",
+    "Friar Tuck"
+  ],
+  [
+    "Éowyn",
+    "Finrod",
+    "Bellerophon",
+    "Little John",
+    "Catreus"
+  ],
+  [
+    "Éowyn",
+    "Gerold Dayne",
+    "Ecthelion",
+    "Anders Yronwood",
+    "Friar Tuck"
+  ],
+  [
+    "Éowyn",
+    "Proteus",
+    "Bellerophon",
+    "Little John",
+    "Catreus"
+  ],
+  [
+    "Éowyn",
+    "Elrond",
+    "Rubellius",
+    "Rahu",
+    "Red Flea"
+  ],
+  [
+    "Idril",
+    "Moros",
+    "Khonsu",
+    "Garin",
+    "Arthur a Bland"
+  ],
+  [
+    "Doran",
+    "Rutilus",
+    "Celebrimbor",
+    "Pyrrhus",
+    "Friar Tuck"
+  ],
+  [
+    "Doran",
+    "Celebrimbor",
+    "Perseus",
+    "Nisha",
+    "Daemon Sand"
+  ],
+  [
+    "Doran",
+    "Perseus",
+    "Nisha",
+    "Elrond",
+    "Daemon Sand"
+  ],
+  [
+    "Finrod",
+    "Marcellus",
+    "Wiglaf",
+    "Moros",
+    "Pyrrhus"
+  ],
+  [
+    "Finrod",
+    "Wiglaf",
+    "Moros",
+    "Bellerophon",
+    "Pyrrhus"
+  ],
+  [
+    "Marcellus",
+    "Wiglaf",
+    "Proteus",
+    "Moros",
+    "Bellerophon"
+  ],
+  [
+    "Marcellus",
+    "Wiglaf",
+    "Proteus",
+    "Thanatos",
+    "Pyrrhus"
+  ],
+  [
+    "Marcellus",
+    "Wiglaf",
+    "Celebrimbor",
+    "Moros",
+    "Daemon Sand"
+  ],
+  [
+    "Marcellus",
+    "Wiglaf",
+    "Celebrimbor",
+    "Moros",
+    "Pyrrhus"
+  ],
+  [
+    "Marcellus",
+    "Wiglaf",
+    "Moros",
+    "Thanatos",
+    "Daemon Sand"
+  ],
+  [
+    "Marcellus",
+    "Wiglaf",
+    "Moros",
+    "Thanatos",
+    "Pyrrhus"
+  ],
+  [
+    "Marcellus",
+    "Proteus",
+    "Aredhel",
+    "Moros",
+    "Elrond"
+  ],
+  [
+    "Gerold Dayne",
+    "Trystane",
+    "Nisha",
+    "Elrond",
+    "Ironstaff"
+  ],
+  [
+    "Trystane",
+    "Longstaff",
+    "Umbra",
+    "Glorfindel",
+    "Nisha"
+  ],
+  [
+    "Ecthelion",
+    "Wiglaf",
+    "Celebrimbor",
+    "Moros",
+    "Nisha"
+  ],
+  [
+    "Ecthelion",
+    "Wiglaf",
+    "Celebrimbor",
+    "Moros",
+    "Catreus"
+  ],
+  [
+    "Ecthelion",
+    "Wiglaf",
+    "Celebrimbor",
+    "Moros",
+    "Pyrrhus"
+  ],
+  [
+    "Ecthelion",
+    "Aredhel",
+    "Celebrimbor",
+    "Moros",
+    "Friar Tuck"
+  ],
+  [
+    "Ecthelion",
+    "Aredhel",
+    "Celebrimbor",
+    "Pyrrhus",
+    "Friar Tuck"
+  ],
+  [
+    "Ecthelion",
+    "Aredhel",
+    "Moros",
+    "Khonsu",
+    "Friar Tuck"
+  ],
+  [
+    "Ecthelion",
+    "Celebrimbor",
+    "Perseus",
+    "Catreus",
+    "Rahu"
+  ],
+  [
+    "Ecthelion",
+    "Moros",
+    "Umbra",
+    "Anders Yronwood",
+    "Pyrrhus"
+  ],
+  [
+    "Wiglaf",
+    "Proteus",
+    "Moros",
+    "Bellerophon",
+    "Pyrrhus"
+  ],
+  [
+    "Proteus",
+    "Aredhel",
+    "Moros",
+    "Bellerophon",
+    "Umbra"
+  ],
+  [
+    "Proteus",
+    "Aredhel",
+    "Moros",
+    "Elrond",
+    "Pyrrhus"
+  ],
+  [
+    "Proteus",
+    "Aredhel",
+    "Bellerophon",
+    "Umbra",
+    "Pyrrhus"
+  ],
+  [
+    "Proteus",
+    "Moros",
+    "Bellerophon",
+    "Umbra",
+    "Daemon Sand"
+  ],
+  [
+    "Rutilus",
+    "Aredhel",
+    "Celebrimbor",
+    "Pyrrhus",
+    "Friar Tuck"
+  ],
+  [
+    "Voronwë",
+    "Umbra",
+    "Scipio",
+    "Arthur a Bland",
+    "Nycteus"
+  ],
+  [
+    "Aredhel",
+    "Moros",
+    "Khonsu",
+    "Garin",
+    "Arthur a Bland"
+  ],
+  [
+    "Aredhel",
+    "Little John",
+    "Mors Martell",
+    "Garin",
+    "Arthur a Bland"
+  ],
+  [
+    "Aredhel",
+    "Umbra",
+    "Scipio",
+    "Arthur a Bland",
+    "Nycteus"
+  ],
+  [
+    "Moros",
+    "Khonsu",
+    "Scipio",
+    "Garin",
+    "Arthur a Bland"
+  ],
+  [
+    "Moros",
+    "Khonsu",
+    "Eos",
+    "Garin",
+    "Red Flea"
+  ],
+  [
+    "Moros",
+    "Khonsu",
+    "Garin",
+    "Red Flea",
+    "Arthur a Bland"
+  ],
+  [
+    "Moros",
+    "Khonsu",
+    "Garin",
+    "Arthur a Bland",
+    "Atalanta"
+  ],
+  [
+    "Nocturne",
+    "Umbra",
+    "Scipio",
+    "Catreus",
+    "Galdor"
+  ],
+  [
+    "Nocturne",
+    "Umbra",
+    "Scipio",
+    "Galdor",
+    "Arthur a Bland"
+  ],
+  [
+    "Khonsu",
+    "Elrond",
+    "Rubellius",
+    "Rahu",
+    "Atalanta"
+  ],
+  [
+    "Little John",
+    "Mors Martell",
+    "Garin",
+    "Ironstaff",
+    "Arthur a Bland"
+  ],
+  [
+    "Little John",
+    "Mors Martell",
+    "Garin",
+    "Will Stutely",
+    "Arthur a Bland"
+  ],
+  [
+    "Little John",
+    "Mors Martell",
+    "Garin",
+    "Red Flea",
+    "Arthur a Bland"
+  ],
+  [
+    "Little John",
+    "Mors Martell",
+    "Garin",
+    "Arthur a Bland",
+    "Atalanta"
+  ]
+]
