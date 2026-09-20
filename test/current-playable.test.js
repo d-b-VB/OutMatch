@@ -3,17 +3,6 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 const playable = await readFile(new URL("../index.html", import.meta.url), "utf8");
-const latestOpponentFile = JSON.parse(await readFile(new URL("../OutMatch_G82_human_opponents_selected16.txt", import.meta.url), "utf8"));
-
-test("ships the current playable and its sixteen selected G82 AI opponents", () => {
-  assert.match(playable, /<h1>OutMatch<\/h1>/);
-  const roster = playable.match(/const FINALISTS = (\[[\s\S]*?\]);\n/);
-  assert.ok(roster, "embedded G82 opponent roster is present");
-  const opponents = JSON.parse(roster[1]);
-  assert.equal(opponents.length, 16);
-  assert.ok(opponents.every(opponent => opponent.id.startsWith("G82_") && opponent.round_robin_record));
-  assert.equal(JSON.stringify(opponents), JSON.stringify(latestOpponentFile.opponents));
-});
 
 test("preserves the authoritative current planner and rules constants", () => {
   assert.match(playable, /lookaheadAsync\(state,side,opponent,3,/);
@@ -72,21 +61,9 @@ test("how-to-play orders units and illustrates their matchups", () => {
   assert.match(playable, /aria-label="Archer moves then attacks an adjacent pikeman"/);
   assert.match(playable, /class="shot"/);
   assert.match(playable, /Archer attacks an adjacent tile before or after moving\./);
-});
-
-test("shows star difficulty and a tactical clue emoji in the opponent dropdown", () => {
-  assert.match(playable, /Math\.max\(1,Math\.min\(5,Math\.round\(g\.round_robin_record\.win_rate\*10-1\)\)\)/);
-  assert.match(playable, /`\$\{g\.name\} — \$\{"★"\.repeat\(difficulty\)\} \$\{OPPONENT_EMOJIS\[g\.name\]\}`/);
-
-  const emojiSource = playable.match(/const OPPONENT_EMOJIS=Object\.freeze\((\{[\s\S]*?\})\);/);
-  assert.ok(emojiSource, "opponent emoji map should be embedded");
-  const emojis = JSON.parse(emojiSource[1]);
-  assert.deepEqual(emojis, {
-    "Æthelwulf": "🏹", "Æthelberht": "🏹", Menelaus: "🐎", Cenwulf: "🏃",
-    Aeropus: "⚔️", Sigeric: "🏹", Alcetas: "🐎", Eadberht: "🏹",
-    Heliodoros: "🛡️", Hector: "🏰", Aeneas: "🤝", Beornred: "🏹",
-    Polemon: "🛡️", Helenus: "🏰", Deiphobus: "🤝", Argaeus: "🐎",
-  });
+  assert.match(playable, /<b>Pike Reach \/ poke<\/b>/);
+  assert.match(playable, /Select a pikeman and click an adjacent enemy/);
+  assert.match(playable, /Choose <b>Advance<\/b> to occupy the enemy hex or <b>Fall back<\/b>/);
 });
 
 test("animates movement, arrows, and defeated pieces", () => {
@@ -111,4 +88,81 @@ test("highlights opening units and redirects full-tile clicks", () => {
   assert.match(playable, /if\(occupant\)\{await onUnitClick\(occupant\.id\);return\}/);
   assert.match(playable, /coord\.setAttribute\("pointer-events","none"\)/);
   assert.match(playable, /if\(mode==="deploy"\)\{nudgeReinforcementPlacement\(\);return\}/);
+});
+
+test("ships Lords & Hunters as the sole playable edition", () => {
+  assert.match(playable, /<title>OutMatch — Lords &amp; Hunters<\/title>/);
+  assert.match(playable, /<h2>Lords &amp; Hunters<\/h2>/);
+  assert.doesNotMatch(playable, /Mercians &amp; Macedonians/);
+  assert.doesNotMatch(playable, /data-version=/);
+  assert.doesNotMatch(playable, /const FINALISTS/);
+  assert.match(playable, /const activeRoster=G33_OPPONENTS/);
+  assert.match(playable, /const usesReachRules=\(\)=>true/);
+});
+
+test("embeds all 44 authoritative G33 Lords and Hunters", async () => {
+  const roster = playable.match(/const G33_OPPONENTS=(\[[\s\S]*?\]);\nconst activeRoster=/);
+  assert.ok(roster, "embedded G33 roster is present");
+  const opponents = JSON.parse(roster[1]);
+  const handoff = JSON.parse(await readFile(new URL("../data/g33/g33_human_opponents.engine.json", import.meta.url), "utf8"));
+  assert.equal(opponents.length, 44);
+  assert.deepEqual(opponents, handoff);
+  assert.ok(opponents.every(general =>
+    general.genomeSchema === "outmatch-core112-complete-position-v1" &&
+    general.numericGenomeLoci === 112 &&
+    Object.keys(general.genes.position).length === 54
+  ));
+});
+
+test("lets a human pike choose advance or fall back after attacking", () => {
+  assert.match(playable, /async function beginPikeAttack\(u,target\)/);
+  assert.match(playable, /pikeOrigin=\[\.\.\.u\.pos\];pikeTargetPos=\[\.\.\.target\.pos\]/);
+  assert.match(playable, /mode="pike_attacking"/);
+  assert.match(playable, /await applyAnimatedAction\(state,\["poke",u\.id,target\.id\],false\)/);
+  assert.match(playable, /if\(kind==="poke"&&mode==="pike_attacking"\)mode="pike_choice"/);
+  assert.match(playable, /button\("Advance",\(\)=>finishPikeAttack\(true\)\)/);
+  assert.match(playable, /button\("Fall back",\(\)=>finishPikeAttack\(false\)\)/);
+  assert.match(playable, /if\(advance\)u\.pos=\[\.\.\.pikeTargetPos\];u\.active=false/);
+  assert.match(playable, /if\(same\(p,pikeOrigin\)\)\{finishPikeAttack\(false\)/);
+  assert.match(playable, /if\(same\(p,pikeTargetPos\)\)\{finishPikeAttack\(true\)/);
+});
+
+test("shows a held spear thrust and highlights both pike choices", () => {
+  assert.match(playable, /async function animatePoke\(before,uid,tid\)/);
+  assert.match(playable, /const PIKE_TIMING=Object\.freeze\(\{windup:240,thrust:520,impact:220,retract:460\}\)/);
+  assert.match(playable, /await playAnimation\(pikeNode,[\s\S]*PIKE_TIMING\.windup/);
+  assert.match(playable, /const readyBase=[\s\S]*impactBase=/);
+  assert.match(playable, /transform:`\$\{impactBase\} scaleX\(\.55\)`/);
+  assert.match(playable, /await Promise\.all\(\[[\s\S]*PIKE_TIMING\.thrust/);
+  assert.match(playable, /await sleep\(PIKE_TIMING\.impact\)/);
+  assert.match(playable, /animateDeathOver\(tid,PIKE_TIMING\.retract\)/);
+  assert.match(playable, /choiceOrigins\.add\(ckey\(pikeOrigin\)\);choiceTargets\.add\(ckey\(pikeTargetPos\)\)/);
+  assert.match(playable, /cls\+=" choice-origin"/);
+  assert.match(playable, /cls\+=" choice-target"/);
+});
+
+test("keeps canonical pike move and poke actions available to the G33 planner", () => {
+  assert.match(playable, /if\(usesReachRules\(\)\)for\(const t of archTargets\(g,u\)\)out\.push\(\["poke",u\.id,t\.id\]\)/);
+  assert.match(playable, /for\(const m of legalMoves\(g,u\)\)out\.push\(\["move",u\.id,m\]\)/);
+  assert.match(playable, /if\(kind==="shoot"\|\|kind==="poke"\)/);
+});
+
+test("celebrates wins and treats losses somberly at game end", () => {
+  assert.match(playable, /id="endgame" role="dialog"/);
+  assert.match(playable, /const result=w===humanSide\?"win":w\?"loss":"draw"/);
+  assert.match(playable, /kind==="win"\?64:kind==="loss"\?28:0/);
+  assert.match(playable, /\.endgame\.win\.red\{--c1:#c63f35/);
+  assert.match(playable, /\.endgame\.win\.blue\{--c1:#3975bd/);
+  assert.match(playable, /\.endgame\.loss\{background:radial-gradient/);
+  assert.match(playable, /className=kind==="win"\?"confetti":"ash"/);
+  assert.match(playable, /showEndgame\(w,outcome\)/);
+});
+
+test("offers a new-game menu and timeline review from the result screen", () => {
+  assert.match(playable, /id="endNewGame">New game/);
+  assert.match(playable, /id="reviewGame">Review game/);
+  assert.match(playable, /getElementById\("endNewGame"\)\.onclick=openNewGameMenu/);
+  assert.match(playable, /getElementById\("newGame"\)\.onclick=openNewGameMenu/);
+  assert.match(playable, /getElementById\("reviewGame"\)\.onclick=reviewFinishedGame/);
+  assert.match(playable, /timelineIndex=timeline\.length\?0:-1;render\(\);updateReviewControls\(\)/);
 });

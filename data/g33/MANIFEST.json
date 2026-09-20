@@ -1,0 +1,77 @@
+{
+  "schema": "outmatch-g33-human-opponent-handoff-v1",
+  "generation": "G33",
+  "opponentCount": 44,
+  "selection": "all unique G33 survivors appearing in the 51 exact balanced five-way loops",
+  "excludedSurvivors": [
+    "Nymor Martell",
+    "Hedgehog",
+    "Ashstaff",
+    "Fingon",
+    "Mercury"
+  ],
+  "engine": {
+    "file": "outmatch_engine_core112.js",
+    "sha256": "842e472816bfff1f66cdded41d54a45d66d3fcd33b1c0321297676157cd9e8bb",
+    "rules": "Reach/Core112 depth-3"
+  },
+  "genomeSchema": "outmatch-core112-complete-position-v1",
+  "numericGenomeLoci": 112,
+  "files": [
+    {
+      "name": "CODEX_HANDOFF.md",
+      "sha256": "f5a7bdc7320706f895b8803a17a590342154ceed2ffd07f7961838a1c8f147c5",
+      "bytes": 3503
+    },
+    {
+      "name": "README.md",
+      "sha256": "b6dccabb4bc781b4eab1ed7585581ea1f5fe718b44ff07c9f3ef41577963f62f",
+      "bytes": 2145
+    },
+    {
+      "name": "core112_genome_schema.json",
+      "sha256": "b2da9bf3fd5468b2f29e5a5a5e44272db73d6a11ce1563e04b3aa6a79340d9b1",
+      "bytes": 2863
+    },
+    {
+      "name": "engine_regression_cases.json",
+      "sha256": "62cd7c4c25b0eaefb54d936f4a8648931a152bfe20f5d09f6e2a8c4c23a1ec73",
+      "bytes": 3405
+    },
+    {
+      "name": "g33_exact_5way_loops.json",
+      "sha256": "316b147d5b9e6527143e0d6570aef249beb03ef0289ea4c8a396d38a4350b802",
+      "bytes": 4444
+    },
+    {
+      "name": "g33_human_opponents.csv",
+      "sha256": "3f6a494803061ec55cdd7965588802cf77ac8c37d4699e9280c2af69289da808",
+      "bytes": 8488
+    },
+    {
+      "name": "g33_human_opponents.engine.json",
+      "sha256": "37ab8be59cc74e72381c820aae1b89691a0f113b0ee152fcce12abacc16827d2",
+      "bytes": 277536
+    },
+    {
+      "name": "g33_human_opponents.json",
+      "sha256": "0872705b3b75472b2bf043f57c1a991b27d648b8511e5fee7a88f42366518dae",
+      "bytes": 296286
+    },
+    {
+      "name": "g33_human_opponents.xlsx",
+      "sha256": "61114343b3c2798295c43aec44e44fb71f4350f11a4567031d952ef52028ba3d",
+      "bytes": 10028
+    },
+    {
+      "name": "outmatch_engine_core112.js",
+      "sha256": "842e472816bfff1f66cdded41d54a45d66d3fcd33b1c0321297676157cd9e8bb",
+      "bytes": 19805
+    },
+    {
+      "name": "verify_engine.js",
+      "sha256": "c0f580c73628dd2a81dbe018b8f85375c9f1b5b8ab3a22d3fe6bb6bf974f6e30",
+      "bytes": 844
+    }
+  ]
+}
